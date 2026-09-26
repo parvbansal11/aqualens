@@ -511,6 +511,64 @@ def test_a3_frame_level_navigation_never_changes_memberships(scenario):
     assert a1_memberships(fuse_contacts(a3_without_fixes(scenario()), "s")) == as_given
     assert a1_memberships(fuse_contacts(a3_with_one_shared_fix(scenario()), "s")) == as_given
 
+# --- Round-2 ticket A4: association basis and Look count ---------------------------
+# Look semantics (spec Q8, A req 5): tile-overlap duplicates and overlapping ping windows
+# are one Look; ping-contiguous disjoint windows are independent Looks.
+
+def test_a4_single_observation_has_single_basis_and_one_look():
+    contact = fuse_contacts([finding("a", 0)], "survey")[0]
+    assert contact["association_basis"] == "SINGLE"
+    assert contact["look_count"] == 1
+
+def test_a4_tile_overlap_duplicate_basis_is_one_look():
+    observations = a1_tile_duplicate()
+    contact = fuse_contacts(observations, "s")[0]
+    assert contact["association_basis"] == "TILE_OVERLAP_DUPLICATE"
+    assert contact["look_count"] == 1
+    assert contact["persistence_evidence_type"] == "WINDOW_OVERLAP_ONLY"
+
+def test_a4_overlapping_ping_ranges_are_one_same_look_contact():
+    # Same fixture as test_a3_declared_ping_relationship_with_slant_range_match_is_one_contact
+    # (overlapping case): this is re-reading the same pings, not persistence (spec Q8).
+    observations = [a3_observation(0, (0, 499)), a3_observation(5, (20, 519), box_px=(2010, 0, 2070, 500))]
+    contact = fuse_contacts(observations, "s")[0]
+    assert contact["association_basis"] == "SAME_LOOK_OVERLAPPING_WINDOWS"
+    assert contact["look_count"] == 1
+    assert contact["persistence_evidence_type"] == "WINDOW_OVERLAP_ONLY"
+    assert contact["persistence_score"] == .15
+
+def test_a4_contiguous_disjoint_ping_ranges_are_independent_looks():
+    observations = [a3_observation(0, (0, 499)), a3_observation(5, (500, 999), box_px=(2010, 0, 2070, 500))]
+    contact = fuse_contacts(observations, "s")[0]
+    assert contact["association_basis"] == "INDEPENDENT_LOOKS_ALONG_TRACK"
+    assert contact["look_count"] == 2
+    assert contact["persistence_evidence_type"] == "SEQUENTIAL_PING"
+    assert contact["persistence_score"] > .15
+
+def test_a4_mixed_contact_counts_independent_looks_not_frames_or_observations():
+    # Two Observations are a same-Frame tile-overlap duplicate (one Look); the third is a
+    # ping-contiguous independent Look chained off the second. 3 Observations, 2 Looks.
+    dup1, dup2 = a1_tile_duplicate()
+    for item in (dup1, dup2):
+        item.update({"sequential_observation_supported": True, "ping_start": 0, "ping_end": 499})
+    third = a3_observation(1, (500, 999), box_px=(770, 100, 870, 200))
+    contacts = fuse_contacts([dup1, dup2, third], "s")
+    assert a1_memberships(contacts) == [sorted(item["detection_id"] for item in (dup1, dup2, third))]
+    assert contacts[0]["look_count"] == 2
+
+@pytest.mark.parametrize("scenario", [
+    pytest.param(a1_tile_duplicate, id="tile_duplicate"),
+    pytest.param(lambda: [a3_observation(0, (0, 499)), a3_observation(5, (20, 519), box_px=(2010, 0, 2070, 500))],
+                 id="overlapping_windows"),
+    pytest.param(lambda: [a3_observation(0, (0, 499)), a3_observation(5, (500, 999), box_px=(2010, 0, 2070, 500))],
+                 id="contiguous_independent_looks"),
+])
+def test_a4_association_basis_and_look_count_are_order_invariant(scenario):
+    forward = fuse_contacts(scenario(), "s")[0]
+    reversed_order = fuse_contacts(list(reversed(scenario())), "s")[0]
+    assert reversed_order["association_basis"] == forward["association_basis"]
+    assert reversed_order["look_count"] == forward["look_count"]
+
 def test_kaggle_provenance_did_not_use_test_and_detector_is_frozen():
     root=Path(__file__).parents[1]
     decision=json.loads((root/'ml/artifacts/vnext/kaggle_20260902_final/experiment_decision.json').read_text())

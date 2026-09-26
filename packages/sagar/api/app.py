@@ -34,6 +34,7 @@ from sagar.vnext import ModelRegistry, SonarConditionEngine, fuse_contact_confid
 from sagar.vnext.openset import OpenSetMemoryBank, OpenSetUnavailable
 from sagar.vnext.physics import verify_candidate, verify_pipeline_acoustics
 from sagar.vnext.priority import prioritize
+from sagar.vnext.surveys import singleton_surveys
 
 
 class ReviewInput(BaseModel):
@@ -142,6 +143,16 @@ class Store:
         # rerun or alter detector inference.
         if self._hydrate_legacy_runtime_surveys():
             self.save_runtime_surveys()
+        self._hydrate_survey_membership()
+
+    def _hydrate_survey_membership(self) -> None:
+        """Records written before Survey membership existed read back with SINGLETON Surveys.
+
+        Additive and in memory only: loading old state never rewrites it; the next save persists it.
+        """
+        for survey_id, survey in self.runtime_surveys.items():
+            if "surveys" not in survey:
+                survey["surveys"] = singleton_surveys(survey.get("survey_id") or survey_id, survey.get("frames") or [])
 
     def _hydrate_legacy_runtime_surveys(self) -> bool:
         changed = False
@@ -538,10 +549,12 @@ def create_app(root: str | Path | None = None) -> FastAPI:
 
             all_findings: list[dict[str, Any]] = []
             frames: list[dict[str, Any]] = []
+            channel_layouts: dict[str, str] = {}
             for index, path in enumerate(paths):
                 meta, findings = store.runtime.infer(path, survey_id, f"frame_{index:04d}")
                 nav_record = navigation_by_frame.get(path.name)
                 with Image.open(path) as source_image:
+                    channel_layouts[f"frame_{index:04d}"] = source_image.mode
                     pixels = np.asarray(source_image.convert("RGB"))
                 condition = store.conditions.assess(pixels, {"navigation_available": nav_record is not None})
                 for finding in findings:
@@ -630,6 +643,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 "navigation_status": decoded["navigation_status"], "mission": mission_meta,
                 "model_registry": store.model_registry.health(), "contact_fusion_policy": "contact_fusion@v1",
                 "sequential_observation_contract": sequential_contract,
+                "surveys": singleton_surveys(survey_id, frames, channel_layouts),
             }
             with store.state_lock:
                 store.runtime_surveys[survey_id] = record

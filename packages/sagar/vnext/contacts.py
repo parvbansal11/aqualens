@@ -45,14 +45,25 @@ def _slant_range_match(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolic
     offset_px=abs((ba[0]+ba[2])-(bb[0]+bb[2]))/2*width
     box_width_px=min(ba[2]-ba[0],bb[2]-bb[0])*width
     return offset_px<=max(policy.slant_range_match_width_fraction*box_width_px,policy.min_slant_range_match_px)
-def _compatible(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->bool:
-    if policy.min_class_compatibility and a.get("raw_class") != b.get("raw_class"): return False
-    if a.get("source_frame_id") == b.get("source_frame_id"): return _tile_overlap_duplicate(a,b,policy)
+def _association_relation(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->str | None:
+    """Why two Observations may join one Contact, or None if they may not.
+
+    A Look is an observation of seabed independent in pings from another Look (spec Q8).
+    Tile-overlap duplicates and overlapping ping windows are the SAME Look; ping-contiguous
+    disjoint windows are INDEPENDENT Looks.
+    """
+    if policy.min_class_compatibility and a.get("raw_class") != b.get("raw_class"): return None
+    if a.get("source_frame_id") == b.get("source_frame_id"):
+        return "TILE_OVERLAP_DUPLICATE" if _tile_overlap_duplicate(a,b,policy) else None
     # Different Frames relate only through declared ping bounds that overlap or are directly
     # contiguous. Frame-level navigation, frame index and upload order never associate Frames.
     pa,pb=_ping_bounds(a),_ping_bounds(b)
-    if pa is None or pb is None or max(pa[0],pb[0])>min(pa[1],pb[1])+1: return False
-    return _slant_range_match(a,b,policy)
+    if pa is None or pb is None: return None
+    gap=max(pa[0],pb[0])-min(pa[1],pb[1])
+    if gap>1 or not _slant_range_match(a,b,policy): return None
+    return "SAME_LOOK_OVERLAPPING_WINDOWS" if gap<=0 else "INDEPENDENT_LOOKS_ALONG_TRACK"
+def _compatible(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->bool:
+    return _association_relation(a,b,policy) is not None
 
 def _ping_order(group:list[dict[str,Any]]) -> tuple[list[dict[str,Any]], bool]:
     """Return observations in declared ping order only when that order is real.
@@ -88,13 +99,20 @@ def fuse_contacts(findings:list[dict[str,Any]], survey_id:str, policy:ContactFus
         (matches[0] if matches else groups.append([]) or groups[-1]).append(finding)
     contacts=[]
     for group in groups:
+        # Each consecutive pair in `group` was verified compatible when the chain was built
+        # (matches[0] is always g[-1]), so the relation between neighbours tells us why the
+        # whole chain associated and how many independent Looks it spans (spec A req 5, Q8).
+        if len(group)==1:
+            association_basis,look_count="SINGLE",1
+        else:
+            relations=[_association_relation(group[i],group[i+1],policy) for i in range(len(group)-1)]
+            look_count=1+sum(1 for r in relations if r=="INDEPENDENT_LOOKS_ALONG_TRACK")
+            if look_count>1: association_basis="INDEPENDENT_LOOKS_ALONG_TRACK"
+            elif all(r=="TILE_OVERLAP_DUPLICATE" for r in relations): association_basis="TILE_OVERLAP_DUPLICATE"
+            else: association_basis="SAME_LOOK_OVERLAPPING_WINDOWS"
         ordered_group, genuine_ping_order = _ping_order(group)
         cs=[_centre(x) for x in ordered_group]; conf=[float(x["raw_confidence"]) for x in ordered_group]
         frames=[x["source_frame_id"] for x in ordered_group]; idx=[int(x.get("frame_index",0)) for x in ordered_group]
-        # frame_index identifies the source raster/ping, not the tile. Several observations
-        # sharing one frame_index are overlapping-tile detections of the SAME static image and
-        # must never be scored as sequential ping/frame persistence (window overlap != temporal
-        # persistence). Only distinct frame_index values count as independent opportunities.
         distinct_idx=sorted(set(idx)); n_frames=len(distinct_idx)
         sequential_supported=genuine_ping_order
         consecutive=1
@@ -102,18 +120,22 @@ def fuse_contacts(findings:list[dict[str,Any]], survey_id:str, policy:ContactFus
             ordered_pings = [(int(item["ping_start"]), int(item["ping_end"])) for item in ordered_group]
             for (_, previous_end), (next_start, _) in zip(ordered_pings, ordered_pings[1:]):
                 consecutive = consecutive + 1 if next_start == previous_end + 1 else 1
-        window_overlap_duplicate_count=len(ordered_group)-n_frames
-        persistence_evidence_type=("SEQUENTIAL_PING" if n_frames>1 and sequential_supported
+        # Persistence is re-observation across independent Looks, not Frames (spec Q8): a
+        # tile-overlap duplicate or an overlapping-window re-read of the same Look is one
+        # Look regardless of how many Frames or Observations produced it.
+        window_overlap_duplicate_count=len(ordered_group)-look_count
+        persistence_evidence_type=("SEQUENTIAL_PING" if look_count>1 and sequential_supported
                                     else "WINDOW_OVERLAP_ONLY" if window_overlap_duplicate_count>0
-                                    else "UNKNOWN" if n_frames > 1 else "SINGLE_OBSERVATION")
+                                    else "UNKNOWN" if look_count > 1 else "SINGLE_OBSERVATION")
         variance=(pstdev([p[0] for p in cs])+pstdev([p[1] for p in cs]))/2 if len(cs)>1 else None
-        persistence=0.15 if n_frames<=1 or not sequential_supported else min(1., .35+.13*n_frames+.25*(consecutive/n_frames))
+        persistence=0.15 if look_count<=1 or not sequential_supported else min(1., .35+.13*look_count+.25*(consecutive/look_count))
         digest=hashlib.sha256("|".join(x["detection_id"] for x in ordered_group).encode()).hexdigest()[:12]
         classes=[x["raw_class"] for x in ordered_group]; nav=[_world(x) for x in ordered_group]
         contacts.append({"contact_id":f"contact_{survey_id}_{digest}","survey_id":survey_id,
           "resolved_class":classes[0] if len(set(classes))==1 else None,"candidate_classes":sorted(set(classes)),"open_set_candidate":False,
           "classification_source":"FROZEN_YOLO11S_CANDIDATE_GENERATOR","production_qualified":False,
           "observation_count":len(group),"distinct_frame_observation_count":n_frames,"window_overlap_duplicate_count":window_overlap_duplicate_count,
+          "association_basis":association_basis,"look_count":look_count,
           "persistence_evidence_type":persistence_evidence_type,
           "first_frame":frames[0],"last_frame":frames[-1],"first_ping":ordered_group[0].get("ping_start") if sequential_supported else None,"last_ping":ordered_group[-1].get("ping_end") if sequential_supported else None,"source_frame_ids":frames,"source_detection_ids":[x["detection_id"] for x in ordered_group],"best_observation_id":ordered_group[conf.index(max(conf))]["detection_id"],
           "max_raw_confidence":max(conf),"mean_raw_confidence":mean(conf),"class_consistency":1.0 if len(set(classes))==1 else 0.0,

@@ -405,3 +405,84 @@ def test_an_undecodable_upload_is_rejected_even_when_pil_raises_something_exotic
     response = client.post("/api/v1/surveys/upload", files={"file": ("weird.png", b"not-an-image", "image/png")})
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "UNREADABLE_RASTER"
+
+
+# ------------------------------------------------- A5 · review isolation (KD-4)
+
+_A5_OBJECT_BOXES = {"A": [4.0, 4.0, 16.0, 16.0], "B": [44.0, 40.0, 58.0, 56.0]}
+_A5_NAV_CSV = (
+    "frame,timestamp_utc,latitude,longitude,heading_deg\n"
+    "sonar_0001.png,2026-09-01T15:30:00Z,18.921840,72.834660,128.4\n"
+)
+
+
+def _two_object_infer(order: tuple[str, str]):
+    """Fake detector: two distinct FULL_FRAME boxes on one Frame, emitted in ``order``."""
+    def infer(self, image_path, survey_id, source_image_id):
+        meta, (template,) = _fake_infer(self, image_path, survey_id, source_image_id)
+        width, height = meta["width_px"], meta["height_px"]
+        findings = []
+        for index, label in enumerate(order):
+            box = _A5_OBJECT_BOXES[label]
+            findings.append({
+                **template, "detection_id": f"det_{survey_id}_{source_image_id}_{index:04d}",
+                "bbox_px": list(box),
+                "bbox_normalized": [box[0] / width, box[1] / height, box[2] / width, box[3] / height],
+                "review_history": [],
+            })
+        return meta, findings
+    return infer
+
+
+def _contact_holding(survey: dict, detection_id: str) -> dict:
+    (contact,) = [item for item in survey["contacts"] if detection_id in item["source_detection_ids"]]
+    return contact
+
+
+@pytest.mark.parametrize("order", [("A", "B"), ("B", "A")], ids=["A_first", "B_first"])
+def test_a5_one_verdict_changes_exactly_the_contact_holding_the_reviewed_observation(client, monkeypatch, order):
+    monkeypatch.setattr(FinalDetector, "infer", _two_object_infer(order))
+    payload = _zip_bytes({"sonar_0001.png": _png_bytes((64, 64)), "navigation.csv": _A5_NAV_CSV})
+    body, job = _upload(client, "bundle.zip", payload, "application/zip")
+    assert job["state"] == "COMPLETED"
+    survey_id = body["survey_id"]
+    before = client.get(f"/api/v1/runtime/surveys/{survey_id}").json()
+
+    by_box = {tuple(item["bbox_px"]): item["detection_id"] for item in before["findings"]}
+    obs_a = by_box[tuple(_A5_OBJECT_BOXES["A"])]
+    obs_b = by_box[tuple(_A5_OBJECT_BOXES["B"])]
+    # Two distinct FULL_FRAME objects on one Frame are two Contacts (A2).
+    assert len(before["contacts"]) == 2
+    contact_a_before = _contact_holding(before, obs_a)
+    contact_b_before = _contact_holding(before, obs_b)
+    assert contact_a_before["contact_id"] != contact_b_before["contact_id"]
+    assert obs_b not in contact_a_before["source_detection_ids"]
+    finding_b_before = next(item for item in before["findings"] if item["detection_id"] == obs_b)
+
+    for verdict in ("UNCERTAIN", "REJECTED"):
+        response = client.post(
+            f"/api/v1/runtime/surveys/{survey_id}/findings/{obs_a}/reviews",
+            json={"verdict": verdict, "reviewer": "test operator", "rejection_reason": "clutter" if verdict == "REJECTED" else None},
+        )
+        assert response.status_code == 200, response.text
+        assert response.json()["append_only"] is True
+
+    for _ in range(2):  # repeated reads preserve the isolation
+        after = client.get(f"/api/v1/runtime/surveys/{survey_id}").json()
+        contact_a = _contact_holding(after, obs_a)
+        contact_b = _contact_holding(after, obs_b)
+        assert contact_a["contact_id"] == contact_a_before["contact_id"]
+        # Contact A carries the verdict, append-only and in order.
+        assert contact_a["disposition"] == "REJECTED"
+        assert contact_a["reviews"]["latest_verdict"] == "REJECTED"
+        assert contact_a["reviews"]["review_count"] == 2
+        assert [event["verdict"] for event in contact_a["reviews"]["history"]] == ["UNCERTAIN", "REJECTED"]
+        assert contact_a["rejection_reason"] == "clutter"
+        # Contact B, and its Observation, are exactly as they were.
+        assert contact_b == contact_b_before
+        finding_b = next(item for item in after["findings"] if item["detection_id"] == obs_b)
+        assert finding_b == finding_b_before
+        assert finding_b["review_history"] == [] and finding_b["review_state"] is None
+        # Only Contact A holds review history anywhere in the Survey.
+        holders = [item["contact_id"] for item in after["contacts"] if (item.get("reviews") or {}).get("history")]
+        assert holders == [contact_a["contact_id"]]

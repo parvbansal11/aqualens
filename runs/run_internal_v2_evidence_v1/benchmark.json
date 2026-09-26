@@ -1,0 +1,56 @@
+{
+  "ablations": [],
+  "detection": {
+    "overall": {
+      "f1": 0.4495936161853161,
+      "map50": 0.28149612224318105,
+      "map50_95": 0.11866431603477576,
+      "precision": 0.46712176709121095,
+      "recall": 0.43333333333333335
+    },
+    "per_class": {
+      "PIPELINE": {
+        "f1": 0.4495936161853161,
+        "map50": 0.28149612224318105,
+        "map50_95": 0.11866431603477576,
+        "precision": 0.46712176709121095,
+        "recall": 0.43333333333333335
+      }
+    },
+    "validation": {
+      "f1": 0.6666168704032054,
+      "map50": 0.6514235525412211,
+      "map50_95": 0.3044759435874185,
+      "precision": 0.8089364071844086,
+      "recall": 0.5668828242633063
+    }
+  },
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "generated_at": "2026-08-30T14:53:27.384449+00:00",
+  "git_sha": null,
+  "metrics_source": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/metrics.json",
+  "open_set": {
+    "folds": [],
+    "reason": "FROZEN_DETECTOR_BACKBONE_RUNTIME_UNAVAILABLE",
+    "status": "NOT_EVALUATED"
+  },
+  "operational": {
+    "latency_gpu": {
+      "mean_ms": 4.517107619994931,
+      "median_ms": 4.543692999959603,
+      "n_images": 100,
+      "p95_ms": 5.235331500011853
+    },
+    "model_size_mb": 18.289
+  },
+  "run_id": "run_internal_v2_evidence_v1",
+  "segmentation": {},
+  "split_assertions": {
+    "eval_ineligible_rows": "PASS",
+    "group_overlap_train_test": "PASS",
+    "group_overlap_train_val": "PASS",
+    "near_duplicates": "PASS",
+    "test_groups_have_positives": "PASS"
+  },
+  "split_id": "split_f476b41f858d4c57"
+}

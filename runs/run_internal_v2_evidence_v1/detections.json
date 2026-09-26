@@ -1,0 +1,1666 @@
+[
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.720074,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x00768_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 253.41952,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 488.317952
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 2,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.42503060900634637,
+        "support_ratio": 1.0,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1026.58048,
+        12.96691199999998,
+        253.41952,
+        488.317952
+      ],
+      "bbox_px": [
+        258.58047999999997,
+        12.96691199999998,
+        253.41952,
+        488.317952
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 257.125888,
+        "along_centre_px": 1153.29024,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.720074,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x00768_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.257034,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x00768_y00000_01",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 196.722176,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 390.503424
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 1,
+        "n_opportunities": 2,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.12086631942227365,
+        "support_ratio": 0.5,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1081.89824,
+        109.68627199999997,
+        196.722176,
+        390.503424
+      ],
+      "bbox_px": [
+        313.89824,
+        109.68627199999997,
+        196.722176,
+        390.503424
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 304.937984,
+        "along_centre_px": 1180.259328,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.257034,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x00768_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.763745,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x01024_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 413.696,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 502.46144
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 3,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.5258044258424873,
+        "support_ratio": 1.0,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1122.304,
+        7.5043839999999875,
+        413.696,
+        502.46144
+      ],
+      "bbox_px": [
+        98.30399999999997,
+        7.5043839999999875,
+        413.696,
+        502.46144
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 258.735104,
+        "along_centre_px": 1329.152,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.763745,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x01024_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.470838,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x01024_y00000_01",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 279.991808,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 499.948544
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1254.409984,
+        10.981887999999998,
+        279.991808,
+        499.948544
+      ],
+      "bbox_px": [
+        230.409984,
+        10.981887999999998,
+        279.991808,
+        499.948544
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 260.95616,
+        "along_centre_px": 1394.4058879999998,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.470838,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x01024_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.717998,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x01280_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 412.153344,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 506.632192
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1280.000256,
+        4.613120000000009,
+        412.153344,
+        506.632192
+      ],
+      "bbox_px": [
+        0.00025600000000736145,
+        4.613120000000009,
+        412.153344,
+        506.632192
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 257.929216,
+        "along_centre_px": 1486.076928,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.717998,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x01280_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.643905,
+    "detection_id": "det_internal_v2_subpipe_hf_09e91b80c7181bdf_x01280_y00000_01",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 269.857792,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 446.1568
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_09e91b80c7181bdf",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1283.511296,
+        65.64198400000004,
+        269.857792,
+        446.1568
+      ],
+      "bbox_px": [
+        3.5112959999999873,
+        65.64198400000004,
+        269.857792,
+        446.1568
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 288.720384,
+        "along_centre_px": 1418.440192,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.643905,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_09e91b80c7181bdf_x01280_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.731538,
+    "detection_id": "det_internal_v2_subpipe_hf_0cb2934e3744625a_x00768_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 239.711232,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 466.331648
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 1,
+        "n_opportunities": 2,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.12086631942227365,
+        "support_ratio": 0.5,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_0cb2934e3744625a",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1040.288768,
+        34.384896000000026,
+        239.711232,
+        466.331648
+      ],
+      "bbox_px": [
+        272.288768,
+        34.384896000000026,
+        239.711232,
+        466.331648
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 267.55072,
+        "along_centre_px": 1160.144384,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.731538,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_0cb2934e3744625a_x00768_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.738326,
+    "detection_id": "det_internal_v2_subpipe_hf_0cb2934e3744625a_x01024_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 295.127552,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 498.6368
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_0cb2934e3744625a",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1240.62592,
+        12.05145600000003,
+        295.127552,
+        498.6368
+      ],
+      "bbox_px": [
+        216.62592000000004,
+        12.05145600000003,
+        295.127552,
+        498.6368
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 261.369856,
+        "along_centre_px": 1388.189696,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.738326,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_0cb2934e3744625a_x01024_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.326587,
+    "detection_id": "det_internal_v2_subpipe_hf_0cb2934e3744625a_x01024_y00000_01",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 409.926656,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 500.747776
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_0cb2934e3744625a",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1123.397632,
+        6.480128000000008,
+        409.926656,
+        500.747776
+      ],
+      "bbox_px": [
+        99.39763199999999,
+        6.480128000000008,
+        409.926656,
+        500.747776
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 256.854016,
+        "along_centre_px": 1328.36096,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.326587,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_0cb2934e3744625a_x01024_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.769833,
+    "detection_id": "det_internal_v2_subpipe_hf_0cb2934e3744625a_x01280_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 418.617856,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 508.297216
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 4,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.18240016325464492,
+        "support_ratio": 0.5,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_0cb2934e3744625a",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1279.999744,
+        3.70278399999998,
+        418.617856,
+        508.297216
+      ],
+      "bbox_px": [
+        -0.00025600000000736145,
+        3.70278399999998,
+        418.617856,
+        508.297216
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 257.851392,
+        "along_centre_px": 1489.308672,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.769833,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_0cb2934e3744625a_x01280_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.417297,
+    "detection_id": "det_internal_v2_subpipe_hf_896ebe4425134015_x00768_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 234.589696,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 403.231232
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 1,
+        "n_opportunities": 2,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.12086631942227365,
+        "support_ratio": 0.5,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_896ebe4425134015",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1045.410048,
+        95.98489599999999,
+        234.589696,
+        403.231232
+      ],
+      "bbox_px": [
+        277.410048,
+        95.98489599999999,
+        234.589696,
+        403.231232
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 297.600512,
+        "along_centre_px": 1162.704896,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.417297,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_896ebe4425134015_x00768_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.785534,
+    "detection_id": "det_internal_v2_subpipe_hf_896ebe4425134015_x01024_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 280.823296,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 501.2736
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_896ebe4425134015",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1254.215936,
+        10.180608000000007,
+        280.823296,
+        501.2736
+      ],
+      "bbox_px": [
+        230.215936,
+        10.180608000000007,
+        280.823296,
+        501.2736
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 260.817408,
+        "along_centre_px": 1394.627584,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.785534,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_896ebe4425134015_x01024_y00000"
+  },
+  {
+    "anomaly_score": null,
+    "category": "PIPELINE",
+    "change_status": null,
+    "class_confidence": 0.771587,
+    "detection_id": "det_internal_v2_subpipe_hf_896ebe4425134015_x01280_y00000_00",
+    "dimensions": {
+      "area_m2": null,
+      "estimator": "NONE",
+      "length_m": null,
+      "length_px": 412.452352,
+      "reason": "range_scale_m_per_px unknown",
+      "width_m": null,
+      "width_px": 506.52672
+    },
+    "evidence": {
+      "completeness": [
+        "persistence",
+        "shadow",
+        "context"
+      ],
+      "context": {
+        "applicable": false,
+        "background_z": null,
+        "clutter_density": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null
+      },
+      "persistence": {
+        "applicable": true,
+        "mode": "WINDOW_OVERLAP",
+        "n_obs": 2,
+        "n_opportunities": 3,
+        "reason": null,
+        "scatter_m": null,
+        "scatter_px": 0.0,
+        "score": 0.2535338682812242,
+        "support_ratio": 0.6666666666666666,
+        "track_id": null
+      },
+      "shadow": {
+        "applicable": false,
+        "continuity": null,
+        "contrast_z": null,
+        "height_assumptions": [],
+        "implied_height_m": null,
+        "ordering_ok": null,
+        "reason": "NADIR_NOT_RECOVERABLE",
+        "score": null,
+        "shadow_len_px": null
+      }
+    },
+    "frame_id": "subpipe_hf_896ebe4425134015",
+    "fusion": {
+      "calibration_id": null,
+      "contributions": {},
+      "final_confidence": null,
+      "fusion_model_id": null,
+      "intercept": null,
+      "reason": "VALIDATION_CALIBRATION_ARTIFACT_NOT_AVAILABLE"
+    },
+    "geo": {
+      "heading_deg": null,
+      "lat": null,
+      "lon": null,
+      "nav_source": null,
+      "position_uncertainty_m": null,
+      "provenance": "NONE",
+      "reason": "WGS84 frame fix unavailable in Mini2 canonical data",
+      "spatial_reference_level": "L0_PIXEL_ONLY"
+    },
+    "geometry": {
+      "bbox_frame_px": [
+        1280.000256,
+        5.473280000000017,
+        412.452352,
+        506.52672
+      ],
+      "bbox_px": [
+        0.00025599999997893974,
+        5.473280000000017,
+        412.452352,
+        506.52672
+      ],
+      "mask_rle": null,
+      "pics": {
+        "across_centre_px": 258.73664,
+        "along_centre_px": 1486.226432,
+        "ping_centre": null,
+        "ping_span": null,
+        "range_centre_m": null,
+        "range_span_m": null,
+        "range_unit": "PIXEL_RANGE",
+        "reason": "PING_INDEX_NOT_RECOVERABLE",
+        "side": "UNKNOWN"
+      }
+    },
+    "kind": "KNOWN",
+    "label_certainty": "CERTAIN",
+    "model": {
+      "confidence_at_prediction": 0.771587,
+      "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "model_id": "sagardrishti-internal-detector",
+      "model_version_id": "internal_v2",
+      "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+    },
+    "priority": {
+      "applicable": false,
+      "reason": "METRIC_FOOTPRINT_UNAVAILABLE"
+    },
+    "provenance": {
+      "class": "MODEL_DERIVED",
+      "evidence": "HEURISTIC_DERIVED",
+      "fusion": "NONE",
+      "geo": "NONE",
+      "review": "NONE"
+    },
+    "review": {
+      "latest_verdict": null,
+      "review_count": 0,
+      "reviewed_at": null,
+      "reviewer": null
+    },
+    "run_id": "run_internal_v2_evidence_v1",
+    "source": "KNOWN_DETECTOR",
+    "survey_id": "survey_subpipe_mini2_internal_v2",
+    "tile_id": "subpipe_hf_896ebe4425134015_x01280_y00000"
+  }
+]

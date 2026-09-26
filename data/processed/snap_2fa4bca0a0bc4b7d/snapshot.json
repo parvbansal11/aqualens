@@ -1,0 +1,54 @@
+{
+  "snapshot_id": "snap_2fa4bca0a0bc4b7d",
+  "generated_at": "2026-08-30T13:55:19.503411Z",
+  "source_datasets": [
+    {
+      "dataset_id": "subpipe",
+      "dataset_version": "Zenodo:10.5281/zenodo.12666132",
+      "source_url": "https://zenodo.org/api/records/12666132/files/SubPipeMini2.zip/content",
+      "record_url": "https://zenodo.org/api/records/12666132",
+      "licence": "GPL-3.0",
+      "acquired_at": "2026-08-30T12:48:00.576421+00:00",
+      "archive": "SubPipeMini2.zip",
+      "archive_md5": "7e0d925f93a89bc0e8715e4f6f7caecb",
+      "archive_sha256": "a3068be28471786c726cd6100e0b1d92d1c17615a4dcfe7f5544ba758821188f",
+      "archive_size": 4945761374,
+      "extraction_complete": true
+    }
+  ],
+  "canonical_class_config_version": 2,
+  "split_seed": 20260830,
+  "frame_counts": {
+    "subpipe": 404
+  },
+  "tile_counts": {
+    "subpipe": 5930
+  },
+  "split_counts": {
+    "val": 1280,
+    "train": 4330,
+    "test": 320
+  },
+  "class_distribution": {
+    "PIPELINE": 1071
+  },
+  "preprocessing_version": "p0.1",
+  "tiling": {
+    "tile_size": [
+      512,
+      512
+    ],
+    "overlap": 0.5,
+    "edge_rule": "zero_pad_right_bottom",
+    "min_box_fraction": 0.25
+  },
+  "git_commit": null,
+  "split_id": "split_f476b41f858d4c57",
+  "split_assertions": {
+    "group_overlap_train_test": "PASS",
+    "group_overlap_train_val": "PASS",
+    "near_duplicates": "PASS",
+    "eval_ineligible_rows": "PASS",
+    "test_groups_have_positives": "PASS"
+  }
+}

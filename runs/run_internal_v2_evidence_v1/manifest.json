@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-08-30T14:53:27.384629+00:00",
+  "fusion": "NOT_MATERIALIZED: validation calibration artifact unavailable",
+  "input": "frozen heldout_predictions labels only",
+  "model_artifact": {
+    "best_pt_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4",
+    "directory": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts",
+    "metrics_json": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/metrics.json"
+  },
+  "run_id": "run_internal_v2_evidence_v1",
+  "snapshot_id": "snap_2fa4bca0a0bc4b7d",
+  "split_id": "split_f476b41f858d4c57",
+  "unknown_output": "NOT_MATERIALIZED: detector backbone embeddings unavailable"
+}

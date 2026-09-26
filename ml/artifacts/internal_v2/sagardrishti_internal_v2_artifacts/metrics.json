@@ -1,0 +1,73 @@
+{
+  "project": "SagarDrishti",
+  "problem_statement": "SIH26057",
+  "experiment": "internal_v2",
+  "dataset_snapshot_id": "snap_2fa4bca0a0bc4b7d",
+  "source_dataset": "SubPipeMini2",
+  "supervised_classes": [
+    "PIPELINE"
+  ],
+  "selection_rule": "highest validation mAP50-95, then one held-out test evaluation",
+  "candidates": {
+    "yolo11s": {
+      "validation": {
+        "precision": 0.8089364071844086,
+        "recall": 0.5668828242633063,
+        "f1": 0.6666168704032054,
+        "map50": 0.6514235525412211,
+        "map50_95": 0.3044759435874185
+      }
+    },
+    "yolo11m": {
+      "validation": {
+        "precision": 0.6485908607330556,
+        "recall": 0.301255230125523,
+        "f1": 0.4114169461514145,
+        "map50": 0.377513858847237,
+        "map50_95": 0.1618039220659817
+      }
+    }
+  },
+  "winner": {
+    "name": "yolo11s",
+    "validation": {
+      "precision": 0.8089364071844086,
+      "recall": 0.5668828242633063,
+      "f1": 0.6666168704032054,
+      "map50": 0.6514235525412211,
+      "map50_95": 0.3044759435874185
+    },
+    "test": {
+      "precision": 0.46712176709121095,
+      "recall": 0.43333333333333335,
+      "f1": 0.4495936161853161,
+      "map50": 0.28149612224318105,
+      "map50_95": 0.11866431603477576
+    },
+    "checkpoint_mb": 18.289
+  },
+  "latency_gpu": {
+    "n_images": 100,
+    "mean_ms": 4.517107619994931,
+    "median_ms": 4.543692999959603,
+    "p95_ms": 5.235331500011853
+  },
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "stage2": {
+    "snapshot": "snap_2fa4bca0a0bc4b7d",
+    "gate2": "PASS",
+    "leakage_assertions": "5/5 PASS",
+    "train_tiles": 4330,
+    "val_tiles": 1280,
+    "test_tiles": 320,
+    "train_boxes": 772,
+    "val_boxes": 239,
+    "test_boxes": 60
+  },
+  "claims": [
+    "Supervised detector class is PIPELINE only.",
+    "UNKNOWN is not a supervised YOLO class.",
+    "Model selection used validation only.",
+    "Held-out test was evaluated once after winner freeze."
+  ]
+}

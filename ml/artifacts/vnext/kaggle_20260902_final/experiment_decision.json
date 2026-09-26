@@ -1,0 +1,15 @@
+{
+  "experiment": "Natural Clutter Suppressor v1",
+  "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+  "runtime_mode": "ADVISORY_ONLY",
+  "test_set_used": false,
+  "validation": {"tp": 6, "fp": 15, "fn": 5, "tn": 32, "precision": 0.2857142857142857, "recall": 0.5454545454545454, "f1": 0.375, "auroc": null},
+  "operational_ablation": {
+    "validation_images": 25, "iou_match_threshold": 0.3,
+    "baseline": {"tp": 2, "fp": 23, "fn": 69, "precision": 0.08, "recall": 0.028169014084507043},
+    "with_suppressor": {"tp": 0, "fp": 19, "fn": 71, "precision": 0.0, "recall": 0.0},
+    "fp_reduction": 0.17391304347826086, "recall_delta": -0.028169014084507043,
+    "decision_reason": "False positives fell from 23 to 19, but both baseline true positives were eliminated and recall fell from 2.82% to 0%."
+  },
+  "scope": "This rejects this model, dataset, training protocol, and operating configuration as an automatic gate; it does not establish that learned clutter suppression is fundamentally ineffective."
+}

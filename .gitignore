@@ -81,3 +81,20 @@ apps/aqualens-astra/playwright-report/
 apps/aqualens-astra/test-results/
 apps/aqualens-astra/qa/runtime-integration/*.csv
 apps/aqualens-astra/qa/runtime-integration/*.json
+
+# Small, frozen evidence files required by backend verification tests.
+!data/interim/
+!data/interim/subpipe/
+!data/interim/subpipe/frames.jsonl
+!data/processed/snap_2fa4bca0a0bc4b7d/snapshot.json
+!data/processed/multidomain_sonar_v1_1_20260831/
+!data/processed/multidomain_sonar_v1_1_20260831/canonical/
+!data/processed/multidomain_sonar_v1_1_20260831/canonical/metadata.jsonl
+!ml/artifacts/internal_v2/
+!ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/
+!ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/best.pt
+!ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/metrics.json
+!ml/artifacts/vnext/kaggle_20260902_final/
+!ml/artifacts/vnext/kaggle_20260902_final/experiment_decision.json
+!runs/run_internal_v2_evidence_v1/
+!runs/run_internal_v2_evidence_v1/**

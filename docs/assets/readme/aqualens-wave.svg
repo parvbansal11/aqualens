@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" role="img" aria-labelledby="title desc">
+  <title id="title">Aqualens sonar sweep</title>
+  <desc id="desc">A restrained animated sonar pulse moving across a dark ocean-blue field.</desc>
+  <defs>
+    <linearGradient id="sea" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#041b2d"/><stop offset="1" stop-color="#0a4056"/></linearGradient>
+    <linearGradient id="line" x1="0" x2="1"><stop stop-color="#35d5c8" stop-opacity="0"/><stop offset=".5" stop-color="#9ff7df"/><stop offset="1" stop-color="#35d5c8" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1200" height="220" rx="18" fill="url(#sea)"/>
+  <g opacity=".22" stroke="#8de9e2" fill="none">
+    <path d="M0 165 C160 105 245 220 405 142 S690 80 850 140 S1050 200 1200 105"/>
+    <path d="M0 190 C150 135 265 245 430 165 S700 102 865 166 S1040 220 1200 136"/>
+    <path d="M0 135 C160 72 275 185 435 108 S700 48 860 110 S1050 170 1200 76"/>
+  </g>
+  <g transform="translate(145 110)" fill="none" stroke="#83f1dc">
+    <circle r="12" fill="#b6fff0"/>
+    <circle r="34" opacity=".75"><animate attributeName="r" values="34;124;34" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;0;.75" dur="3s" repeatCount="indefinite"/></circle>
+    <circle r="70" opacity=".38"><animate attributeName="r" values="70;164;70" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".38;0;.38" dur="3s" repeatCount="indefinite"/></circle>
+  </g>
+  <rect x="0" y="106" width="360" height="3" fill="url(#line)"><animate attributeName="x" values="-360;1200" dur="4.5s" repeatCount="indefinite"/></rect>
+  <text x="430" y="96" fill="#d9fffa" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19" letter-spacing="4">SIDE-SCAN SONAR</text>
+  <text x="430" y="132" fill="#76d8cf" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" letter-spacing="2">DETECT · VERIFY · REVIEW</text>
+</svg>

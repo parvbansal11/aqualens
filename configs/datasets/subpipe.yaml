@@ -1,0 +1,50 @@
+dataset_id: subpipe
+name: "SubPipe \u2014 Submarine Pipeline Inspection Dataset"
+original_source: https://github.com/remaro-network/SubPipe-dataset
+doi: 10.5281/zenodo.10053564
+licence: GPL-3.0
+access: OPEN
+local_path: data/raw/subpipe
+internal_status: P0
+sensor: Klein 3500
+platform: LAUV (OceanScan-MST), pipeline inspection near Porto, Portugal
+channels:
+  low_frequency:
+    khz: 455
+    images: 5000
+    size_px:
+    - 2500
+    - 500
+    annotations: 3163
+  high_frequency:
+    khz: 900
+    images: 5030
+    size_px:
+    - 5000
+    - 500
+    annotations: 3172
+annotation_type: BBOX
+annotation_formats:
+- COCO
+- YOLO
+n_samples: 10030
+n_annotations: 6335
+group_key:
+  field: mission_id
+  derivation: dataset chunk / mission segment identifier
+  strength: STRONG
+capability_gates:
+  nav_available: true
+  ping_order_recoverable: true
+  range_scale_known: false
+  nadir_recoverable: false
+notes: "Backbone of the internal build. Only P0 dataset with real navigation (INS\
+  \ CSV:\nEstimatedState, Depth, Acceleration, AngularVelocity, Rpm), so the only\
+  \ route to a\ngenuine L2_TRACK_RELATIVE geolocation demonstration.\n\nTwo real frequencies\
+  \ make cross-frequency robustness measurable rather than asserted.\n\n5000x500 waterfall\
+  \ strips tile at 512x512 / 50% overlap into ~18 windows per strip,\nwhich is what\
+  \ makes USP 2 (persistence) demonstrable without depending on any\ndataset's ping\
+  \ metadata. See docs/ARCHITECTURE.md section 0, item 3.\n\nWeaknesses: one class,\
+  \ one site, one sensor, one mission environment. Cannot support a\nmulti-class detector\
+  \ or a domain-shift claim on its own. Partially buried pipeline is a\nhard positive\
+  \ \u2014 expect lower recall and report it rather than tuning it away.\n"

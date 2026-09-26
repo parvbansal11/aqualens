@@ -1,0 +1,5 @@
+# Single source of truth for product identity. Rename freely — nothing else hardcodes it.
+name: AQUALENS
+subtitle: Side-Scan Sonar Anomaly Workstation
+organisation: Ministry of Earth Sciences (MoES)
+department: National Institute of Ocean Technology (NIOT)

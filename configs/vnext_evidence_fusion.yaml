@@ -1,0 +1,10 @@
+version: evidence_fusion@v1
+score_type: UNVALIDATED_EVIDENCE_FUSION
+weights:
+  detector: 0.30
+  persistence: 0.25
+  physics: 0.18
+  quality: 0.15
+  anomaly: 0.07
+  artificiality: 0.05
+notes: Components unavailable at runtime are excluded and remaining weights renormalized. This is not a calibrated probability.

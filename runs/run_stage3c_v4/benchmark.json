@@ -1,0 +1,118 @@
+{
+  "detection": {
+    "overall": {
+      "f1": 0.4495936161853161,
+      "map50": 0.28149612224318105,
+      "map50_95": 0.11866431603477576,
+      "precision": 0.46712176709121095,
+      "recall": 0.43333333333333335
+    },
+    "per_class": {
+      "PIPELINE": {
+        "f1": 0.4495936161853161,
+        "map50": 0.28149612224318105,
+        "map50_95": 0.11866431603477576,
+        "precision": 0.46712176709121095,
+        "recall": 0.43333333333333335
+      }
+    },
+    "validation": {
+      "f1": 0.6666168704032054,
+      "map50": 0.6514235525412211,
+      "map50_95": 0.3044759435874185,
+      "precision": 0.8089364071844086,
+      "recall": 0.5668828242633063
+    }
+  },
+  "device": "mps",
+  "generated_at": "2026-08-30T17:44:48.299664+00:00",
+  "git_sha": null,
+  "metrics_source": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/metrics.json",
+  "open_set": {
+    "protocol": "pipeline-region vs annotation-free-background separation only",
+    "scores": {
+      "median": 0.24549103528261185
+    },
+    "status": "LIMITED_PROTOCOL_EXECUTED",
+    "universal_unknown_recognition_claim": false,
+    "unknown_candidates": 20
+  },
+  "operational": {
+    "device": "mps",
+    "end_to_end_ultralytics_ms_per_tile": 10.903070839995053,
+    "note": "MPS and CPU timings are not comparable to the frozen RTX benchmark.",
+    "peak_rss_mb_approximate": 1195.703125,
+    "preprocessing_decode_ms_per_tile": 0.7471154199447483,
+    "raw_model_forward_ms_per_tile": 4.973450562829385,
+    "sample_tiles": 100
+  },
+  "run_id": "run_stage3c_v4",
+  "split_assertions": {
+    "eval_ineligible_rows": "PASS",
+    "group_overlap_train_test": "PASS",
+    "group_overlap_train_val": "PASS",
+    "near_duplicates": "PASS",
+    "test_groups_have_positives": "PASS"
+  },
+  "split_id": "split_f476b41f858d4c57",
+  "stage3c": {
+    "artifact_dir": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/stage3c_v4",
+    "calibration": {
+      "detector_calibration": null,
+      "fusion": null,
+      "provenance": "HEURISTIC_DERIVED",
+      "reason": "VALIDATION_CALIBRATION_INSUFFICIENT_LABEL_DIVERSITY",
+      "snapshot_id": "snap_2fa4bca0a0bc4b7d",
+      "status": "UNAVAILABLE"
+    },
+    "latency": {
+      "device": "mps",
+      "end_to_end_ultralytics_ms_per_tile": 10.903070839995053,
+      "note": "MPS and CPU timings are not comparable to the frozen RTX benchmark.",
+      "peak_rss_mb_approximate": 1195.703125,
+      "preprocessing_decode_ms_per_tile": 0.7471154199447483,
+      "raw_model_forward_ms_per_tile": 4.973450562829385,
+      "sample_tiles": 100
+    },
+    "test": {
+      "fusion_auprc": null,
+      "known_candidates": 110,
+      "open_set": {
+        "protocol": "pipeline-region vs annotation-free-background separation only",
+        "scores": {
+          "median": 0.24549103528261185
+        },
+        "universal_unknown_recognition_claim": false,
+        "unknown_candidates": 20
+      },
+      "shadow": {
+        "applicable": 0,
+        "unavailable_reason": "NADIR_NOT_RECOVERABLE"
+      },
+      "validation_labels": {
+        "negative_unmatched_detection": 110,
+        "positive_matched_pipeline": 0
+      }
+    },
+    "validation": {
+      "fusion_auprc": null,
+      "known_candidates": 334,
+      "open_set": {
+        "protocol": "pipeline-region vs annotation-free-background separation only",
+        "scores": {
+          "median": 0.27726802229881287
+        },
+        "universal_unknown_recognition_claim": false,
+        "unknown_candidates": 78
+      },
+      "shadow": {
+        "applicable": 0,
+        "unavailable_reason": "NADIR_NOT_RECOVERABLE"
+      },
+      "validation_labels": {
+        "negative_unmatched_detection": 334,
+        "positive_matched_pipeline": 0
+      }
+    }
+  }
+}

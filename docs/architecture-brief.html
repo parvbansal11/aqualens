@@ -1,0 +1,955 @@
+<title>Aqualens Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --bg:        #e9eef0;
+  --surface:   #f7fafb;
+  --surface-2: #dfe7ea;
+  --ink:       #0d181e;
+  --ink-2:     #38505a;
+  --muted:     #5c7079;
+  --line:      #c7d4d9;
+  --line-soft: #d9e3e6;
+  --accent:    #96500a;
+  --accent-bg: #f2e3d2;
+  --sea:       #1c6a5b;
+  --sea-bg:    #d8e8e3;
+  --clay:      #9d3a2b;
+  --clay-bg:   #f3ddd8;
+  --screen:    #060d11;
+
+  --f-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --f-body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --f-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #070f14;
+    --surface:   #0d1922;
+    --surface-2: #14232c;
+    --ink:       #dae7ec;
+    --ink-2:     #a9bfc8;
+    --muted:     #7b929d;
+    --line:      #1e2f39;
+    --line-soft: #172630;
+    --accent:    #eda04a;
+    --accent-bg: #2a1d0f;
+    --sea:       #55bda5;
+    --sea-bg:    #0f2620;
+    --clay:      #e5836b;
+    --clay-bg:   #2a150f;
+    --screen:    #060d11;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        #070f14;
+  --surface:   #0d1922;
+  --surface-2: #14232c;
+  --ink:       #dae7ec;
+  --ink-2:     #a9bfc8;
+  --muted:     #7b929d;
+  --line:      #1e2f39;
+  --line-soft: #172630;
+  --accent:    #eda04a;
+  --accent-bg: #2a1d0f;
+  --sea:       #55bda5;
+  --sea-bg:    #0f2620;
+  --clay:      #e5836b;
+  --clay-bg:   #2a150f;
+  --screen:    #060d11;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.62;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px 96px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 1060px) {
+  .shell { grid-template-columns: 196px minmax(0, 1fr); gap: 56px; padding-right: 40px; }
+}
+
+/* ---------- nav rail ---------- */
+.rail { display: none; }
+@media (min-width: 1060px) {
+  .rail {
+    display: block;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 40px 0 40px;
+  }
+}
+.rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.rail a {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 4px 0 4px 11px;
+  border-left: 2px solid var(--line-soft);
+  transition: color .12s, border-color .12s;
+}
+.rail a:hover, .rail a:focus-visible { color: var(--accent); border-left-color: var(--accent); }
+.rail .rail-head {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 12px 11px;
+}
+
+/* ---------- masthead ---------- */
+.masthead { padding: 44px 0 0; }
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 18px;
+}
+h1 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 4.1rem);
+  letter-spacing: -0.028em;
+  line-height: 0.98;
+  margin: 0;
+  text-wrap: balance;
+}
+.tagline {
+  font-size: 1.13rem;
+  color: var(--ink-2);
+  max-width: 46ch;
+  margin: 16px 0 0;
+}
+
+/* ---------- waterfall band ---------- */
+.band {
+  margin: 30px 0 0;
+  border: 1px solid var(--line);
+  background: var(--screen);
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.band canvas { display: block; width: 100%; height: 132px; }
+.band figcaption {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: .05em;
+  color: #7e8f97;
+  padding: 7px 12px;
+  border-top: 1px solid #16242c;
+  background: #0a141a;
+}
+
+.factbar {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  margin: 14px 0 0;
+  background: var(--surface);
+}
+.factbar div {
+  flex: 1 1 150px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--line-soft);
+}
+.factbar div:last-child { border-right: 0; }
+.factbar dt {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 3px;
+}
+.factbar dd { font-family: var(--f-mono); font-size: 13px; margin: 0; color: var(--ink); }
+
+/* ---------- sections ---------- */
+section { padding: 54px 0 0; scroll-margin-top: 24px; }
+h2 {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 1.62rem;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+h2 .num {
+  font-family: var(--f-mono); font-size: 12px; font-weight: 400;
+  letter-spacing: .1em; color: var(--accent); display: block; margin-bottom: 8px;
+}
+h3 {
+  font-family: var(--f-display); font-weight: 600; font-size: 1.06rem;
+  letter-spacing: -0.005em; margin: 30px 0 8px;
+}
+h4 {
+  font-family: var(--f-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+  margin: 20px 0 6px;
+}
+p { margin: 0 0 14px; max-width: 68ch; }
+.lede { font-size: 1.05rem; color: var(--ink-2); max-width: 66ch; }
+ul, ol { max-width: 68ch; padding-left: 20px; margin: 0 0 14px; }
+li { margin: 0 0 6px; }
+strong { font-weight: 600; }
+code {
+  font-family: var(--f-mono); font-size: .875em;
+  background: var(--surface-2); padding: 1px 5px; border-radius: 2px;
+}
+a { color: var(--accent); }
+.hr { height: 1px; background: var(--line); border: 0; margin: 48px 0 0; }
+
+/* ---------- pull quote / thesis ---------- */
+.thesis {
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 22px;
+  margin: 0 0 22px;
+}
+.thesis p { font-size: 1.1rem; color: var(--ink); }
+.thesis p:last-child { margin-bottom: 0; }
+
+/* ---------- code block ---------- */
+pre {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  line-height: 1.62;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  color: var(--ink-2);
+}
+pre b { color: var(--accent); font-weight: 500; }
+
+/* ---------- tables ---------- */
+.tw { overflow-x: auto; margin: 0 0 18px; border: 1px solid var(--line); border-radius: 2px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--surface); }
+th {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); text-align: left;
+  padding: 9px 14px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  font-weight: 500;
+}
+td { padding: 9px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.mono, th.mono { font-family: var(--f-mono); font-size: 12px; white-space: nowrap; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------- layer stack ---------- */
+.stack { display: flex; flex-direction: column; gap: 3px; margin: 0 0 8px; }
+.layer {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.layer .lid {
+  font-family: var(--f-mono); font-size: 11.5px; font-weight: 500;
+  color: var(--accent); background: var(--accent-bg);
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--line);
+}
+.layer .lbody { padding: 10px 15px; }
+.layer .lname {
+  font-family: var(--f-display); font-weight: 600; font-size: .93rem;
+  letter-spacing: .01em; margin: 0 0 3px;
+}
+.layer .lmods {
+  font-family: var(--f-mono); font-size: 11.5px; color: var(--muted);
+  margin: 0; line-height: 1.55; max-width: none;
+}
+
+/* ---------- USP cards ---------- */
+.usp {
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surface);
+  padding: 20px 22px 8px;
+  margin: 0 0 14px;
+}
+.usp.king { border-color: var(--accent); border-width: 1px 1px 1px 3px; }
+.usp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 0 0 4px; }
+.usp-head h3 { margin: 0; font-size: 1.1rem; }
+.usp p { max-width: 64ch; }
+.tag {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
+  background: var(--surface-2); color: var(--muted);
+}
+.tag.king { background: var(--accent-bg); color: var(--accent); }
+.limit {
+  border-top: 1px solid var(--line-soft);
+  margin: 14px 0 0; padding: 12px 0 12px;
+  display: grid; gap: 10px;
+}
+@media (min-width: 720px) { .limit { grid-template-columns: 1fr 1fr; gap: 22px; } }
+.limit .lbl {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); display: block; margin: 0 0 3px;
+}
+.limit p { font-size: 13.5px; margin: 0; color: var(--ink-2); max-width: none; }
+
+/* ---------- figures ---------- */
+figure.dia { margin: 20px 0 22px; }
+figure.dia .fw {
+  overflow-x: auto; border: 1px solid var(--line); border-radius: 2px;
+  background: var(--surface); padding: 14px;
+}
+figure.dia svg { display: block; max-width: 100%; height: auto; margin: 0 auto; color: var(--ink); }
+figure.dia figcaption {
+  font-size: 13px; color: var(--muted); margin: 9px 0 0; max-width: 68ch;
+}
+
+/* ---------- callouts ---------- */
+.note {
+  border: 1px solid var(--line); border-left-width: 3px;
+  border-radius: 2px; padding: 13px 16px; margin: 0 0 16px;
+  background: var(--surface); font-size: 14px;
+}
+.note p { margin: 0; max-width: 64ch; }
+.note p + p { margin-top: 8px; }
+.note .lbl {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em;
+  text-transform: uppercase; display: block; margin: 0 0 4px;
+}
+.note.warn { border-left-color: var(--clay); background: var(--clay-bg); }
+.note.warn .lbl { color: var(--clay); }
+.note.good { border-left-color: var(--sea); background: var(--sea-bg); }
+.note.good .lbl { color: var(--sea); }
+.note.key { border-left-color: var(--accent); background: var(--accent-bg); }
+.note.key .lbl { color: var(--accent); }
+
+/* ---------- refusal list ---------- */
+.refuse { list-style: none; padding: 0; max-width: 70ch; }
+.refuse li {
+  padding: 11px 0 11px 30px;
+  border-bottom: 1px solid var(--line-soft);
+  position: relative;
+  font-size: 14.5px;
+  margin: 0;
+}
+.refuse li::before {
+  content: "✕";
+  position: absolute; left: 4px; top: 11px;
+  font-family: var(--f-mono); font-size: 12px; color: var(--clay);
+}
+.refuse li:last-child { border-bottom: 0; }
+
+/* ---------- two-col ---------- */
+.cols { display: grid; gap: 22px; margin: 0 0 8px; }
+@media (min-width: 780px) { .cols { grid-template-columns: 1fr 1fr; gap: 34px; } }
+.cols > div > *:first-child { margin-top: 0; }
+
+/* ---------- footer ---------- */
+footer {
+  margin-top: 60px; padding-top: 26px; border-top: 1px solid var(--line);
+  font-size: 13.5px; color: var(--muted);
+}
+footer .docs { display: grid; gap: 3px; margin: 12px 0 20px; }
+footer .docs div { display: flex; gap: 12px; font-family: var(--f-mono); font-size: 12px; }
+footer .docs span:first-child { color: var(--accent); min-width: 200px; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="shell">
+
+<nav class="rail" aria-label="Sections">
+  <p class="rail-head">Contents</p>
+  <ol>
+    <li><a href="#thesis">Thesis</a></li>
+    <li><a href="#pics">PICS frame</a></li>
+    <li><a href="#levels">Reference levels</a></li>
+    <li><a href="#stack">Pipeline</a></li>
+    <li><a href="#usps">Five differentiators</a></li>
+    <li><a href="#modules">Module boundaries</a></li>
+    <li><a href="#data">Data integrity</a></li>
+    <li><a href="#eval">Evaluation</a></li>
+    <li><a href="#accept">Acceptance</a></li>
+    <li><a href="#refuse">Will not claim</a></li>
+    <li><a href="#next">Deferred &amp; blocked</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<header class="masthead">
+  <p class="eyebrow">SIH26057 · MoES / NIOT · Architecture specification</p>
+  <h1>AQUALENS</h1>
+  <p class="tagline">Automated marine debris and anomaly detection from side-scan sonar — an operator workstation, not a demo.</p>
+
+  <figure class="band">
+    <canvas id="wf" width="1600" height="264" aria-label="Simulated dual-channel side-scan sonar waterfall showing a central nadir band, two targets, and their acoustic shadows falling away from nadir"></canvas>
+    <figcaption>DUAL-CHANNEL WATERFALL · PORT ◀ NADIR ▶ STARBOARD · shadows fall away from nadir on both sides</figcaption>
+  </figure>
+
+  <dl class="factbar">
+    <div><dt>Status</dt><dd>Spec complete · code not started</dd></div>
+    <div><dt>Repo</dt><dd>~/Desktop/aqualens</dd></div>
+    <div><dt>Target</dt><dd>M5 Pro · 24 GB · MPS</dd></div>
+    <div><dt>Datasets</dt><dd>4 primary + 1 pretrain</dd></div>
+  </dl>
+</header>
+
+<section id="thesis">
+  <h2><span class="num">THE ARGUMENT</span>Why this is not an object-detection problem</h2>
+  <div class="thesis">
+    <p>A naive submission runs YOLO on sonar JPEGs and draws boxes. That system cannot answer the question NIOT actually asked — <em>separate natural seafloor topology from artificial anomalies</em> — because a single-frame appearance classifier has no way to tell a rock from a cylinder when both are bright blobs with shadows.</p>
+  </div>
+  <p>Our thesis is that <strong>the discriminative signal is not in the pixels of one detection box; it is in the sonar geometry around it.</strong> A real man-made target on the seabed is:</p>
+  <ul>
+    <li><strong>Persistent</strong> — present in every ping window that covers its position.</li>
+    <li><strong>Shadow-consistent</strong> — accompanied by an occlusion on the far-range side whose length is geometrically consistent with a raised object.</li>
+    <li><strong>Contextually anomalous</strong> — unlike the <em>range-matched local</em> seabed, not merely unlike the image average.</li>
+    <li><strong>Stable</strong> — in the same place on the next survey.</li>
+  </ul>
+  <p>Speckle satisfies none of these. Rock fields satisfy the first two and fail the third, producing characteristic high clutter density. Everything in this architecture exists to compute those four pieces of evidence and fuse them in a way a hostile examiner can audit line by line.</p>
+</section>
+
+<hr class="hr">
+
+<section id="pics">
+  <h2><span class="num">FOUNDATION</span>PICS — the ping-indexed coordinate system</h2>
+  <p class="lede">This is the single most important design decision in the system. Every architectural advantage flows from it.</p>
+
+  <p>Side-scan sonar imagery is not a photograph. It is a raster whose two axes carry physical meaning: one is sequential pings (along-track, roughly time), the other is acoustic return sample index (across-track, range from nadir). A detector that only knows <code>(x, y)</code> in pixels cannot reason about shadows, cannot associate observations across overlapping windows, and cannot georeference. So every module speaks one internal frame:</p>
+
+  <pre><b>ping</b>    = ping_index_start + along_sign · along_idx · ping_stride
+<b>range_m</b> = |across_idx − nadir_offset_px| · range_scale_m_per_px
+<b>side</b>    = PORT | STARBOARD          (across_idx vs nadir_offset_px)</pre>
+
+  <p>Two unit vectors fall out of this, and they are what the evidence modules actually consume: <code>u_along</code>, the direction of increasing ping, and <code>u_range</code>, the direction of increasing range <em>away from nadir</em>.</p>
+
+  <figure class="dia">
+    <div class="fw">
+      <svg viewBox="0 0 760 430" role="img" aria-label="A dual-channel sonar tile with nadir down the centre. Range increases outward to both left and right. A target on the port side casts its shadow leftward and a target on the starboard side casts its shadow rightward — both away from nadir.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+          <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#c07316"/>
+          </marker>
+        </defs>
+
+        <!-- tile -->
+        <rect x="96" y="66" width="568" height="272" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
+        <!-- water column -->
+        <rect x="356" y="66" width="48" height="272" fill="currentColor" opacity="0.10"/>
+        <text x="380" y="358" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.6">water column</text>
+        <!-- nadir -->
+        <line x1="380" y1="60" x2="380" y2="344" stroke="#c07316" stroke-width="1.6"/>
+        <text x="380" y="52" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#c07316">NADIR</text>
+
+        <!-- port target + shadow -->
+        <rect x="232" y="158" width="20" height="15" fill="#c07316"/>
+        <rect x="180" y="158" width="52" height="15" fill="currentColor" opacity="0.30"/>
+        <text x="206" y="150" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.75">shadow</text>
+        <text x="257" y="186" text-anchor="start" font-family="monospace" font-size="10.5" fill="#c07316">target</text>
+
+        <!-- starboard target + shadow -->
+        <rect x="512" y="248" width="18" height="14" fill="#c07316"/>
+        <rect x="530" y="248" width="46" height="14" fill="currentColor" opacity="0.30"/>
+        <text x="553" y="240" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.75">shadow</text>
+        <text x="505" y="276" text-anchor="end" font-family="monospace" font-size="10.5" fill="#c07316">target</text>
+
+        <!-- u_range arrows -->
+        <line x1="372" y1="390" x2="116" y2="390" stroke="#c07316" stroke-width="1.4" marker-end="url(#arA)"/>
+        <line x1="388" y1="390" x2="644" y2="390" stroke="#c07316" stroke-width="1.4" marker-end="url(#arA)"/>
+        <text x="244" y="382" text-anchor="middle" font-family="monospace" font-size="11" fill="#c07316">◀ u_range (PORT)</text>
+        <text x="516" y="382" text-anchor="middle" font-family="monospace" font-size="11" fill="#c07316">u_range (STARBOARD) ▶</text>
+        <text x="380" y="394" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.6">0 m</text>
+        <text x="120" y="410" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.6">75 m</text>
+        <text x="640" y="410" text-anchor="middle" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.6">75 m</text>
+
+        <!-- u_along -->
+        <line x1="60" y1="72" x2="60" y2="332" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)" opacity="0.8"/>
+        <text x="42" y="212" text-anchor="middle" font-family="monospace" font-size="11" fill="currentColor" opacity="0.8" transform="rotate(-90 42 212)">u_along · ping n → n+k</text>
+      </svg>
+    </div>
+    <figcaption>Shadows fall in <code>+u_range</code>, so the shadow-search direction <em>reverses</em> between channels. A shadow module that assumes "dark region to the right of the object" is wrong on half of every dual-channel survey — which is precisely the class of error PICS makes impossible to write.</figcaption>
+  </figure>
+</section>
+
+<section id="levels">
+  <h2><span class="num">HONESTY MECHANISM</span>Capability is declared per tile, never assumed</h2>
+  <p>We will mostly work with public datasets that are <em>images</em>, not raw recordings. The architecture must not pretend otherwise and must not collapse when metadata is absent. Every tile and detection carries a declared reference level:</p>
+
+  <div class="tw">
+  <table>
+    <thead><tr><th class="mono">Level</th><th>Available</th><th>Persistence</th><th>Shadow</th><th>Geolocation</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">L0_PIXEL_ONLY</td><td>Raster only, nadir not recoverable</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td class="mono">L1_TILE_RELATIVE</td><td>Nadir and <code>u_range</code> estimated from the image itself</td><td>—</td><td>px, no height</td><td>—</td></tr>
+      <tr><td class="mono">L2_TRACK_RELATIVE</td><td>+ ping index, range scale, sequential tiles</td><td>yes</td><td>metric</td><td>nav-derived</td></tr>
+      <tr><td class="mono">L3_SURVEYED</td><td>+ validated nav, heading, attitude</td><td>yes</td><td>metric</td><td>with uncertainty</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note key">
+    <span class="lbl">Load-bearing</span>
+    <p><strong>L1 is why this design works on public data.</strong> A <code>NadirEstimator</code> recovers <code>nadir_offset_px</code> and <code>u_range</code> from the raster itself — the water column is a low-return band and the first bottom return is a bright across-track ridge. When its confidence falls below threshold the tile drops to L0 and shadow evidence reports <code>applicable: false, reason: "NADIR_NOT_RECOVERABLE"</code>.</p>
+    <p>When a judge asks "does your shadow module work on <em>this</em> image?", the answer is a field in the record, not an opinion.</p>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="stack">
+  <h2><span class="num">PIPELINE</span>Nine layers, each a pure function over typed records</h2>
+
+  <div class="stack">
+    <div class="layer"><div class="lid">L0</div><div class="lbody">
+      <p class="lname">Ingest</p>
+      <p class="lmods">RawSonarReader (XTF · Humminbird/PINGMapper) · TiledImageReader (image + sidecar) · DemoMissionReader → SonarTile[] + Track</p></div></div>
+    <div class="layer"><div class="lid">L1</div><div class="lbody">
+      <p class="lname">Preprocess &amp; quality</p>
+      <p class="lmods">NadirEstimator → geometry descriptor → SpatialReferenceLevel · SpeckleSuppressor · RangeGainNormaliser · QualityScorer (dropout, heave/pitch/roll banding)</p></div></div>
+    <div class="layer"><div class="lid">L2</div><div class="lbody">
+      <p class="lname">Perception <span style="color:var(--muted);font-weight:400">— three independent heads</span></p>
+      <p class="lmods">KnownDetector (YOLO) · KnownSegmenter (masks) · OpenWorldAnomaly (PatchCore) → Candidate[]</p></div></div>
+    <div class="layer"><div class="lid">L3</div><div class="lbody">
+      <p class="lname">Evidence engine <span style="color:var(--muted);font-weight:400">— operates in PICS, zero learned weights</span></p>
+      <p class="lmods">PersistenceEvidence · ShadowEvidence · ContextEvidence</p></div></div>
+    <div class="layer"><div class="lid">L4</div><div class="lbody">
+      <p class="lname">Fusion</p>
+      <p class="lmods">Isotonic calibrator + 8-feature logistic regression → final_confidence + per-feature log-odds contributions</p></div></div>
+    <div class="layer"><div class="lid">L5</div><div class="lbody">
+      <p class="lname">Geo engine</p>
+      <p class="lmods">PICS + nav + heading + range → lat/lon + uncertainty ellipse · CoveragePolygonBuilder</p></div></div>
+    <div class="layer"><div class="lid">L6</div><div class="lbody">
+      <p class="lname">Mission intelligence</p>
+      <p class="lmods">ChangeDetector (coverage-aware) · PriorityEngine (transparent weighted score)</p></div></div>
+    <div class="layer"><div class="lid">L7</div><div class="lbody">
+      <p class="lname">Persistence &amp; API</p>
+      <p class="lmods">SQLite (WAL) + Parquet + GeoJSON · FastAPI + SSE job progress</p></div></div>
+    <div class="layer"><div class="lid">L8</div><div class="lbody">
+      <p class="lname">Operator workstation</p>
+      <p class="lmods">React/TS · MapLibre · WebGL sonar canvas · RAW / ENHANCED / DETECTIONS / ANOMALY / CHANGE</p></div></div>
+  </div>
+
+  <p>There is no hidden state and no in-place mutation. Every invocation produces an <strong>immutable run directory</strong> carrying a manifest (config hash, git SHA, model IDs + weight hashes, split-assertion results, device, per-stage timings), the tiles, detections and evidence as Parquet, and <code>metrics.json</code> — <strong>the only source of any number displayed anywhere in the project</strong>.</p>
+</section>
+
+<hr class="hr">
+
+<section id="usps">
+  <h2><span class="num">DIFFERENTIATORS</span>Five, and exactly five</h2>
+  <p class="lede">Each is scoped to what is genuinely buildable for the internal version, with the honest limit stated and the test that proves it.</p>
+
+  <div class="usp king">
+    <div class="usp-head"><h3>Open-world / unknown anomaly detection</h3><span class="tag king">King USP</span></div>
+    <p>Answers <em>"does this region look significantly unlike normal seabed?"</em> — never <em>"which class is it?"</em></p>
+    <h4>Minimum implementation</h4>
+    <p><strong>PatchCore over sonar-domain patch embeddings.</strong> Feature extractor behind a swappable protocol: ship first on the fine-tuned detector's own backbone features (sonar-domain, zero training, cannot fail to ship); train a small DINO/SimCLR encoder on a stratified 50–60k DeeperSense subset in parallel and swap it in only if it wins. Memory bank of normal-only patches, greedy k-centre coreset, |M| ≈ 100k × D, fp16 — about 75 MB. Per-patch nearest-neighbour distance → dense anomaly map → connected components.</p>
+    <h4>The part that matters — per-survey thresholding</h4>
+    <pre>tau_survey = max(tau_min_global, <b>quantile(scores_of_this_survey, 0.995)</b>)</pre>
+    <p>Absolute embedding distances shift across sensors, frequencies and basins — exactly the domain shift GhostNetZero measured between Baltic and Puget Sound. Thresholding at a quantile of the survey's <em>own</em> score distribution means we flag "unlike <em>this</em> seabed", which is both the correct semantics and a hard bound on false-positive burden: at q99.5, at most 0.5 % of patches can ever be proposed.</p>
+    <div class="limit">
+      <div><span class="lbl">Enforced constraint</span><p>Schema rejects any record where <code>category = UNKNOWN_ARTIFICIAL_ANOMALY_CANDIDATE</code> carries a class confidence. Open-world proposals overlapping a known detection are absorbed into it, not emitted separately. The word "debris" cannot appear on an unclassified anomaly anywhere in the system.</p></div>
+      <div><span class="lbl">How it is proven</span><p>Leave-one-class-out: train the detector on three of four classes, treat the fourth as genuinely unknown, measure whether the subsystem flags it. AUROC / AUPRC at region level plus FPR on held-out natural seabed. A real open-set protocol, and the strongest single result the project can show.</p></div>
+    </div>
+  </div>
+
+  <div class="usp">
+    <div class="usp-head"><h3>Temporal persistence verification</h3><span class="tag">Evidence</span></div>
+    <p><strong>The insight that makes this rigorous:</strong> the target is stationary and the vehicle moves. In image space a target appears to drift between overlapping windows, which is why naive trackers need motion models. <em>In PICS the target's <code>(ping, range_m)</code> is constant.</em> Association is therefore not tracking — it is clustering with a fixed gate, which is far more robust.</p>
+    <h4>Minimum implementation</h4>
+    <p>Tile with 50 % along-track overlap so each ping is covered by ≥2 windows. Project candidates to PICS, union-find cluster with gate <code>eps = max(3 m, 0.5 × median diagonal)</code>. Per cluster compute <code>n_obs</code>, <code>n_opportunities</code> (windows whose ping <em>and</em> range extent actually cover that location — the denominator that makes the ratio mean something), <code>support_ratio</code>, positional <code>scatter_m</code>, and a <strong>Wilson lower bound</strong> at 90 %.</p>
+    <div class="limit">
+      <div><span class="lbl">Why Wilson, not a raw ratio</span><p>1/1 and 8/8 are not the same evidence, and a raw support ratio says they are. The bound shrinks confidence when coverage is thin, and <code>n_opportunities == 1</code> reports <code>applicable: false</code> outright.</p></div>
+      <div><span class="lbl">Honest scope</span><p>Datasets of independent single images report <code>NO_TEMPORAL_CONTEXT</code>. Ping ordering for the PINGEcosystem corpus must be <em>verified from filenames before</em> the capability is claimed — the reader sets <code>ping_index_start</code> only when it parses successfully, and never guesses.</p></div>
+    </div>
+  </div>
+
+  <div class="usp">
+    <div class="usp-head"><h3>Acoustic shadow validation</h3><span class="tag">Evidence</span></div>
+    <p>An object of height <em>h</em> on the seabed, at slant range <em>R</em> from a sonar at altitude <em>H</em>, occludes the beam over a shadow of length <em>L</em>. Similar triangles give the standard side-scan relation:</p>
+
+    <figure class="dia">
+      <div class="fw">
+        <svg viewBox="0 0 700 300" role="img" aria-label="Side elevation. A sonar at altitude H above the seabed. A ray grazing the top of an object of height h continues to strike the seabed, defining a shadow of length L beyond the object. Object height follows from H, L and the slant range R.">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <!-- seabed -->
+          <line x1="52" y1="238" x2="664" y2="238" stroke="currentColor" stroke-width="1.4"/>
+          <text x="600" y="256" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.6">seabed (assumed flat)</text>
+          <!-- sonar -->
+          <polygon points="72,40 92,54 72,68 52,54" fill="#c07316"/>
+          <text x="72" y="30" text-anchor="middle" font-family="monospace" font-size="11" fill="#c07316">sonar</text>
+          <!-- H -->
+          <line x1="72" y1="70" x2="72" y2="238" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+          <text x="64" y="158" text-anchor="end" font-family="monospace" font-size="12" fill="currentColor">H</text>
+          <!-- slant range R -->
+          <line x1="88" y1="60" x2="372" y2="238" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+          <text x="212" y="164" font-family="monospace" font-size="12" fill="currentColor" opacity="0.8">R</text>
+          <!-- object -->
+          <rect x="372" y="196" width="22" height="42" fill="#c07316"/>
+          <line x1="404" y1="196" x2="440" y2="196" stroke="#c07316" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="446" y="200" font-family="monospace" font-size="12" fill="#c07316">h</text>
+          <!-- grazing ray -->
+          <line x1="86" y1="56" x2="372" y2="196" stroke="#c07316" stroke-width="1.5"/>
+          <line x1="372" y1="196" x2="466" y2="238" stroke="#c07316" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="228" y="112" font-family="monospace" font-size="10.5" fill="#c07316">grazing ray</text>
+          <!-- shadow -->
+          <rect x="394" y="230" width="72" height="8" fill="currentColor" opacity="0.32"/>
+          <line x1="394" y1="266" x2="466" y2="266" stroke="currentColor" stroke-width="1.2" marker-start="url(#ar2)" marker-end="url(#ar2)"/>
+          <text x="430" y="284" text-anchor="middle" font-family="monospace" font-size="12" fill="currentColor">L</text>
+          <!-- relation -->
+          <text x="516" y="120" font-family="monospace" font-size="17" fill="#c07316">h = H·L / (R + L)</text>
+          <text x="516" y="142" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.65">range-geometry estimate,</text>
+          <text x="516" y="157" font-family="monospace" font-size="10.5" fill="currentColor" opacity="0.65">not a 3-D reconstruction</text>
+        </svg>
+      </div>
+      <figcaption>Valid only under flat local seabed, object resting on the bottom, known altitude, and an untruncated shadow. All four conditions are checked and recorded on every value as <code>height_assumptions</code>.</figcaption>
+    </figure>
+
+    <h4>Minimum implementation</h4>
+    <p>Establish <code>u_range</code>; extract the shadow search band immediately outboard of the candidate; measure <strong>range-matched</strong> contrast <em>z</em>, along-track continuity, highlight/shadow ordering, shadow length, and edge linearity.</p>
+    <div class="limit">
+      <div><span class="lbl">The mistake to avoid</span><p>Background statistics <em>must</em> be range-matched. Intensity falls with range, so comparing a far-range object against a global image mean makes every distant object look like it sits in a shadow. This is the most common way naive shadow implementations silently break.</p></div>
+      <div><span class="lbl">What we claim, precisely</span><p>Shadow evidence separates <em>real raised objects</em> from speckle and texture artefacts. It does <strong>not</strong> on its own separate man-made from natural — rocks cast shadows too. Its weak man-made signal is <code>edge_linearity</code>, and it is one feature of eight, weighted by fitted data rather than by assertion.</p></div>
+    </div>
+  </div>
+
+  <div class="usp">
+    <div class="usp-head"><h3>Survey-to-survey change detection</h3><span class="tag">Mission</span></div>
+    <p>Object-level geospatial comparison, no pixel registration for v1. Both surveys must reach L2+, otherwise comparison is refused with a stated reason. Hungarian matching on distance, class compatibility and size similarity, gated at <code>max(15 m, 3σ_nav, 0.5 × footprint)</code>.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th class="mono">Status</th><th>Condition</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">NEW</td><td>New detection, no baseline match, inside baseline coverage</td></tr>
+          <tr><td class="mono">UNCHANGED</td><td>Matched within tolerance</td></tr>
+          <tr><td class="mono">MOVED</td><td>Matched but displaced beyond the gate, within 3× the gate</td></tr>
+          <tr><td class="mono">NOT_REOBSERVED</td><td>Baseline detection <strong>inside</strong> the new coverage polygon, unmatched</td></tr>
+          <tr><td class="mono">OUT_OF_COVERAGE</td><td>Baseline detection <strong>not covered</strong> by the new survey</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <span class="lbl">Non-negotiable</span>
+      <p>The <strong>coverage polygon is not optional</strong>. Without it the last two rows collapse into one, and the system reports objects as removed when it simply never looked there. Reporting a recovered ghost net that was never re-surveyed is the kind of error that ends a demo — so the distinction is a first-class output, not a refinement.</p>
+    </div>
+  </div>
+
+  <div class="usp">
+    <div class="usp-head"><h3>Recovery priority engine</h3><span class="tag">Mission</span></div>
+    <p>A transparent weighted sum over confidence, persistence, anomaly evidence, footprint, class weight and newness — weights living in a versioned YAML, never in code. Every detection stores the <strong>full breakdown</strong> (component → weight × value → contribution) plus the config version, and the inspector renders it as a contribution waterfall. Change the YAML, priorities change, and the UI shows exactly why.</p>
+    <div class="limit">
+      <div><span class="lbl">Deliberately not built</span><p>No trained ecological-risk model. We have no data that would support one, and an unfalsifiable risk score is exactly the kind of claim that collapses under questioning.</p></div>
+      <div><span class="lbl">Framing</span><p>Presented as <strong>decision support</strong>, in those words, in the UI and the report.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="modules">
+  <h2><span class="num">BOUNDARIES</span>Modules, and the rule a test enforces</h2>
+  <p>Boundaries are drawn so each module is testable against a fixture with no other module present, and so each of the five USPs lives in exactly one module.</p>
+
+  <pre>ds_core   ← everything (schemas, enums, provenance)
+ds_io · ds_preprocess · ds_perception · ds_evidence · ds_fusion · ds_geo  →  <b>ds_core only</b>
+ds_mission    → ds_core, ds_geo
+ds_pipeline   → all              ds_api → ds_pipeline, ds_core</pre>
+
+  <p><code>tests/test_module_boundaries.py</code> walks the import graph and fails on any violation. Two consequences are worth naming:</p>
+  <ul>
+    <li><strong><code>ds_perception</code> cannot import <code>ds_evidence</code> or <code>ds_geo</code>.</strong> The detector cannot quietly consume evidence or position, so the ablations compare like with like.</li>
+    <li><strong><code>ds_evidence</code> holds no learned weights.</strong> Evidence channels cannot overfit, and "detector → +temporal → +shadow" compares the <em>same</em> detector under different evidence rather than differently-trained models — the only version of that ablation that means anything.</li>
+  </ul>
+
+  <h3>The contract that makes it honest, in code</h3>
+  <pre>class <b>Evidence</b>(BaseModel):
+    applicable: bool
+    reason: str | None = None     <b># REQUIRED when applicable is False</b>
+    score: float | None = None    <b># None iff applicable is False</b></pre>
+  <p>Every evidence channel subclasses this. It is structurally impossible to emit a score without declaring computability, or to declare inapplicability without a machine-readable reason. There is no sentinel <code>0.0</code>, no <code>-1</code>, and no silent default anywhere in the schemas.</p>
+
+  <h3>How a confidence number is actually computed</h3>
+  <p>No hand-tuned fusion weights and no fusion neural network. An L2 logistic regression on eight features — calibrated detector logit, Wilson persistence, log opportunities, shadow score, shadow applicability, context <em>z</em>, clutter density, anomaly score — fitted on the <em>validation</em> split with TP/FP as the label. Nine parameters total. Coefficients are committed with a model card; per-detection log-odds contributions surface in the inspector.</p>
+  <div class="note good">
+    <span class="lbl">Answers the hardest question</span>
+    <p><em>"Where does that 0.87 come from?"</em> — an auditable sum of eight terms with published coefficients, next to a list of which evidence channels were unavailable for that detection.</p>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="data">
+  <h2><span class="num">DATA</span>The registry is the interface</h2>
+  <p><strong>There is no <code>data/all/</code>.</strong> Loaders never take a directory path — they take a registry query. Every sample row carries dataset, mission, site, sensor, frequency, source filename, SHA-256, ping window, annotation type and licence, so training on an anonymous pile of images is structurally impossible.</p>
+
+  <div class="cols">
+    <div>
+      <h4>Capability gates — verified, never assumed</h4>
+      <div class="tw"><table>
+        <thead><tr><th class="mono">Gate</th><th>If false</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">ping_order_recoverable</td><td>Persistence reports <code>NO_TEMPORAL_CONTEXT</code></td></tr>
+          <tr><td class="mono">nadir_recoverable</td><td>Tile drops to L0, shadow inapplicable</td></tr>
+          <tr><td class="mono">range_scale_known</td><td>Metric dimensions and implied height stay null</td></tr>
+          <tr><td class="mono">nav_available</td><td>Reference level capped at L1</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:13.5px">Each is set by a verification script. <strong>No UI surface may claim a capability whose gate is false.</strong></p>
+    </div>
+    <div>
+      <h4>Leakage controls</h4>
+      <ul style="font-size:14px">
+        <li><strong>Group-wise splits only</strong> — recording, mission, site or instrument. Never random.</li>
+        <li><strong>Assertions run inside the pipeline</strong> and land in the run manifest.</li>
+        <li><strong>Perceptual near-duplicate check</strong> across splits catches overlapping windows that survived grouping.</li>
+        <li><strong>DeeperSense is <code>eval_eligible = false</code></strong> at registry level — a query cannot pull it into a test split.</li>
+        <li><strong>Held-out domains</strong>, not just images: ≥1 sensor and ≥1 frequency band reserved.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note warn">
+    <span class="lbl">Corpus discrepancy — must be stated in any comparison</span>
+    <p>GhostVision (JMSE 2026) reports model experiments on <strong>3,110</strong> manually annotated images. The PINGEcosystem repository currently holds <strong>6,674</strong>. These are not the same corpus. We report our own numbers on our own split and never claim comparability with their published F1 of roughly 0.71–0.73; that figure is cited only as operating-regime context.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Dataset</th><th>Role</th><th class="mono">Split key</th><th>Phase</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PINGEcosystem Ghost Pot</strong> · 6,674 img, bbox</td><td>Derelict fishing gear · detector init from published SSS weights</td><td class="mono">recording_id</td><td class="tnum">1</td></tr>
+        <tr><td><strong>SubPipe</strong> · 10,030 img, 6,335 ann</td><td>Pipeline · cross-frequency robustness · <strong>the only real navigation metadata</strong></td><td class="mono">mission_id</td><td class="tnum">1</td></tr>
+        <tr><td><strong>AI4Shipwrecks</strong> · 286 img, masks</td><td>Wreck &amp; structural debris · segmentation · site-aware split as given</td><td class="mono">site_id</td><td class="tnum">1</td></tr>
+        <tr><td><strong>Marine-PULSE</strong> · 627 img, labels only</td><td>Engineering structure · sensor variation · <strong>negatives</strong>. No boxes synthesised from image labels.</td><td class="mono">instrument_id</td><td class="tnum">2</td></tr>
+        <tr><td><strong>DeeperSense</strong> · 434k patches</td><td>SSL pretraining + normal memory bank. <strong>Stratified 50–60k subset</strong>, never evaluated on.</td><td class="mono">— (eval-ineligible)</td><td class="tnum">2</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="hr">
+
+<section id="eval">
+  <h2><span class="num">EVALUATION</span>Every number traces to a saved artifact</h2>
+  <p><strong>Rule zero: the word "accuracy" appears in no headline result.</strong> On a task with this class imbalance it is meaningless — a model that detects nothing scores above 99 %.</p>
+
+  <h3>Provenance chain</h3>
+  <pre>pipeline run  →  runs/&lt;run_id&gt;/metrics.json
+                       │
+       scripts/make_benchmarks.py   <b>← refuses runs with a failed split assertion</b>
+                       │
+      apps/workstation/public/benchmarks.json   {run_id, git_sha, generated_at, metrics}
+                       │
+                  UI reads at runtime</pre>
+  <p>Enforced by <code>test_no_hardcoded_metrics.py</code>, which scans frontend source for numeric literals near metric identifiers and fails the build, and asserts every metric key the UI renders exists in the benchmark artifact. The Model Lab shows <code>run_id</code> and <code>git_sha</code> beside the table — if a judge asks where a number came from, the answer is on screen before they finish asking.</p>
+
+  <h3>Ablations — same detector, same test set, evidence progressively enabled</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="mono">#</th><th>Configuration</th><th>Answers</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">A0</td><td>Detector only, raw confidence</td><td>Baseline</td></tr>
+        <tr><td class="mono">A1</td><td>+ calibration</td><td>Is the confidence honest?</td></tr>
+        <tr><td class="mono">A2</td><td>+ temporal persistence</td><td>Is transient clutter suppressed?</td></tr>
+        <tr><td class="mono">A3</td><td>+ acoustic shadow</td><td>Are texture artefacts suppressed?</td></tr>
+        <tr><td class="mono">A4</td><td>+ context / clutter density</td><td>Does rock-field suppression work?</td></tr>
+        <tr><td class="mono">A5</td><td>Full fused</td><td>Does fusion beat any single channel?</td></tr>
+        <tr><td class="mono">A6</td><td>Open-world only</td><td>Unknown detection standalone</td></tr>
+        <tr><td class="mono">A7</td><td>Detector backbone vs SSL encoder</td><td>Did pretraining earn its cost?</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Every row reports P / R / F1 / mAP <em>and</em> <strong>false positives per km of trackline</strong> — the number an operator actually cares about, since F1 alone never tells them how many boxes they must review. An ablation that raises F1 while raising review burden is shown as exactly that.</p>
+
+  <p>Detection metrics are broken out per class, per dataset, per site, per sensor and per frequency. Single aggregates hide domain collapse; the whole GhostNetZero Baltic-to-Puget lesson is that the aggregate looks fine while one domain is broken.</p>
+</section>
+
+<hr class="hr">
+
+<section id="accept">
+  <h2><span class="num">ACCEPTANCE</span>What "internally done" means</h2>
+  <p>Binary and machine-checkable wherever possible. Group A is structural honesty — these are the criteria that survive hostile questioning.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="mono">ID</th><th>Criterion</th><th class="mono">Check</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">A2</td><td>Every detection's <code>weights_sha256</code> resolves to a registered model card</td><td class="mono">test_model_provenance</td></tr>
+        <tr><td class="mono">A3</td><td>All five leakage assertions pass; benchmarks refuse runs where they don't</td><td class="mono">test_splits</td></tr>
+        <tr><td class="mono">A4</td><td>No metric literal in frontend source</td><td class="mono">test_no_hardcoded_metrics</td></tr>
+        <tr><td class="mono">A5</td><td>Every coordinate carries provenance; synthetic values only on demo surveys, watermarked in UI <em>and</em> report</td><td class="mono">test_geo_provenance</td></tr>
+        <tr><td class="mono">A6</td><td>No evidence with a score but no applicability, or inapplicable with no reason</td><td class="mono">test_evidence_contract</td></tr>
+        <tr><td class="mono">A7</td><td>No unknown-anomaly record carries a class name or class confidence</td><td class="mono">test_unknown_contract</td></tr>
+        <tr><td class="mono">A10</td><td>Every capability gate explicitly set; no UI surface claims a false gate</td><td class="mono">test_capability_gates</td></tr>
+        <tr><td class="mono">D1</td><td>Run manifest records the device that <em>actually executed</em> — no CPU-as-GPU claims</td><td class="mono">integration</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note key">
+    <span class="lbl">Framed as protocol, not as score</span>
+    <p>For the king USP, <strong>the MUST is that the leave-one-class-out protocol executes across all four folds and reports AUROC, AUPRC and natural-seabed FPR.</strong> A specific score is a SHOULD (target mean AUROC ≥ 0.75). We report the actual number whatever it is — and if evidence fusion turns out not to beat the detector alone, that is a publishable finding reported as such, not buried.</p>
+  </div>
+
+  <h3>The demo path that must genuinely execute</h3>
+  <pre>real SSS data → preprocess + quality → real model → detection + confidence
+→ evidence (persistence · shadow · context) → unknown-anomaly pathway
+→ fusion → geo → FastAPI → frontend overlay → inspector → mission map
+→ change detection → priority → report download</pre>
+</section>
+
+<section id="refuse">
+  <h2><span class="num">DISCIPLINE</span>What we will not claim</h2>
+  <ul class="refuse">
+    <li>Comparability with GhostVision's F1 (~0.71–0.73) — different corpus, split and classes. Cited as operating-regime context only.</li>
+    <li>GhostNetZero's ~90 % centroid figure as a benchmark — small <em>n</em>, no reserved test set. We cite its <em>domain-shift finding</em>, which is methodologically sound and which our per-survey thresholding is built around.</li>
+    <li>Unknown-anomaly performance on classes the detector was trained on.</li>
+    <li>Any metric from a run with a failed split assertion.</li>
+    <li><code>implied_height_m</code> as a 3-D reconstruction — it is a range-geometry estimate carrying its assumption list on every value.</li>
+    <li>A synthetic coordinate as sonar-derived, anywhere, ever.</li>
+    <li>Headline "accuracy" on a task this imbalanced.</li>
+  </ul>
+</section>
+
+<hr class="hr">
+
+<section id="next">
+  <h2><span class="num">SCOPE</span>Deferred, and what is blocking phase 1</h2>
+  <div class="cols">
+    <div>
+      <h4>Blocked — needs a human</h4>
+      <div class="note warn">
+        <p>The <strong>PINGEcosystem dataset is Hugging Face gated</strong>: it requires a person to accept the terms and share contact details. This cannot and should not be automated. Once accepted, <code>HF_TOKEN</code> goes in <code>.env</code>.</p>
+        <p>SubPipe and AI4Shipwrecks are openly downloadable, so <strong>phase-1 work starts on those immediately</strong> and PINGEcosystem drops in when the token exists.</p>
+      </div>
+      <h4>Also worth deciding early</h4>
+      <p style="font-size:14px">The dataset licence (CC BY-SA 4.0) and the <em>model</em> licence for the published GhostVision checkpoints are separate questions. Check the second before shipping any weights.</p>
+    </div>
+    <div>
+      <h4>Explicitly deferred</h4>
+      <ul style="font-size:14px">
+        <li>Full raw-format decoding across vendors; ground-range correction using real bathymetry</li>
+        <li>Attitude-driven geometric <em>correction</em> — v1 detects and scores attitude artefacts, it does not fix them</li>
+        <li>Full 434k-patch DeeperSense pretraining; PhysDNet-style physics decomposition</li>
+        <li>Cross-line corroboration — strong evidence, needs multi-line surveys we don't have</li>
+        <li>Pixel-level co-registered change detection</li>
+        <li>Core ML export, INT8, on-AUV benchmarking, streaming inference during acquisition</li>
+        <li>Auth, multi-user, audit trail, active-learning loop, typeset PDF</li>
+        <li>Sea-trial validation on Indian-waters data with NIOT</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Specification set</strong> — authoritative; implementation conforms to these or amends them by PR.</p>
+  <div class="docs">
+    <div><span>docs/ARCHITECTURE.md</span><span>Thesis · PICS · layers · module APIs · repo structure · the five USPs</span></div>
+    <div><span>docs/SCHEMAS.md</span><span>Unified schemas and the provenance contract</span></div>
+    <div><span>docs/DATASETS.md</span><span>Acquisition · registry · capability gates · leakage control</span></div>
+    <div><span>docs/TRAINING.md</span><span>Model strategy · sonar-valid augmentation · training order · serving</span></div>
+    <div><span>docs/EVALUATION.md</span><span>Splits · metrics · ablations · benchmark provenance</span></div>
+    <div><span>docs/WORKSTATION.md</span><span>Operator product surfaces</span></div>
+    <div><span>docs/ACCEPTANCE.md</span><span>Binary acceptance criteria</span></div>
+    <div><span>docs/DEFERRED.md</span><span>Out of scope, post-internal</span></div>
+  </div>
+  <p>AQUALENS is a working name held in <code>configs/product.yaml</code> — nothing else hardcodes it.</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+(function () {
+  var c = document.getElementById('wf');
+  if (!c || !c.getContext) return;
+  var ctx = c.getContext('2d');
+  var W = c.width, H = c.height;
+  var img = ctx.createImageData(W, H);
+  var d = img.data;
+  var nadir = W / 2;
+  var wc = W * 0.028;          // water column half-width
+  var maxR = nadir;
+
+  // deterministic pseudo-random so the band is stable across reloads
+  var s = 20260830;
+  function rnd() { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }
+
+  // targets: [row, rangeFromNadir, side(-1 port / +1 stbd), halfWidth, rowHalf, shadowLen]
+  var targets = [
+    [ 62, 232, -1, 9,  7, 46],
+    [148, 318,  1, 7,  5, 62],
+    [206, 140, -1, 6,  4, 28],
+    [ 30, 402,  1, 11, 8, 74]
+  ];
+
+  for (var y = 0; y < H; y++) {
+    // slow along-track substrate drift + a faint attitude band
+    var drift = 0.06 * Math.sin(y * 0.021) + 0.03 * Math.sin(y * 0.0067);
+    for (var x = 0; x < W; x++) {
+      var r = Math.abs(x - nadir);
+      var side = x < nadir ? -1 : 1;
+      var v;
+
+      if (r < wc) {
+        v = 0.03 + 0.02 * rnd();                          // water column
+      } else if (r < wc + 6) {
+        v = 0.86 + 0.12 * rnd();                          // first bottom return
+      } else {
+        var gain = Math.pow(1 - (r - wc) / (maxR - wc), 0.62);
+        var texture = 0.44
+          + 0.14 * Math.sin(r * 0.05 + y * 0.012)
+          + 0.09 * Math.sin(r * 0.014 - y * 0.03)
+          + drift;
+        var speckle = 0.55 + 0.9 * rnd() * rnd();         // multiplicative speckle
+        v = gain * texture * speckle;
+      }
+
+      // targets: bright highlight, then shadow falling AWAY from nadir
+      for (var t = 0; t < targets.length; t++) {
+        var T = targets[t];
+        if (side !== T[2] || Math.abs(y - T[0]) > T[4]) continue;
+        var dr = r - T[1];
+        if (dr >= -T[3] && dr <= T[3]) {
+          v = 0.95 + 0.05 * rnd();
+        } else if (dr > T[3] && dr < T[3] + T[5]) {
+          v = 0.015 + 0.02 * rnd();
+        }
+      }
+
+      if (v < 0) v = 0; if (v > 1) v = 1;
+      var i = (y * W + x) * 4;
+      d[i]     = 18 + v * 226;   // amber ramp — sodium-lamp sonar display
+      d[i + 1] = 22 + v * 152;
+      d[i + 2] = 28 + v * 74;
+      d[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+})();
+</script>

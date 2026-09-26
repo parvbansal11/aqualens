@@ -1,0 +1,14 @@
+{
+  "architecture": "yolo11s",
+  "calibration_id": null,
+  "framework": "ultralytics",
+  "is_active": true,
+  "metrics_ref": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/metrics.json",
+  "model_id": "sagardrishti-internal-detector",
+  "model_version_id": "internal_v2",
+  "review_examples_included": 0,
+  "snapshot_id": "snap_2fa4bca0a0bc4b7d",
+  "split_id": "split_f476b41f858d4c57",
+  "version": "internal_v2",
+  "weights_sha256": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+}

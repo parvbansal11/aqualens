@@ -1,0 +1,28 @@
+# Dataset descriptor. One file per dataset. Consumed by scripts/build_registry.py.
+# Capability gates MUST be set by a verification script, never by hand-optimism.
+dataset_id: <id>
+name: <human name>
+original_source: <URL or DOI>
+licence: <SPDX or text>
+access: OPEN | GATED | LITERATURE_ONLY
+access_note: <e.g. "HF gated: requires human acceptance of terms">
+local_path: data/raw/<id>
+
+annotation_type: BBOX | MASK | IMAGE_LABEL | NONE
+n_samples: <int>
+n_annotations: <int>
+eval_eligible: true            # false for pretraining-only corpora (e.g. DeeperSense)
+
+group_key:
+  field: <recording_id | mission_id | site_id | instrument_id>
+  derivation: <how it is computed from the source>
+  strength: STRONG | WEAK      # WEAK must be stated in any result that uses this dataset
+
+capability_gates:              # set by scripts/verify_gates.py — do not edit by hand
+  ping_order_recoverable: null
+  nadir_recoverable: null
+  range_scale_known: null
+  nav_available: null
+
+notes: |
+  Known discrepancies, corpus-version caveats, anything a reviewer could challenge.

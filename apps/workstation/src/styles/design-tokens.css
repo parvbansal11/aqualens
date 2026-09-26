@@ -1,0 +1,201 @@
+/* Aqualens — canonical design tokens. Frozen 2026-09-01.
+ *
+ * These are the ONLY values permitted in the production interface. Any value
+ * not present here is a design decision and must be raised, not invented.
+ * Names are stable; engineering may re-express them as a Tailwind theme or a
+ * CSS-in-JS theme object, but the resolved values must match exactly.
+ */
+
+:root {
+  /* ---- Foundation: warm near-white, light-first. No dark app shell. ---- */
+  --sd-bg:            #FBFAF8; /* app canvas, sidebar, page background */
+  --sd-surface:       #FFFFFF; /* panels, tables, inspector, upload well */
+  --sd-surface-sunk:  #F4F3F0; /* sonar pane matte, hover fill, inert wells */
+  --sd-surface-alt:   #F7F6F3; /* unavailable-state block fill */
+
+  /* ---- Ink ---- */
+  --sd-ink:           #16191C; /* primary type, headings, values */
+  --sd-ink-secondary: #5A6169; /* body copy, descriptions, table cells */
+  --sd-ink-muted:     #8A9199; /* labels, metadata, captions, eyebrows */
+  --sd-ink-faint:     #B9BDBF; /* disabled fills, chevrons */
+
+  /* ---- Marine accent (deep desaturated ocean blue) ---- */
+  --sd-accent:        #1F4E6B; /* primary buttons, active state, links, data ink */
+  --sd-accent-hover:  #2A6389;
+  --sd-accent-tint:   #F4F8FA; /* recommended-action panel, selected format */
+  --sd-accent-tint-2: #EAF0F4; /* "Likely" / "New" badge fill */
+  --sd-accent-border: #CBDCE6;
+  --sd-accent-ink:    #40525C; /* body copy inside an accent-tinted panel */
+  --sd-accent-rule:   #D5E3EB; /* rule inside an accent-tinted panel */
+
+  /* ---- Semantic status. Never colour alone: always text + colour. ---- */
+  --sd-ok:            #2E7D5B; /* confirmed, loaded, complete */
+  --sd-ok-tint:       #E8F2ED;
+  --sd-ok-border:     #C4E0D1;
+  --sd-warn:          #A9701A; /* needs review, unknown anomaly, marker fill */
+  --sd-warn-ink:      #8A5A11; /* warn text on tint (contrast-safe) */
+  --sd-warn-tint:     #FBF3E4;
+  --sd-warn-border:   #EBD9B4;
+  --sd-warn-ink-alt:  #7A5A16; /* sample-survey banner text */
+  --sd-warn-tint-alt: #FBF6EA; /* sample-survey banner fill */
+  --sd-warn-border-2: #E3D7BC;
+  --sd-crit:          #B03A2C; /* high priority, removed. Genuinely critical only. */
+  --sd-crit-tint:     #FAEBE8;
+  --sd-crit-border:   #EFCFC9;
+  --sd-null:          #5A6169; /* unavailable / not surveyed — grey, never red */
+  --sd-null-tint:     #F2F1EE;
+  --sd-null-border:   #E1DFDA;
+
+  /* ---- Borders. Hairline only; 1px everywhere. No thick rules. ---- */
+  --sd-border:        #E5E3DE; /* structural: panel edge, sidebar, section rule */
+  --sd-border-strong: #D6D3CC; /* secondary button edge, axis line */
+  --sd-border-soft:   #F0EFEC; /* inner list dividers inside a panel */
+  --sd-border-softer: #F4F3F0; /* table body rows, densest dividers */
+  --sd-border-row:    #EDEBE6; /* borderless list-row dividers on canvas */
+  --sd-border-hover:  #8A9199; /* the ONLY hover treatment on bordered controls */
+  --sd-border-dashed: #C9C5BC; /* upload dropzone */
+
+  /* ---- Selection ---- */
+  --sd-selected-bg:   #EDEFF2; /* active nav item, selected list row, active tab */
+  --sd-hover-bg:      #F4F3F0;
+  --sd-hover-bg-2:    #E9E7E2; /* hover on an already-filled control */
+
+  /* ---- Sonar viewer (the only dark surface in the product) ---- */
+  --sd-sonar-bg:      #0C1114; /* viewer matte */
+  --sd-sonar-bg-2:    #0E1418; /* processing filmstrip */
+  --sd-sonar-plaque:  rgba(10, 16, 20, 0.74);
+  --sd-sonar-ink:     #EDF2F4;
+  --sd-sonar-ink-2:   #9BAAB2;
+  --sd-sonar-rule:    #4A5B65;
+  --sd-box-known:     #7FD3F2; /* detection box, trained class (solid 1.5px) */
+  --sd-box-known-ink: #06222E;
+  --sd-box-unknown:   #E2B15C; /* unknown anomaly box (dashed 1.5px) */
+  --sd-box-unknown-ink: #2B1D05;
+
+  /* ---- Map ---- */
+  --sd-map-water:     #EFF3F3;
+  --sd-map-land:      #F3F1EA;
+  --sd-map-land-edge: #DCD8CE;
+  --sd-map-grid:      #E1E6E5;
+  --sd-map-swath:     #B9CBD6; /* sonar coverage */
+  --sd-map-gap:       #9FA6A4; /* not surveyed */
+
+  /* ---- Radius. Subtle only. No pills. ---- */
+  --sd-r-xs: 3px;  /* ping cells, detection box */
+  --sd-r-sm: 5px;  /* status badge */
+  --sd-r-md: 6px;  /* nav item, segmented tab, list row, small plaque */
+  --sd-r-lg: 8px;  /* buttons, inputs, dark plaque */
+  --sd-r-xl: 10px; /* panels, tables, side cards */
+  --sd-r-2xl: 12px;/* large containers: map frame, review card, dropzone */
+
+  /* ---- Elevation. Effectively none. ---- */
+  --sd-shadow-none: none;                            /* every panel, every card */
+  --sd-shadow-marker: 0 1px 4px rgba(16, 25, 32, 0.35); /* map markers only */
+  --sd-ring-selected: inset 0 0 0 1px var(--sd-accent); /* selected role card */
+  /* No blur, no glass, no ambient shadow anywhere else. */
+
+  /* ---- Spacing scale (px). Use these; do not interpolate. ---- */
+  --sd-1: 2px;   --sd-2: 4px;   --sd-3: 6px;   --sd-4: 8px;
+  --sd-5: 10px;  --sd-6: 12px;  --sd-7: 14px;  --sd-8: 16px;
+  --sd-9: 18px;  --sd-10: 20px; --sd-11: 22px; --sd-12: 26px;
+  --sd-13: 28px; --sd-14: 32px; --sd-15: 34px; --sd-16: 40px;
+  --sd-17: 44px; --sd-18: 48px; --sd-19: 56px; --sd-20: 64px;
+  --sd-21: 72px; --sd-22: 80px; --sd-23: 96px;
+
+  /* ---- Type: families ---- */
+  --sd-font: Geist, ui-sans-serif, -apple-system, system-ui, sans-serif;
+  --sd-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* ---- Type: sizes, as used in the frozen design (not normalised) ---- */
+  --sd-fs-hero: 58px;      /* landing h1 */
+  --sd-fs-display: 40px;   /* decision h1 */
+  --sd-fs-metric-xl: 38px; /* results metrics */
+  --sd-fs-h1: 34px;        /* results h1 */
+  --sd-fs-entry: 32px;     /* role entry h1 */
+  --sd-fs-metric-lg: 32px; /* mission metrics */
+  --sd-fs-h1-wide: 30px;   /* mission h1 */
+  --sd-fs-metric: 30px;    /* decision rows, inspector confidence */
+  --sd-fs-h1-page: 28px;   /* upload, report */
+  --sd-fs-h1-dense: 26px;  /* processing, map, review, lab */
+  --sd-fs-metric-sm: 26px; /* review backlog */
+  --sd-fs-action: 22px;    /* recommended action sentence */
+  --sd-fs-title-lg: 21px;  /* inspector class */
+  --sd-fs-title: 19px;     /* review subject class */
+  --sd-fs-title-sm: 18px;  /* map panel class */
+  --sd-fs-body-lg: 18px;   /* landing sub-hero */
+  --sd-fs-dropzone: 17px;  /* "Upload sonar survey" */
+  --sd-fs-logo: 16px;      /* wordmark, landing claim headings */
+  --sd-fs-row-lg: 15.5px;  /* role card name */
+  --sd-fs-body: 15px;      /* page subtitles, section headings, primary CTA */
+  --sd-fs-btn: 14.5px;     /* primary/secondary button label */
+  --sd-fs-claim: 14.5px;   /* landing claim body, requirement name, stage name */
+  --sd-fs-row: 14px;       /* nav item, evidence paragraph, inspector actions */
+  --sd-fs-dense: 13.5px;   /* table body, dl values, small buttons, list detail */
+  --sd-fs-caption: 13px;   /* row detail, layer note, tabs, legend */
+  --sd-fs-meta: 12.5px;    /* honesty notes, priority word, captions */
+  --sd-fs-mono-sm: 12px;   /* mono metadata, table header, eyebrow small */
+  --sd-fs-badge: 11.5px;   /* status badge, mono id line */
+  --sd-fs-eyebrow: 11px;   /* uppercase group labels, kbd, box label */
+
+  /* ---- Type: weights (550 is deliberate; do not round to 500/600) ---- */
+  --sd-fw-light: 300;
+  --sd-fw-regular: 400;
+  --sd-fw-nav: 450;   /* inactive nav item, inactive tab */
+  --sd-fw-medium: 500;/* buttons, metrics, mono values */
+  --sd-fw-row: 550;   /* row titles that must not read as headings */
+  --sd-fw-semi: 600;  /* headings, active nav, badges' emphasis */
+  --sd-fw-bold: 700;
+
+  /* ---- Type: line heights ---- */
+  --sd-lh-hero: 1.04;
+  --sd-lh-tight: 1;     /* metric numerals */
+  --sd-lh-action: 1.4;
+  --sd-lh-snug: 1.45;
+  --sd-lh-body: 1.5;
+  --sd-lh-copy: 1.55;
+  --sd-lh-relaxed: 1.6;
+  --sd-lh-mono: 1.7;    /* report preview */
+
+  /* ---- Type: tracking ---- */
+  --sd-tr-hero: -0.035em;
+  --sd-tr-display: -0.04em;  /* results metric */
+  --sd-tr-h1: -0.03em;
+  --sd-tr-page: -0.025em;
+  --sd-tr-title: -0.02em;
+  --sd-tr-title-sm: -0.015em;
+  --sd-tr-logo: -0.01em;
+  --sd-tr-eyebrow: 0.05em;
+  --sd-tr-eyebrow-2: 0.06em;
+  --sd-tr-eyebrow-3: 0.07em;
+  --sd-tr-eyebrow-4: 0.08em; /* landing accent eyebrow */
+
+  /* ---- Control heights ---- */
+  --sd-h-cta: 44px;       /* landing + decision primary */
+  --sd-h-btn: 42px;       /* standard primary/secondary */
+  --sd-h-btn-inspector: 40px; /* inspector actions, panel buttons, inputs */
+  --sd-h-btn-sm: 38px;    /* sidebar, verdict, disclosure, top-bar CTA */
+  --sd-h-nav: 36px;       /* sidebar nav item */
+  --sd-h-tab: 30px;       /* segmented control tab */
+  --sd-h-ping: 30px;      /* ping strip cells */
+  --sd-h-banner: 45px;    /* survey context strip (workspace height depends on it) */
+
+  /* ---- Layout widths ---- */
+  --sd-sidebar: 232px;          /* app sidebar, fixed, never collapses at target */
+  --sd-inspector: 356px;        /* sonar workspace right inspector */
+  --sd-contact-rail: 214px;     /* sonar workspace left finding rail */
+  --sd-aside: 320px;            /* mission / lab secondary column */
+  --sd-aside-narrow: 300px;     /* report / review secondary column */
+  --sd-aside-map: 340px;        /* map finding panel */
+  --sd-w-decision: 860px;       /* decision viewer */
+  --sd-w-upload: 900px;         /* upload */
+  --sd-w-processing: 760px;     /* processing */
+  --sd-w-report: 940px;         /* report */
+  --sd-w-standard: 1060px;      /* results, mission, lab (1040px), review (1040px) */
+  --sd-w-marketing: 1180px;     /* public landing */
+  --sd-gutter: 40px;            /* in-app page gutter */
+  --sd-gutter-public: 48px;     /* public site gutter */
+
+  /* ---- Layout: breakpoint at which the workspace drops its contact rail ---- */
+  --sd-bp-workspace-rail: 1180px;
+  --sd-sonar-aspect: 1120 / 630; /* the aspect-locked plate; box fractions depend on it */
+}

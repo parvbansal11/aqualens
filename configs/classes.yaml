@@ -1,0 +1,38 @@
+# Unified detection taxonomy — FROZEN. Matches docs/DATA_STRATEGY.md §2.
+# UNKNOWN_ANOMALY_CANDIDATE is deliberately absent: it is produced by the open-set
+# subsystem and is NEVER a supervised class. See docs/ML_PLAN.md §6.
+version: 2
+
+classes:
+  PIPELINE:
+    index: 0
+    internal_status: P0
+    description: Subsea pipeline or cable, including partially sand-buried sections.
+  WRECK_OR_STRUCTURAL_DEBRIS:
+    index: 1
+    internal_status: P0
+    description: Shipwreck and associated structural debris field.
+  DERELICT_FISHING_GEAR:
+    index: 2
+    internal_status: P0_CONDITIONAL      # requires PINGEcosystem (HF-gated)
+    description: Derelict/ghost fishing gear — pots, traps, nets, entangled gear.
+  ENGINEERING_STRUCTURE:
+    index: 3
+    internal_status: P2                  # Marine-PULSE, finals only
+    description: Engineered seabed installation — platform, mound, fixed structure.
+
+# Per-dataset label mapping. `certainty` is an attribute, never silently merged into the
+# positive class: metrics are reported under both strict and inclusive protocols.
+mappings:
+  subpipe:
+    pipeline:        {class: PIPELINE, certainty: CERTAIN}
+  ai4shipwrecks:
+    wreck:           {class: WRECK_OR_STRUCTURAL_DEBRIS, certainty: CERTAIN}
+  pingeco_ghostpot:
+    Crab-Pot:        {class: DERELICT_FISHING_GEAR, certainty: CERTAIN}
+    Maybe-Crab-Pot:  {class: DERELICT_FISHING_GEAR, certainty: UNCERTAIN}
+  marine_pulse:                                            # P2 — IMAGE_LABEL only, no boxes
+    pipeline_cable:       {class: PIPELINE, certainty: CERTAIN, annotation: IMAGE_LABEL}
+    engineering_platform: {class: ENGINEERING_STRUCTURE, certainty: CERTAIN, annotation: IMAGE_LABEL}
+    residual_mound:       {class: ENGINEERING_STRUCTURE, certainty: UNCERTAIN, annotation: IMAGE_LABEL}
+    seabed_surface:       {class: null, negative: true}

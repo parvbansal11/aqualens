@@ -1,0 +1,104 @@
+{
+ "job_id": "job_e8d9a0c37521",
+ "survey_id": "survey_upload_f63c4680c79e",
+ "state": "COMPLETED",
+ "stage": "completed",
+ "phase": "report",
+ "created_at": "2026-09-05T11:25:18.527237+00:00",
+ "updated_at": "2026-09-05T11:25:19.510619+00:00",
+ "completed_at": "2026-09-05T11:25:19.510617+00:00",
+ "files_parsed": 2,
+ "images_processed": 2,
+ "tiles_processed": 0,
+ "detections_generated": 6,
+ "upload": {
+  "filename": "harbour_pass_raw.zip",
+  "bytes": 145610,
+  "kind": "BUNDLE",
+  "decoded": true,
+  "bundle_entries": 2,
+  "raster_count": 2
+ },
+ "source_frame_count": 2,
+ "frames_completed": 2,
+ "metadata": {
+  "navigation": "UNAVAILABLE",
+  "mission": "UNAVAILABLE",
+  "sequential_observation_contract": false
+ },
+ "detector": {
+  "availability": "AVAILABLE",
+  "loaded": true,
+  "device": "mps",
+  "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15"
+ },
+ "open_set": {
+  "availability": "AVAILABLE",
+  "available": true,
+  "role": "ADVISORY_OPEN_SET_EVIDENCE",
+  "method": "PATCHCORE_STYLE_OPEN_SET",
+  "memory_version": "open_set_v1",
+  "feature_source": "frozen YOLO11s layer-16 embeddings",
+  "threshold": 0.4616784453392029,
+  "threshold_source": "q99.5_annotation_safe_background_val"
+ },
+ "contacts_fused": 4,
+ "report_ready": true,
+ "steps": [
+  {
+   "id": "upload_decoded",
+   "label": "Upload decoded",
+   "state": "done",
+   "detail": "2 source frames decoded from bundle"
+  },
+  {
+   "id": "metadata_read",
+   "label": "Survey metadata read",
+   "state": "skipped",
+   "detail": "No navigation.csv or mission.json accompanies this upload, so findings carry no position."
+  },
+  {
+   "id": "detector_ready",
+   "label": "Frozen detector loaded",
+   "state": "done",
+   "detail": "Frozen YOLO11s on mps"
+  },
+  {
+   "id": "inference",
+   "label": "Detector inference over source frames",
+   "state": "done",
+   "detail": "2 of 2 source frames"
+  },
+  {
+   "id": "condition",
+   "label": "Sonar condition assessment",
+   "state": "done",
+   "detail": "Measured raster quality recorded for every source frame"
+  },
+  {
+   "id": "open_set",
+   "label": "Open-set anomaly evidence",
+   "state": "done",
+   "detail": "6 of 6 observations scored against the reference memory"
+  },
+  {
+   "id": "contact_fusion",
+   "label": "Contact fusion",
+   "state": "done",
+   "detail": "4 contacts from 6 observations"
+  },
+  {
+   "id": "evidence",
+   "label": "Evidence fusion and recovery priority",
+   "state": "done",
+   "detail": "UNVALIDATED_EVIDENCE_FUSION over available channels; unavailable channels excluded: artificiality, physics"
+  },
+  {
+   "id": "report",
+   "label": "Report records prepared",
+   "state": "done",
+   "detail": "6 finding records written"
+  }
+ ],
+ "error": null
+}

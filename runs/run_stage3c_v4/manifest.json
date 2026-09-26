@@ -1,0 +1,36 @@
+{
+  "artifact_dir": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/stage3c_v4",
+  "checkpoint": {
+    "path": "/Users/parvbansal/Desktop/sagardrishti/ml/artifacts/internal_v2/sagardrishti_internal_v2_artifacts/best.pt",
+    "sha256_after": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4",
+    "sha256_before": "f94d934681c8f95c0eda5474fe578d8aaa06463e638184f376456f861bb5c8a4"
+  },
+  "created_at": "2026-08-30T17:44:48.299664+00:00",
+  "input": "real Stage 3C frozen-checkpoint inference on snapshot val/test tiles",
+  "open_set": {
+    "coreset_size": 512,
+    "grid": [
+      4,
+      4
+    ],
+    "method": "PatchCore-style nearest-neighbour frozen YOLO layer-16 embeddings",
+    "no_leave_one_class_out": "Only PIPELINE is supervised; a true LOCO evaluation is impossible.",
+    "per_survey_threshold": "max(tau_min, q99.5(all inference patch scores))",
+    "tau_min_background_q99_val": 0.16978448629379272,
+    "train_background_patches": 56928,
+    "train_background_tiles": 3558
+  },
+  "run_id": "run_stage3c_v4",
+  "runtime": {
+    "backbone_layer": 16,
+    "device": "mps",
+    "inference_imgsz": 640,
+    "mps_available": true,
+    "mps_fallback": true,
+    "torch": "2.13.0",
+    "ultralytics": "8.4.135"
+  },
+  "snapshot_id": "snap_2fa4bca0a0bc4b7d",
+  "split_id": "split_f476b41f858d4c57",
+  "stage": "3C"
+}

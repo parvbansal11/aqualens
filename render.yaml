@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: aqualens-api
+    runtime: docker
+    region: singapore
+    plan: 1c-2g
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/runtime/health
+    disk:
+      name: aqualens-runtime
+      mountPath: /app/data/runtime
+      sizeGB: 10
+    envVars:
+      - key: SAGARDRISHTI_ALLOWED_ORIGINS
+        value: https://aqualens-web.vercel.app
+      - key: SAGARDRISHTI_MODEL_PATH
+        value: /app/ml/artifacts/final_v1/detector/best.pt
+      - key: SAGARDRISHTI_OPEN_SET_DIR
+        value: /app/ml/artifacts/vnext/open_set_v1
+      - key: SAGARDRISHTI_RUNTIME_DIR
+        value: /app/data/runtime
+      - key: SAGARDRISHTI_MAX_UPLOAD_BYTES
+        value: "536870912"

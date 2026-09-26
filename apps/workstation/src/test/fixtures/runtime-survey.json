@@ -1,0 +1,1342 @@
+{
+ "survey_id": "survey_upload_f63c4680c79e",
+ "name": "harbour_pass_raw.zip",
+ "frames": [
+  {
+   "frame_id": "frame_0000",
+   "source_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg",
+   "width_px": 640,
+   "height_px": 640,
+   "inference_mode": "FULL_FRAME",
+   "tile_count": 0,
+   "navigation": {
+    "latitude": null,
+    "longitude": null,
+    "heading_deg": null,
+    "timestamp_utc": null,
+    "navigation_status": "UNAVAILABLE"
+   },
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   }
+  },
+  {
+   "frame_id": "frame_0001",
+   "source_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg",
+   "width_px": 640,
+   "height_px": 640,
+   "inference_mode": "FULL_FRAME",
+   "tile_count": 0,
+   "navigation": {
+    "latitude": null,
+    "longitude": null,
+    "heading_deg": null,
+    "timestamp_utc": null,
+    "navigation_status": "UNAVAILABLE"
+   },
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   }
+  }
+ ],
+ "findings": [
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0000_0000",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0000",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.27558261156082153,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.27558261156082153,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    240.99740600585938,
+    39.290252685546875,
+    335.7944641113281,
+    122.48892211914062
+   ],
+   "bbox_normalized": [
+    0.3765584468841553,
+    0.061391019821166994,
+    0.5246788501739502,
+    0.19138894081115723
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": "CONFIRMED",
+   "review_history": [
+    {
+     "review_id": "runtime_rev_64364a1b4b42",
+     "verdict": "CONFIRMED",
+     "corrected_class": null,
+     "corrected_bbox_px": null,
+     "notes": null,
+     "reviewer": "local operator",
+     "rejection_reason": null,
+     "created_at": "2026-09-05T11:25:19.556025+00:00",
+     "append_only": true
+    }
+   ],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 0,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.4240867495536804,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": false,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  },
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0000_0001",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0000",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.2725653350353241,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.2725653350353241,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    169.633544921875,
+    544.4766845703125,
+    286.49542236328125,
+    629.9810791015625
+   ],
+   "bbox_normalized": [
+    0.26505241394042967,
+    0.8507448196411133,
+    0.44764909744262693,
+    0.9843454360961914
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": null,
+   "review_history": [],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 0,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.5400092601776123,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  },
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0000_0002",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0000",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.2564684748649597,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.2564684748649597,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    214.6708984375,
+    539.0518798828125,
+    318.5174560546875,
+    623.6624755859375
+   ],
+   "bbox_normalized": [
+    0.33542327880859374,
+    0.8422685623168945,
+    0.4976835250854492,
+    0.9744726181030273
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": null,
+   "review_history": [],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 0,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.5157356262207031,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  },
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0001_0000",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0001",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.27558261156082153,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.27558261156082153,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    240.99740600585938,
+    39.290252685546875,
+    335.7944641113281,
+    122.48892211914062
+   ],
+   "bbox_normalized": [
+    0.3765584468841553,
+    0.061391019821166994,
+    0.5246788501739502,
+    0.19138894081115723
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": null,
+   "review_history": [],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 1,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.4240867495536804,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": false,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  },
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0001_0001",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0001",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.2725653350353241,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.2725653350353241,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    169.633544921875,
+    544.4766845703125,
+    286.49542236328125,
+    629.9810791015625
+   ],
+   "bbox_normalized": [
+    0.26505241394042967,
+    0.8507448196411133,
+    0.44764909744262693,
+    0.9843454360961914
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": null,
+   "review_history": [],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 1,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.5400092601776123,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  },
+  {
+   "detection_id": "det_survey_upload_f63c4680c79e_frame_0001_0002",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "source_frame_id": "frame_0001",
+   "source_image_path": "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg",
+   "tile_id": null,
+   "raw_class_id": 2,
+   "raw_class": "CRAB_POT",
+   "raw_confidence": 0.2564684748649597,
+   "display_confidence_source": null,
+   "display_class": "CRAB_POT",
+   "display_confidence": 0.2564684748649597,
+   "classification_source": "MODEL",
+   "production_qualified": true,
+   "candidate_recovery": false,
+   "evidence_count": null,
+   "anomaly_score": null,
+   "bbox_px": [
+    214.6708984375,
+    539.0518798828125,
+    318.5174560546875,
+    623.6624755859375
+   ],
+   "bbox_normalized": [
+    0.33542327880859374,
+    0.8422685623168945,
+    0.4976835250854492,
+    0.9744726181030273
+   ],
+   "pixel_dimensions": [
+    640,
+    640
+   ],
+   "geo": {
+    "lat": null,
+    "lon": null
+   },
+   "review_state": null,
+   "review_history": [],
+   "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+   "model_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+   "dataset_snapshot_id": "multidomain_sonar_v1_1_20260831",
+   "run_id": "runtime_survey_upload_f63c4680c79e",
+   "inference_mode": "FULL_FRAME",
+   "tile_size": null,
+   "tile_overlap": null,
+   "latitude": null,
+   "longitude": null,
+   "heading_deg": null,
+   "timestamp_utc": null,
+   "navigation_status": "UNAVAILABLE",
+   "frame_index": 1,
+   "ping_start": null,
+   "ping_end": null,
+   "sequential_observation_supported": false,
+   "sonar_condition": {
+    "engine_version": "sonar_conditions@v1",
+    "quality_score": 0.9060645035061163,
+    "quality_grade": "GOOD",
+    "quality_flags": [],
+    "dropout_fraction": 0.0,
+    "nadir_fraction": 0.0,
+    "usable_fraction": 0.90040771484375,
+    "near_black_fraction": 0.09959228515625,
+    "dynamic_range": 0.9098039215686274,
+    "entropy": 0.9061216973884362,
+    "resolution": [
+     640,
+     640
+    ],
+    "dropout_rows": [],
+    "aspect_ratio": 1.0,
+    "navigation_available": false,
+    "motion_metadata_available": false,
+    "motion_quality": "UNKNOWN",
+    "missing_metadata_flags": [
+     "MOTION_METADATA_UNAVAILABLE"
+    ]
+   },
+   "sonar_evidence": {
+    "dropout_overlap": 0.0,
+    "nadir_overlap": 0.0
+   },
+   "physics": {
+    "highlight_score": null,
+    "shadow_presence_score": null,
+    "shadow_direction_score": null,
+    "shadow_geometry_score": null,
+    "physics_consistency": null,
+    "physics_flags": [
+     "UNKNOWN_ORIENTATION"
+    ],
+    "reason": "SONAR_ORIENTATION_UNAVAILABLE"
+   },
+   "open_set": {
+    "anomaly_score": 0.5157356262207031,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   }
+  }
+ ],
+ "contacts": [
+  {
+   "contact_id": "contact_survey_upload_f63c4680c79e_adae2fd4f748",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "resolved_class": "CRAB_POT",
+   "candidate_classes": [
+    "CRAB_POT"
+   ],
+   "open_set_candidate": false,
+   "classification_source": "FROZEN_YOLO11S_CANDIDATE_GENERATOR",
+   "production_qualified": false,
+   "observation_count": 1,
+   "distinct_frame_observation_count": 1,
+   "window_overlap_duplicate_count": 0,
+   "persistence_evidence_type": "SINGLE_OBSERVATION",
+   "first_frame": "frame_0000",
+   "last_frame": "frame_0000",
+   "first_ping": null,
+   "last_ping": null,
+   "source_frame_ids": [
+    "frame_0000"
+   ],
+   "source_detection_ids": [
+    "det_survey_upload_f63c4680c79e_frame_0000_0000"
+   ],
+   "best_observation_id": "det_survey_upload_f63c4680c79e_frame_0000_0000",
+   "max_raw_confidence": 0.27558261156082153,
+   "mean_raw_confidence": 0.27558261156082153,
+   "class_consistency": 1.0,
+   "bbox_stability": null,
+   "normalized_position_stability": null,
+   "world_position_variance": null,
+   "persistence_score": 0.15,
+   "consecutive_observation_count": 1,
+   "observation_span": 1,
+   "physics_consistency": null,
+   "highlight_score": null,
+   "shadow_score": null,
+   "dropout_overlap": null,
+   "nadir_overlap": 0.0,
+   "anomaly_score": 0.4240867495536804,
+   "anomaly_source": null,
+   "anomaly_threshold_provenance": "q99.5_annotation_safe_background_val",
+   "anomaly_threshold": 0.4616784453392029,
+   "anomaly_feature_source": "frozen YOLO11s layer-16 embeddings",
+   "anomaly_memory_version": "open_set_v1",
+   "is_open_set_candidate": false,
+   "open_set": {
+    "anomaly_score": 0.4240867495536804,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": false,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   },
+   "natural_clutter": {
+    "score": null,
+    "model_version": "natural_clutter_v1",
+    "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+    "mode": "ADVISORY_ONLY",
+    "experimental": true,
+    "reason": "MODEL_NOT_LOADED_ADVISORY_EXPERIMENT_ONLY"
+   },
+   "quality_score": 0.9060645035061163,
+   "quality_flags": [],
+   "latitude": null,
+   "longitude": null,
+   "localization_uncertainty_m": null,
+   "localization_uncertainty_status": "UNAVAILABLE",
+   "navigation_status": "UNAVAILABLE",
+   "evidence_score": 0.37113056034145653,
+   "evidence_breakdown": {
+    "evidence_score": 0.37113056034145653,
+    "score_type": "UNVALIDATED_EVIDENCE_FUSION",
+    "policy_version": "evidence_fusion@v1",
+    "components": {
+     "detector": {
+      "value": 0.27558261156082153,
+      "weight": 0.3,
+      "normalized_weight": 0.3896103896103896,
+      "contribution": 0.10736984866006033
+     },
+     "persistence": {
+      "value": 0.15,
+      "weight": 0.25,
+      "normalized_weight": 0.3246753246753247,
+      "contribution": 0.0487012987012987
+     },
+     "quality": {
+      "value": 0.9060645035061163,
+      "weight": 0.15,
+      "normalized_weight": 0.1948051948051948,
+      "contribution": 0.17650607211158112
+     },
+     "anomaly": {
+      "value": 0.4240867495536804,
+      "weight": 0.07,
+      "normalized_weight": 0.09090909090909091,
+      "contribution": 0.0385533408685164
+     }
+    },
+    "missing_components": [
+     "artificiality",
+     "physics"
+    ]
+   },
+   "disposition": "CONFIRMED",
+   "recommended_action": "REVIEW",
+   "provenance": {
+    "detector_model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+    "runtime_version": "contact_fusion@v1",
+    "processing_configuration": {
+     "version": "contact_fusion@v1",
+     "max_adjacent_frame_gap": 1,
+     "max_normalized_center_distance": 0.12,
+     "max_world_distance_m": 35.0,
+     "min_class_compatibility": true
+    },
+    "source_raster_identities": [
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg"
+    ]
+   },
+   "reviews": {
+    "history": [
+     {
+      "review_id": "runtime_rev_64364a1b4b42",
+      "verdict": "CONFIRMED",
+      "corrected_class": null,
+      "corrected_bbox_px": null,
+      "notes": null,
+      "reviewer": "local operator",
+      "rejection_reason": null,
+      "created_at": "2026-09-05T11:25:19.556025+00:00",
+      "append_only": true
+     }
+    ],
+    "latest_verdict": "CONFIRMED",
+    "review_count": 1
+   },
+   "priority_score": 0.4757316879491909,
+   "priority_band": "LOW",
+   "priority_components": {
+    "evidence": 0.37113056034145653,
+    "persistence": 0.15,
+    "quality": 0.9060645035061163
+   }
+  },
+  {
+   "contact_id": "contact_survey_upload_f63c4680c79e_2dd21f3740bc",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "resolved_class": "CRAB_POT",
+   "candidate_classes": [
+    "CRAB_POT"
+   ],
+   "open_set_candidate": false,
+   "classification_source": "FROZEN_YOLO11S_CANDIDATE_GENERATOR",
+   "production_qualified": false,
+   "observation_count": 2,
+   "distinct_frame_observation_count": 1,
+   "window_overlap_duplicate_count": 1,
+   "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+   "first_frame": "frame_0000",
+   "last_frame": "frame_0000",
+   "first_ping": null,
+   "last_ping": null,
+   "source_frame_ids": [
+    "frame_0000",
+    "frame_0000"
+   ],
+   "source_detection_ids": [
+    "det_survey_upload_f63c4680c79e_frame_0000_0001",
+    "det_survey_upload_f63c4680c79e_frame_0000_0002"
+   ],
+   "best_observation_id": "det_survey_upload_f63c4680c79e_frame_0000_0001",
+   "max_raw_confidence": 0.2725653350353241,
+   "mean_raw_confidence": 0.2645169049501419,
+   "class_consistency": 1.0,
+   "bbox_stability": 0.8554642001787819,
+   "normalized_position_stability": 0.8554642001787819,
+   "world_position_variance": null,
+   "persistence_score": 0.15,
+   "consecutive_observation_count": 1,
+   "observation_span": 1,
+   "physics_consistency": null,
+   "highlight_score": null,
+   "shadow_score": null,
+   "dropout_overlap": null,
+   "nadir_overlap": 0.0,
+   "anomaly_score": 0.5400092601776123,
+   "anomaly_source": null,
+   "anomaly_threshold_provenance": "q99.5_annotation_safe_background_val",
+   "anomaly_threshold": 0.4616784453392029,
+   "anomaly_feature_source": "frozen YOLO11s layer-16 embeddings",
+   "anomaly_memory_version": "open_set_v1",
+   "is_open_set_candidate": true,
+   "open_set": {
+    "anomaly_score": 0.5400092601776123,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   },
+   "natural_clutter": {
+    "score": null,
+    "model_version": "natural_clutter_v1",
+    "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+    "mode": "ADVISORY_ONLY",
+    "experimental": true,
+    "reason": "MODEL_NOT_LOADED_ADVISORY_EXPERIMENT_ONLY"
+   },
+   "quality_score": 0.9060645035061163,
+   "quality_flags": [],
+   "latitude": null,
+   "longitude": null,
+   "localization_uncertainty_m": null,
+   "localization_uncertainty_status": "UNAVAILABLE",
+   "navigation_status": "UNAVAILABLE",
+   "evidence_score": 0.3804934081155163,
+   "evidence_breakdown": {
+    "evidence_score": 0.3804934081155163,
+    "score_type": "UNVALIDATED_EVIDENCE_FUSION",
+    "policy_version": "evidence_fusion@v1",
+    "components": {
+     "detector": {
+      "value": 0.2725653350353241,
+      "weight": 0.3,
+      "normalized_weight": 0.3896103896103896,
+      "contribution": 0.106194286377399
+     },
+     "persistence": {
+      "value": 0.15,
+      "weight": 0.25,
+      "normalized_weight": 0.3246753246753247,
+      "contribution": 0.0487012987012987
+     },
+     "quality": {
+      "value": 0.9060645035061163,
+      "weight": 0.15,
+      "normalized_weight": 0.1948051948051948,
+      "contribution": 0.17650607211158112
+     },
+     "anomaly": {
+      "value": 0.5400092601776123,
+      "weight": 0.07,
+      "normalized_weight": 0.09090909090909091,
+      "contribution": 0.04909175092523748
+     }
+    },
+    "missing_components": [
+     "artificiality",
+     "physics"
+    ]
+   },
+   "disposition": "UNREVIEWED",
+   "recommended_action": "REVIEW",
+   "provenance": {
+    "detector_model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+    "runtime_version": "contact_fusion@v1",
+    "processing_configuration": {
+     "version": "contact_fusion@v1",
+     "max_adjacent_frame_gap": 1,
+     "max_normalized_center_distance": 0.12,
+     "max_world_distance_m": 35.0,
+     "min_class_compatibility": true
+    },
+    "source_raster_identities": [
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg",
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/a_copy.jpg"
+    ]
+   },
+   "reviews": {
+    "history": [],
+    "latest_verdict": null,
+    "review_count": 0
+   },
+   "priority_score": 0.47885263720721083,
+   "priority_band": "LOW",
+   "priority_components": {
+    "evidence": 0.3804934081155163,
+    "persistence": 0.15,
+    "quality": 0.9060645035061163
+   }
+  },
+  {
+   "contact_id": "contact_survey_upload_f63c4680c79e_82c990dd5c35",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "resolved_class": "CRAB_POT",
+   "candidate_classes": [
+    "CRAB_POT"
+   ],
+   "open_set_candidate": false,
+   "classification_source": "FROZEN_YOLO11S_CANDIDATE_GENERATOR",
+   "production_qualified": false,
+   "observation_count": 1,
+   "distinct_frame_observation_count": 1,
+   "window_overlap_duplicate_count": 0,
+   "persistence_evidence_type": "SINGLE_OBSERVATION",
+   "first_frame": "frame_0001",
+   "last_frame": "frame_0001",
+   "first_ping": null,
+   "last_ping": null,
+   "source_frame_ids": [
+    "frame_0001"
+   ],
+   "source_detection_ids": [
+    "det_survey_upload_f63c4680c79e_frame_0001_0000"
+   ],
+   "best_observation_id": "det_survey_upload_f63c4680c79e_frame_0001_0000",
+   "max_raw_confidence": 0.27558261156082153,
+   "mean_raw_confidence": 0.27558261156082153,
+   "class_consistency": 1.0,
+   "bbox_stability": null,
+   "normalized_position_stability": null,
+   "world_position_variance": null,
+   "persistence_score": 0.15,
+   "consecutive_observation_count": 1,
+   "observation_span": 1,
+   "physics_consistency": null,
+   "highlight_score": null,
+   "shadow_score": null,
+   "dropout_overlap": null,
+   "nadir_overlap": 0.0,
+   "anomaly_score": 0.4240867495536804,
+   "anomaly_source": null,
+   "anomaly_threshold_provenance": "q99.5_annotation_safe_background_val",
+   "anomaly_threshold": 0.4616784453392029,
+   "anomaly_feature_source": "frozen YOLO11s layer-16 embeddings",
+   "anomaly_memory_version": "open_set_v1",
+   "is_open_set_candidate": false,
+   "open_set": {
+    "anomaly_score": 0.4240867495536804,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": false,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   },
+   "natural_clutter": {
+    "score": null,
+    "model_version": "natural_clutter_v1",
+    "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+    "mode": "ADVISORY_ONLY",
+    "experimental": true,
+    "reason": "MODEL_NOT_LOADED_ADVISORY_EXPERIMENT_ONLY"
+   },
+   "quality_score": 0.9060645035061163,
+   "quality_flags": [],
+   "latitude": null,
+   "longitude": null,
+   "localization_uncertainty_m": null,
+   "localization_uncertainty_status": "UNAVAILABLE",
+   "navigation_status": "UNAVAILABLE",
+   "evidence_score": 0.37113056034145653,
+   "evidence_breakdown": {
+    "evidence_score": 0.37113056034145653,
+    "score_type": "UNVALIDATED_EVIDENCE_FUSION",
+    "policy_version": "evidence_fusion@v1",
+    "components": {
+     "detector": {
+      "value": 0.27558261156082153,
+      "weight": 0.3,
+      "normalized_weight": 0.3896103896103896,
+      "contribution": 0.10736984866006033
+     },
+     "persistence": {
+      "value": 0.15,
+      "weight": 0.25,
+      "normalized_weight": 0.3246753246753247,
+      "contribution": 0.0487012987012987
+     },
+     "quality": {
+      "value": 0.9060645035061163,
+      "weight": 0.15,
+      "normalized_weight": 0.1948051948051948,
+      "contribution": 0.17650607211158112
+     },
+     "anomaly": {
+      "value": 0.4240867495536804,
+      "weight": 0.07,
+      "normalized_weight": 0.09090909090909091,
+      "contribution": 0.0385533408685164
+     }
+    },
+    "missing_components": [
+     "artificiality",
+     "physics"
+    ]
+   },
+   "disposition": "UNREVIEWED",
+   "recommended_action": "REVIEW",
+   "provenance": {
+    "detector_model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+    "runtime_version": "contact_fusion@v1",
+    "processing_configuration": {
+     "version": "contact_fusion@v1",
+     "max_adjacent_frame_gap": 1,
+     "max_normalized_center_distance": 0.12,
+     "max_world_distance_m": 35.0,
+     "min_class_compatibility": true
+    },
+    "source_raster_identities": [
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg"
+    ]
+   },
+   "reviews": {
+    "history": [],
+    "latest_verdict": null,
+    "review_count": 0
+   },
+   "priority_score": 0.4757316879491909,
+   "priority_band": "LOW",
+   "priority_components": {
+    "evidence": 0.37113056034145653,
+    "persistence": 0.15,
+    "quality": 0.9060645035061163
+   }
+  },
+  {
+   "contact_id": "contact_survey_upload_f63c4680c79e_49d89caa9d96",
+   "survey_id": "survey_upload_f63c4680c79e",
+   "resolved_class": "CRAB_POT",
+   "candidate_classes": [
+    "CRAB_POT"
+   ],
+   "open_set_candidate": false,
+   "classification_source": "FROZEN_YOLO11S_CANDIDATE_GENERATOR",
+   "production_qualified": false,
+   "observation_count": 2,
+   "distinct_frame_observation_count": 1,
+   "window_overlap_duplicate_count": 1,
+   "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+   "first_frame": "frame_0001",
+   "last_frame": "frame_0001",
+   "first_ping": null,
+   "last_ping": null,
+   "source_frame_ids": [
+    "frame_0001",
+    "frame_0001"
+   ],
+   "source_detection_ids": [
+    "det_survey_upload_f63c4680c79e_frame_0001_0001",
+    "det_survey_upload_f63c4680c79e_frame_0001_0002"
+   ],
+   "best_observation_id": "det_survey_upload_f63c4680c79e_frame_0001_0001",
+   "max_raw_confidence": 0.2725653350353241,
+   "mean_raw_confidence": 0.2645169049501419,
+   "class_consistency": 1.0,
+   "bbox_stability": 0.8554642001787819,
+   "normalized_position_stability": 0.8554642001787819,
+   "world_position_variance": null,
+   "persistence_score": 0.15,
+   "consecutive_observation_count": 1,
+   "observation_span": 1,
+   "physics_consistency": null,
+   "highlight_score": null,
+   "shadow_score": null,
+   "dropout_overlap": null,
+   "nadir_overlap": 0.0,
+   "anomaly_score": 0.5400092601776123,
+   "anomaly_source": null,
+   "anomaly_threshold_provenance": "q99.5_annotation_safe_background_val",
+   "anomaly_threshold": 0.4616784453392029,
+   "anomaly_feature_source": "frozen YOLO11s layer-16 embeddings",
+   "anomaly_memory_version": "open_set_v1",
+   "is_open_set_candidate": true,
+   "open_set": {
+    "anomaly_score": 0.5400092601776123,
+    "threshold": 0.4616784453392029,
+    "threshold_source": "q99.5_annotation_safe_background_val",
+    "feature_source": "frozen YOLO11s layer-16 embeddings",
+    "memory_version": "open_set_v1",
+    "status": "AVAILABLE",
+    "missing_inputs": [],
+    "is_open_set_candidate": true,
+    "artifact_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f"
+   },
+   "natural_clutter": {
+    "score": null,
+    "model_version": "natural_clutter_v1",
+    "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+    "mode": "ADVISORY_ONLY",
+    "experimental": true,
+    "reason": "MODEL_NOT_LOADED_ADVISORY_EXPERIMENT_ONLY"
+   },
+   "quality_score": 0.9060645035061163,
+   "quality_flags": [],
+   "latitude": null,
+   "longitude": null,
+   "localization_uncertainty_m": null,
+   "localization_uncertainty_status": "UNAVAILABLE",
+   "navigation_status": "UNAVAILABLE",
+   "evidence_score": 0.3804934081155163,
+   "evidence_breakdown": {
+    "evidence_score": 0.3804934081155163,
+    "score_type": "UNVALIDATED_EVIDENCE_FUSION",
+    "policy_version": "evidence_fusion@v1",
+    "components": {
+     "detector": {
+      "value": 0.2725653350353241,
+      "weight": 0.3,
+      "normalized_weight": 0.3896103896103896,
+      "contribution": 0.106194286377399
+     },
+     "persistence": {
+      "value": 0.15,
+      "weight": 0.25,
+      "normalized_weight": 0.3246753246753247,
+      "contribution": 0.0487012987012987
+     },
+     "quality": {
+      "value": 0.9060645035061163,
+      "weight": 0.15,
+      "normalized_weight": 0.1948051948051948,
+      "contribution": 0.17650607211158112
+     },
+     "anomaly": {
+      "value": 0.5400092601776123,
+      "weight": 0.07,
+      "normalized_weight": 0.09090909090909091,
+      "contribution": 0.04909175092523748
+     }
+    },
+    "missing_components": [
+     "artificiality",
+     "physics"
+    ]
+   },
+   "disposition": "UNREVIEWED",
+   "recommended_action": "REVIEW",
+   "provenance": {
+    "detector_model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+    "runtime_version": "contact_fusion@v1",
+    "processing_configuration": {
+     "version": "contact_fusion@v1",
+     "max_adjacent_frame_gap": 1,
+     "max_normalized_center_distance": 0.12,
+     "max_world_distance_m": 35.0,
+     "min_class_compatibility": true
+    },
+    "source_raster_identities": [
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg",
+     "/workspace/aqualens/data/runtime/uploads/upload_2e45ea676a08/b_copy.jpg"
+    ]
+   },
+   "reviews": {
+    "history": [],
+    "latest_verdict": null,
+    "review_count": 0
+   },
+   "priority_score": 0.47885263720721083,
+   "priority_band": "LOW",
+   "priority_components": {
+    "evidence": 0.3804934081155163,
+    "persistence": 0.15,
+    "quality": 0.9060645035061163
+   }
+  }
+ ],
+ "created_at": "2026-09-05T11:25:19.507838+00:00",
+ "navigation_status": "UNAVAILABLE",
+ "mission": null,
+ "model_registry": {
+  "yolo11s": {
+   "availability": "AVAILABLE",
+   "available": true,
+   "role": "KNOWN_CLASS_CANDIDATE_GENERATOR"
+  },
+  "rfdetr": {
+   "availability": "NOT_CONFIGURED",
+   "available": false,
+   "role": "OPTIONAL_CANDIDATE_GENERATOR"
+  },
+  "natural_clutter": {
+   "availability": "NOT_CONFIGURED",
+   "available": false,
+   "role": "EXPERIMENTAL_ADVISORY_EVIDENCE_ONLY",
+   "status": "REJECTED_FOR_AUTOMATIC_SUPPRESSION",
+   "mode": "ADVISORY_ONLY",
+   "automatic_veto_permitted": false
+  },
+  "mask_refiner": {
+   "availability": "NOT_CONFIGURED",
+   "available": false,
+   "role": "OPTIONAL_REFINER"
+  },
+  "open_set": {
+   "availability": "AVAILABLE",
+   "available": true,
+   "role": "ADVISORY_OPEN_SET_EVIDENCE",
+   "method": "PATCHCORE_STYLE_OPEN_SET",
+   "memory_version": "open_set_v1",
+   "feature_source": "frozen YOLO11s layer-16 embeddings",
+   "threshold": 0.4616784453392029,
+   "threshold_source": "q99.5_annotation_safe_background_val"
+  }
+ },
+ "contact_fusion_policy": "contact_fusion@v1",
+ "sequential_observation_contract": false
+}

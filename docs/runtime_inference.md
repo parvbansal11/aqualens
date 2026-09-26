@@ -1,0 +1,3 @@
+# Runtime inference
+
+The API accepts PNG, JPEG, PBM and ZIPs containing those rasters. Uploads are written under `SAGARDRISHTI_RUNTIME_DIR/uploads/` (default, gitignored, `data/runtime/uploads/`), decoded into RGB without destructive normalization, and run at 640 through a lazy singleton YOLO11s loader on a device selected by preference — CUDA, then Apple Silicon MPS, then CPU (see `packages/sagar/perception/runtime.py::select_device`). No geolocation or metric scale is fabricated. Runtime records retain pixel boxes and raw values. See `docs/DEPLOYMENT.md` for production configuration (model path, runtime storage, CORS, health check).

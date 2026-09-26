@@ -1,0 +1,65 @@
+/**
+ * Design tokens. The ink / amber / sea family is carried over verbatim from the
+ * accepted design and from the existing apps/workstation globals.css so the two
+ * layers stay visually identical during the swap.
+ *
+ * Anything added here beyond the original file is a named alias for a colour the
+ * accepted design already used inline. No new hues were introduced.
+ */
+:root {
+  /* Surfaces, darkest to lightest */
+  --ink: #101820;
+  --deep: #0d151c;
+  --slate: #162028;
+  --raise: #1c2832;
+  --lift: #24323e;
+  --abyss: #0a1116;
+  --chart: #0b1318;
+
+  /* Lines */
+  --line: rgba(232, 236, 232, 0.08);
+  --line-strong: rgba(232, 236, 232, 0.14);
+
+  /* Text */
+  --text: #e7ece8;
+  --text-2: #a8b4b0;
+  --text-3: #738088;
+  --on-amber: #16130c;
+
+  /* Accents */
+  --amber: #d9a441;
+  --amber-hover: #e6b456;
+  --amber-soft: rgba(217, 164, 65, 0.16);
+  --amber-text: #f0d7a2;
+  --sea: #3ea89a;
+  --sea-soft: rgba(62, 168, 154, 0.16);
+  --ice: #7ec9c2;
+  --ice-soft: rgba(126, 201, 194, 0.12);
+  --wheat: #ddc07a;
+  --wheat-soft: rgba(221, 192, 122, 0.12);
+  --mint: #8fd4a4;
+  --mint-soft: rgba(143, 212, 164, 0.12);
+  --unknown: #e0a85a;
+  --unknown-soft: rgba(224, 168, 90, 0.16);
+  --danger: #d26655;
+  --danger-soft: rgba(210, 102, 85, 0.16);
+  --danger-text: #f0a297;
+  --stone: #8ea09a;
+  --hatch: #b3abbf;
+
+  /* Geometry */
+  --radius: 3px;
+  --tap: 38px;
+
+  /* Type */
+  --sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Layout, tuned for a 1440 x 900 laptop */
+  --shell-max: 1180px;
+  --rail: 232px;
+  --inspector: 340px;
+  --queue: 280px;
+
+  color-scheme: dark;
+}

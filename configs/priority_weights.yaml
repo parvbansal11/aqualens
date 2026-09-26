@@ -1,0 +1,38 @@
+# USP 5 — Recovery Priority Engine.
+# Transparent decision support. NOT an ecological risk model (see docs/DEFERRED.md).
+# Every detection stores the full breakdown plus this config_version, so any score is
+# reproducible from its stored components.
+version: 1
+
+weights:
+  confidence:        0.30
+  persistence:       0.20
+  anomaly_evidence:  0.15
+  footprint:         0.15
+  class_weight:      0.12
+  newness:           0.08
+
+normalisers:
+  footprint:
+    kind: log_capped
+    cap_m2: 200.0
+  persistence:
+    value_when_not_applicable: 0.5   # neutral, never 0 — absence of evidence is not evidence
+  anomaly_evidence:
+    kind: max_of
+    inputs: [shadow.score, candidate.anomaly_score]
+
+class_weight:
+  DERELICT_FISHING_GEAR:      1.00   # continues to fish; highest recovery value
+  WRECK_OR_STRUCTURAL_DEBRIS: 0.70
+  PIPELINE:                   0.60   # integrity concern rather than recovery target
+  ENGINEERING_STRUCTURE:      0.50
+  UNKNOWN_ARTIFICIAL_ANOMALY_CANDIDATE: 0.75   # warrants inspection precisely because unclassified
+
+newness:
+  NEW:             1.00
+  MOVED:           0.80
+  UNCHANGED:       0.40
+  NOT_REOBSERVED:  0.30
+  OUT_OF_COVERAGE: 0.50
+  null:            0.60   # no comparison performed

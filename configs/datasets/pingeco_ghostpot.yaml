@@ -1,0 +1,38 @@
+dataset_id: pingeco_ghostpot
+name: PINGEcosystem Ghost Pot Side-Scan Sonar Dataset
+original_source: https://huggingface.co/datasets/PINGEcosystem/sss-crab-pot-detection-ds
+licence: CC-BY-SA-4.0
+access: GATED
+access_note: >
+  Hugging Face gated. Requires a human to accept terms and share contact details.
+  Parv must do this personally; set HF_TOKEN in .env afterwards. Not automatable.
+local_path: data/raw/pingeco_ghostpot
+
+annotation_type: BBOX
+n_samples: 6674
+n_annotations: null
+eval_eligible: true
+
+group_key:
+  field: recording_id
+  derivation: parsed from filename prefix; falls back to filename/spatial block
+  strength: WEAK        # until recording ids are confirmed parseable — see gates below
+
+capability_gates:
+  ping_order_recoverable: null
+  nadir_recoverable: null
+  range_scale_known: null
+  nav_available: null
+
+notes: |
+  CORPUS DISCREPANCY — must be stated in any comparison.
+  GhostVision (Bodine et al., JMSE 2026) reports model experiments on 3,110 manually
+  annotated images. This repository currently holds 6,674 images. These are NOT the same
+  corpus. We report our own numbers on our own split and do not claim comparability with
+  GhostVision's published F1 (~0.71-0.73); that figure is cited only as operating-regime
+  context.
+
+  Pretrained YOLO12 / YOLO26 / RF-DETR checkpoints are published alongside the dataset,
+  confirmed available as ONNX, single class "Crab-Pot", 640x640 input. Usable as detector
+  initialisation. Check the MODEL licence separately from the DATASET licence before
+  shipping any weights.

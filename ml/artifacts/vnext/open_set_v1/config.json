@@ -1,0 +1,24 @@
+{
+  "artifact_version": "open_set_v1",
+  "calibration_split": "val",
+  "coreset": {
+    "method": "deterministic_linspace",
+    "seed": null,
+    "source_patch_count": 56928,
+    "target_size": 2048
+  },
+  "created_at": "2026-09-03T17:53:18.597477+00:00",
+  "feature_extractor_model": "sagardrishti_multidomain_v1_1_yolo11s",
+  "feature_extractor_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+  "feature_source": "frozen YOLO11s layer-16 embeddings",
+  "memory_bank_sha256": "8f3640774c571a28d4d126969820663b99c9dd8f56079072892a94c05531191f",
+  "memory_bank_size": 2048,
+  "memory_version": "open_set_v1",
+  "method": "PATCHCORE_STYLE_OPEN_SET",
+  "preprocessing": "Ultralytics imgsz=640; L2-normalized 4x4 adaptive pooled layer-16 patches",
+  "reference_train_rows": 3558,
+  "reference_val_rows": 1041,
+  "test_set_used": false,
+  "threshold": 0.4616784453392029,
+  "threshold_source": "q99.5_annotation_safe_background_val"
+}

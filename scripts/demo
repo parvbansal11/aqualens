@@ -1,0 +1,1301 @@
+#!/usr/bin/env bash
+# SagarDrishti internal demo operations. One entrypoint for bringing the real
+# backend into a known-good, verified demo state and for diagnosing it when it
+# is not.
+#
+#   ./scripts/demo up | status | doctor | restart | logs | down
+#   ./scripts/demo smoke [--full] | epitome [zip] | watch | env | snapshot
+#
+# Rules this tool keeps, everywhere:
+#   - it never kills a process it did not start;
+#   - it never accepts a detector artifact whose SHA256 is not the frozen one;
+#   - it never reports READY before the live health endpoint proves it;
+#   - it never deletes surveys, uploads, runtime state or datasets;
+#   - it needs no network beyond loopback.
+set -uo pipefail
+
+# ---------------------------------------------------------------- environment
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ ! -f "$ROOT/pyproject.toml" || ! -d "$ROOT/packages/sagar" ]]; then
+  printf 'REFUSING: %s does not look like the SagarDrishti repository root.\n' "$ROOT" >&2
+  exit 1
+fi
+cd "$ROOT" || exit 1
+
+HOST="127.0.0.1"
+PORT="${DEMO_PORT:-8000}"
+EXPECTED_SHA="2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15"
+MODEL_PATH="$ROOT/ml/artifacts/final_v1/detector/best.pt"
+OPEN_SET_DIR="$ROOT/ml/artifacts/vnext/open_set_v1"
+RUNTIME_DIR="${SAGARDRISHTI_RUNTIME_DIR:-$ROOT/data/runtime}"
+LOG_DIR="$ROOT/.demo-logs"
+BACKEND_LOG="$LOG_DIR/backend.log"
+PID_FILE="$LOG_DIR/backend.pid"
+STATE_FILE="$LOG_DIR/backend.state"
+HEALTH_CACHE="$LOG_DIR/health.json"
+VENV_PY="$ROOT/.venv/bin/python"
+APP_FACTORY="demo_serve:create_demo_app"
+EPITOME_ZIP_DEFAULT="${EPITOME_ZIP:-$HOME/Desktop/SagarDrishti_Epitome_Demo_Survey.zip}"
+ASTRA_ORIGINS="http://127.0.0.1:5174 http://localhost:5174"
+
+base_url() { printf 'http://%s:%s' "$HOST" "$PORT"; }
+health_url() { printf '%s/api/v1/runtime/health' "$(base_url)"; }
+
+# .demo-logs holds only regenerable runtime artifacts and is gitignored, so a
+# fresh clone may not have it. Anything that writes there creates it first.
+ensure_log_dir() {
+  mkdir -p "$LOG_DIR" 2>/dev/null || die "cannot create the log directory at $LOG_DIR"
+}
+
+# ------------------------------------------------------------------- printing
+
+info() { printf '%s\n' "$*"; }
+warn() { printf 'WARN  %s\n' "$*"; }
+err() { printf '%s\n' "$*" >&2; }
+die() { printf 'REFUSING: %s\n' "$*" >&2; exit 1; }
+row() { printf '%-15s %s\n' "$1" "$2"; }
+hr() { printf '\n'; }
+
+DOCTOR_FAILURES=0
+DOCTOR_WARNINGS=0
+d_ok() { printf 'OK    %s\n' "$1"; [[ $# -gt 1 ]] && printf '      %s\n' "$2"; return 0; }
+d_warn() {
+  DOCTOR_WARNINGS=$((DOCTOR_WARNINGS + 1))
+  printf 'WARN  %s\n' "$1"
+  shift
+  for line in "$@"; do printf '      %s\n' "$line"; done
+}
+d_fail() {
+  DOCTOR_FAILURES=$((DOCTOR_FAILURES + 1))
+  printf 'FAIL  %s\n' "$1"
+  shift
+  for line in "$@"; do printf '      %s\n' "$line"; done
+}
+
+# ---------------------------------------------------------------- json / http
+
+# Read JSON on stdin, print the value at a dotted path ("" when absent).
+jget() {
+  python3 -c '
+import json, sys
+try:
+    value = json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+for key in sys.argv[1].split("."):
+    if isinstance(value, list):
+        try:
+            value = value[int(key)]
+        except (ValueError, IndexError):
+            value = None
+    elif isinstance(value, dict):
+        value = value.get(key)
+    else:
+        value = None
+    if value is None:
+        break
+if value is None:
+    print("")
+elif isinstance(value, bool):
+    print("true" if value else "false")
+elif isinstance(value, (dict, list)):
+    print(json.dumps(value))
+else:
+    print(value)
+' "$1" 2>/dev/null
+}
+
+health_fetch() { curl --silent --max-time "${1:-5}" "$(health_url)" 2>/dev/null; }
+
+# True when a health payload came from a SagarDrishti backend.
+is_sagar_health() {
+  local payload="$1"
+  [[ -n "$payload" ]] || return 1
+  [[ -n "$(printf '%s' "$payload" | jget frozen_evidence_run_id)" ]] || return 1
+  [[ -n "$(printf '%s' "$payload" | jget model_sha256)" ]] || return 1
+  return 0
+}
+
+http_code() { curl --silent --max-time "${2:-10}" -o /dev/null -w '%{http_code}' "$1" 2>/dev/null; }
+
+# ------------------------------------------------------------ process / ports
+
+port_listeners() { lsof -nP -iTCP:"$PORT" -sTCP:LISTEN -t 2>/dev/null | sort -u; }
+proc_cmd() { ps -o command= -p "$1" 2>/dev/null; }
+proc_etime() { ps -o etime= -p "$1" 2>/dev/null | tr -d ' '; }
+proc_alive() { [[ -n "${1:-}" ]] && kill -0 "$1" 2>/dev/null; }
+
+# A process is ours to stop only if we recorded it AND it still looks like the
+# backend we started. A recycled PID must never be signalled.
+looks_like_backend() {
+  local cmd
+  cmd="$(proc_cmd "$1")"
+  [[ -n "$cmd" ]] || return 1
+  printf '%s' "$cmd" | grep -qE 'demo_serve|sagar\.api|uvicorn' || return 1
+  return 0
+}
+
+state_get() {
+  [[ -f "$STATE_FILE" ]] || return 0
+  awk -F= -v key="$1" '$1==key {sub(/^[^=]*=/, ""); print}' "$STATE_FILE"
+}
+
+pidfile_pid() {
+  local pid
+  [[ -f "$PID_FILE" ]] || return 1
+  pid="$(tr -dc '0-9' <"$PID_FILE")"
+  [[ -n "$pid" ]] || return 1
+  printf '%s' "$pid"
+}
+
+# The recorded process, only if it is still a live backend. Port-agnostic.
+live_recorded_pid() {
+  local pid
+  pid="$(pidfile_pid)" || return 1
+  proc_alive "$pid" || return 1
+  looks_like_backend "$pid" || return 1
+  printf '%s' "$pid"
+}
+
+# The demo-managed backend for the port this invocation is about. Every command
+# is port-scoped, so a tracked backend on another port is not this one.
+tracked_pid() {
+  local pid recorded
+  pid="$(live_recorded_pid)" || return 1
+  recorded="$(state_get PORT)"
+  [[ -z "$recorded" || "$recorded" == "$PORT" ]] || return 1
+  printf '%s' "$pid"
+}
+
+# "<pid> <port>" when the recorded backend is alive but serving another port.
+tracked_elsewhere() {
+  local pid recorded
+  pid="$(live_recorded_pid)" || return 1
+  recorded="$(state_get PORT)"
+  [[ -n "$recorded" && "$recorded" != "$PORT" ]] || return 1
+  printf '%s %s' "$pid" "$recorded"
+}
+
+# The tracked backend, confirmed to be the process holding this port.
+demo_managed_pid() {
+  local pid listeners
+  pid="$(tracked_pid)" || return 1
+  listeners="$(port_listeners)"
+  [[ -n "$listeners" ]] || return 1
+  printf '%s\n' "$listeners" | grep -qx "$pid" || return 1
+  printf '%s' "$pid"
+}
+
+clear_stale_pid() {
+  if [[ -f "$PID_FILE" ]] && ! live_recorded_pid >/dev/null; then
+    rm -f "$PID_FILE" "$STATE_FILE"
+    return 0
+  fi
+  return 1
+}
+
+# ------------------------------------------------------------ static checks
+
+sha_of() { shasum -a 256 "$1" 2>/dev/null | awk '{print $1}'; }
+
+# Canonical artifact discovery: the repository-frozen path, checked against the
+# frozen SHA. An operator override is honoured only if it is the same artifact.
+resolve_model_path() {
+  local override="${SAGARDRISHTI_MODEL_PATH:-}"
+  if [[ -n "$override" ]]; then
+    local resolved="$override"
+    [[ "$resolved" = /* ]] || resolved="$ROOT/$resolved"
+    if [[ ! -f "$resolved" ]]; then
+      die "SAGARDRISHTI_MODEL_PATH is set to '$override' but no file exists there. Unset it to use the frozen artifact at ml/artifacts/final_v1/detector/best.pt."
+    fi
+    if [[ "$(sha_of "$resolved")" != "$EXPECTED_SHA" ]]; then
+      die "SAGARDRISHTI_MODEL_PATH points at a different model than the frozen detector (SHA mismatch). This tool will not substitute a model. Unset it or point it at the frozen artifact."
+    fi
+    MODEL_PATH="$resolved"
+  fi
+}
+
+check_python_env() {
+  [[ -x "$VENV_PY" ]] || command -v uv >/dev/null 2>&1 || return 1
+  return 0
+}
+
+backend_python() {
+  if [[ -x "$VENV_PY" ]]; then
+    printf '%s' "$VENV_PY"
+  else
+    printf 'uv'
+  fi
+}
+
+required_runtime_files() {
+  # The metadata the API loads at construction time. A missing entry means the
+  # backend refuses to start, so they are checked before anything is launched.
+  local evidence_run="$ROOT/runs/run_stage3c_v4"
+  [[ -f "$evidence_run/manifest.json" ]] || evidence_run="$ROOT/runs/run_internal_v2_evidence_v1"
+  printf '%s\n' \
+    "$evidence_run/manifest.json" \
+    "$evidence_run/benchmark.json" \
+    "$evidence_run/model_version.json" \
+    "$evidence_run/frames.json" \
+    "$evidence_run/detections.json" \
+    "$ROOT/data/processed/snap_2fa4bca0a0bc4b7d/split.json" \
+    "$ROOT/ml/artifacts/final_v1/detector/metrics.json"
+}
+
+runtime_disk_free() { df -h "$1" 2>/dev/null | awk 'NR==2 {print $4" free of "$2}'; }
+runtime_disk_used() { du -sh "$1" 2>/dev/null | awk '{print $1}'; }
+
+# ----------------------------------------------------------------- up / start
+
+verify_static_prerequisites() {
+  check_python_env || die "neither $ROOT/.venv/bin/python nor 'uv' is available; the backend cannot be started."
+
+  [[ -f "$MODEL_PATH" ]] || die "the frozen detector artifact is missing at $MODEL_PATH"
+  local actual
+  actual="$(sha_of "$MODEL_PATH")"
+  [[ "$actual" == "$EXPECTED_SHA" ]] || die "frozen detector SHA mismatch at $MODEL_PATH
+           expected $EXPECTED_SHA
+           actual   $actual
+           This tool will not start with a different model."
+
+  local os_override="${SAGARDRISHTI_OPEN_SET_DIR:-}"
+  if [[ -n "$os_override" ]]; then
+    [[ "$os_override" = /* ]] && OPEN_SET_DIR="$os_override" || OPEN_SET_DIR="$ROOT/$os_override"
+  fi
+  [[ -d "$OPEN_SET_DIR" ]] || die "the open_set_v1 artifact directory is missing at $OPEN_SET_DIR"
+  [[ -f "$OPEN_SET_DIR/config.json" ]] || die "open_set_v1 config.json is missing in $OPEN_SET_DIR"
+  [[ -f "$OPEN_SET_DIR/memory_bank.npz" ]] || die "open_set_v1 memory_bank.npz is missing in $OPEN_SET_DIR"
+
+  local missing=()
+  while IFS= read -r path; do
+    [[ -f "$path" ]] || missing+=("$path")
+  done < <(required_runtime_files)
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    die "required runtime metadata is missing:
+           ${missing[*]}"
+  fi
+
+  mkdir -p "$RUNTIME_DIR" 2>/dev/null
+  [[ -w "$RUNTIME_DIR" ]] || die "the runtime store at $RUNTIME_DIR is not writeable"
+  ensure_log_dir
+}
+
+print_ready_summary() {
+  local payload="$1" origin="$2" log_line="${3:-.demo-logs/backend.log}"
+  local device open_set surveys
+  device="$(printf '%s' "$payload" | jget device | tr '[:lower:]' '[:upper:]')"
+  open_set="$(printf '%s' "$payload" | jget optional_models.open_set.availability)"
+  surveys="$(printf '%s' "$payload" | jget runtime_surveys_retained)"
+  hr
+  info "SAGARDRISHTI INTERNAL DEMO"
+  hr
+  row "API" "READY"
+  row "Detector" "READY"
+  row "Device" "${device:-UNKNOWN}"
+  row "Checkpoint" "VERIFIED"
+  row "Open Set" "$([[ "$open_set" == "AVAILABLE" ]] && echo READY || echo "$open_set")"
+  row "Survey Store" "READY (${surveys:-0} retained)"
+  row "Process" "$origin"
+  hr
+  info "Backend"
+  info "$(base_url)"
+  hr
+  info "Health"
+  info "$(health_url)"
+  hr
+  info "Logs"
+  info "$log_line"
+  hr
+  info "READY FOR DEMO"
+}
+
+# Verify a live health payload against every condition a judge demo needs.
+verify_live_health() {
+  local payload="$1"
+  local status runtime_available model_loaded device sha open_set problems=()
+  status="$(printf '%s' "$payload" | jget status)"
+  runtime_available="$(printf '%s' "$payload" | jget runtime_available)"
+  model_loaded="$(printf '%s' "$payload" | jget model_loaded)"
+  device="$(printf '%s' "$payload" | jget device)"
+  sha="$(printf '%s' "$payload" | jget model_sha256)"
+  open_set="$(printf '%s' "$payload" | jget optional_models.open_set.availability)"
+
+  [[ "$status" == "ok" ]] || problems+=("status is '$status', expected 'ok'")
+  [[ "$runtime_available" == "true" ]] || problems+=("runtime_available is '$runtime_available'")
+  [[ "$model_loaded" == "true" ]] || problems+=("model_loaded is '$model_loaded' (the detector is not warm)")
+  [[ -n "$device" ]] || problems+=("no compute device reported")
+  [[ "$sha" == "$EXPECTED_SHA" ]] || problems+=("checkpoint SHA is '$sha', expected $EXPECTED_SHA")
+  [[ "$open_set" == "AVAILABLE" ]] || problems+=("open_set availability is '$open_set', expected AVAILABLE")
+
+  if [[ ${#problems[@]} -gt 0 ]]; then
+    err "NOT READY FOR DEMO"
+    for problem in "${problems[@]}"; do err "  - $problem"; done
+    return 1
+  fi
+  return 0
+}
+
+start_backend() {
+  local runner log_note
+  runner="$(backend_python)"
+  ensure_log_dir
+  : >"$BACKEND_LOG"
+
+  # Explicit configuration, every session, from the discovered canonical paths.
+  export SAGARDRISHTI_MODEL_PATH="$MODEL_PATH"
+  export SAGARDRISHTI_OPEN_SET_DIR="$OPEN_SET_DIR"
+  export SAGARDRISHTI_RUNTIME_DIR="$RUNTIME_DIR"
+
+  if [[ "$runner" == "uv" ]]; then
+    log_note="uv run python -m uvicorn"
+    nohup uv run python -m uvicorn "$APP_FACTORY" --factory --app-dir "$ROOT/scripts" \
+      --host "$HOST" --port "$PORT" --workers 1 >>"$BACKEND_LOG" 2>&1 &
+  else
+    log_note=".venv/bin/python -m uvicorn"
+    nohup "$VENV_PY" -m uvicorn "$APP_FACTORY" --factory --app-dir "$ROOT/scripts" \
+      --host "$HOST" --port "$PORT" --workers 1 >>"$BACKEND_LOG" 2>&1 &
+  fi
+  local pid=$!
+  printf '%s\n' "$pid" >"$PID_FILE"
+  {
+    printf 'PID=%s\n' "$pid"
+    printf 'PORT=%s\n' "$PORT"
+    printf 'RUNNER=%s\n' "$log_note"
+    printf 'STARTED_AT=%s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+    printf 'MODEL_PATH=%s\n' "$MODEL_PATH"
+    printf 'OPEN_SET_DIR=%s\n' "$OPEN_SET_DIR"
+    printf 'RUNTIME_DIR=%s\n' "$RUNTIME_DIR"
+  } >"$STATE_FILE"
+  printf '%s' "$pid"
+}
+
+stop_tracked_backend() {
+  local pid elsewhere
+  if ! pid="$(tracked_pid)"; then
+    if clear_stale_pid; then
+      info "No demo-managed backend is running on port $PORT (a stale PID file was removed)."
+    elif elsewhere="$(tracked_elsewhere)"; then
+      info "No demo-managed backend on port $PORT. The one this tool started (PID ${elsewhere% *}) is serving port ${elsewhere#* }."
+      info "Stop that one with: ./scripts/demo --port ${elsewhere#* } down"
+    else
+      info "No demo-managed backend is running on port $PORT."
+    fi
+    return 0
+  fi
+
+  info "Stopping demo-managed backend (PID $pid) ..."
+  pkill -TERM -P "$pid" 2>/dev/null
+  kill -TERM "$pid" 2>/dev/null
+  local waited=0
+  while proc_alive "$pid" && [[ $waited -lt 15 ]]; do
+    sleep 1
+    waited=$((waited + 1))
+  done
+  if proc_alive "$pid"; then
+    info "It did not exit after ${waited}s; sending SIGKILL to PID $pid (a process this tool started)."
+    pkill -KILL -P "$pid" 2>/dev/null
+    kill -KILL "$pid" 2>/dev/null
+    sleep 1
+  fi
+  if proc_alive "$pid"; then
+    err "PID $pid is still alive. Inspect it with: ps -p $pid -o command="
+    return 1
+  fi
+  rm -f "$PID_FILE" "$STATE_FILE"
+  info "Stopped. Surveys, uploads and runtime state were left untouched."
+  return 0
+}
+
+cmd_up() {
+  local with_frontend=""
+  for arg in "$@"; do
+    case "$arg" in
+      --with-frontend) with_frontend=1 ;;
+      *) die "unknown option for 'up': $arg" ;;
+    esac
+  done
+
+  resolve_model_path
+  ensure_log_dir
+
+  # A backend that is already serving correctly is reused, never restarted and
+  # never killed.
+  local listeners payload
+  listeners="$(port_listeners)"
+  if [[ -n "$listeners" ]]; then
+    payload="$(health_fetch 8)"
+    if is_sagar_health "$payload"; then
+      local tracked="" origin
+      origin="externally started (PID $(printf '%s' "$listeners" | tr '\n' ' ' | sed 's/ $//')); 'demo down' and 'demo restart' will not touch it"
+      # Demo-managed only if the process we recorded is the one holding this port.
+      if tracked="$(tracked_pid)" && printf '%s\n' "$listeners" | grep -qx "$tracked"; then
+        origin="demo-managed (PID $tracked, up $(proc_etime "$tracked"))"
+      else
+        tracked=""
+      fi
+      info "Port $PORT is already served by a SagarDrishti backend; reusing it."
+      printf '%s' "$payload" >"$HEALTH_CACHE"
+      if ! verify_live_health "$payload"; then
+        err ""
+        if [[ -n "${tracked:-}" ]]; then
+          err "This backend is demo-managed. Restart it into a verified state with:"
+          err "  ./scripts/demo restart"
+        else
+          err "This backend was not started by this tool, so it will not be restarted for you."
+          err "Stop it yourself, then run './scripts/demo up' for a warm, verified backend:"
+          while IFS= read -r pid; do
+            [[ -n "$pid" ]] && err "  kill $pid   # $(proc_cmd "$pid" | head -c 120)"
+          done <<<"$listeners"
+        fi
+        return 1
+      fi
+      if [[ -n "$tracked" ]]; then
+        print_ready_summary "$payload" "$origin"
+      else
+        print_ready_summary "$payload" "$origin" "written wherever that process was started from, not .demo-logs/"
+      fi
+      [[ -n "$with_frontend" ]] && start_frontend
+      return 0
+    fi
+
+    err "REFUSING: port $PORT is owned by a process that is not a SagarDrishti backend."
+    while IFS= read -r pid; do
+      [[ -n "$pid" ]] || continue
+      err "  PID $pid  $(proc_cmd "$pid" | head -c 160)"
+    done <<<"$listeners"
+    err ""
+    err "Stop it yourself, or run this tool against another port:"
+    err "  DEMO_PORT=8010 ./scripts/demo up"
+    err "This tool will not kill a process it did not start."
+    return 1
+  fi
+
+  clear_stale_pid >/dev/null
+  verify_static_prerequisites
+  info "Prerequisites verified: frozen detector SHA, open_set_v1 artifact, runtime metadata, runtime store."
+
+  local pid
+  pid="$(start_backend)"
+  info "Backend starting (PID $pid) on $(base_url) ..."
+
+  local waited=0 ready=""
+  while [[ $waited -lt 120 ]]; do
+    if ! proc_alive "$pid"; then
+      err "The backend process exited during startup. Last log lines:"
+      tail -n 30 "$BACKEND_LOG" >&2
+      rm -f "$PID_FILE" "$STATE_FILE"
+      return 1
+    fi
+    payload="$(health_fetch 3)"
+    if is_sagar_health "$payload"; then
+      ready=1
+      break
+    fi
+    sleep 1
+    waited=$((waited + 1))
+  done
+  if [[ -z "$ready" ]]; then
+    err "The backend did not answer $(health_url) within ${waited}s. Last log lines:"
+    tail -n 30 "$BACKEND_LOG" >&2
+    err ""
+    err "The process (PID $pid) is still tracked. Stop it with: ./scripts/demo down"
+    return 1
+  fi
+
+  printf '%s' "$payload" >"$HEALTH_CACHE"
+  info "Health endpoint answered after ${waited}s."
+  if grep -q 'DEMO_WARMUP OK' "$BACKEND_LOG"; then
+    info "Detector warmed in-process: $(grep -m1 'DEMO_WARMUP' "$BACKEND_LOG")"
+  else
+    warn "no DEMO_WARMUP OK line in the backend log; checking live health instead."
+    grep -m1 'DEMO_WARMUP' "$BACKEND_LOG" >&2
+  fi
+
+  if ! verify_live_health "$payload"; then
+    err ""
+    err "The backend is running (PID $pid) but is not demo-ready. Diagnose with:"
+    err "  ./scripts/demo doctor"
+    err "  ./scripts/demo logs"
+    return 1
+  fi
+
+  print_ready_summary "$payload" "demo-managed (PID $pid)"
+  [[ -n "$with_frontend" ]] && start_frontend
+  return 0
+}
+
+# Optional: the in-repo workstation frontend. Not required by any other
+# command; the backend is the thing that has to be reliable.
+start_frontend() {
+  local dir="$ROOT/apps/workstation" log="$LOG_DIR/frontend.log" pidfile="$LOG_DIR/frontend.pid" port=3000
+  [[ -d "$dir" ]] || { warn "no in-repo frontend at $dir; skipping --with-frontend."; return 0; }
+  command -v pnpm >/dev/null 2>&1 || { warn "'pnpm' is not on PATH; skipping --with-frontend."; return 0; }
+  [[ -d "$dir/node_modules" ]] || { warn "frontend dependencies are not installed (run 'pnpm install' in apps/workstation); skipping."; return 0; }
+  if lsof -nP -iTCP:"$port" -sTCP:LISTEN -t >/dev/null 2>&1; then
+    warn "port $port is already in use; not starting a second frontend."
+    return 0
+  fi
+  (cd "$dir" && NEXT_PUBLIC_API_BASE_URL="$(base_url)" nohup pnpm dev --port "$port" >"$log" 2>&1 &
+   echo $! >"$pidfile")
+  info "Frontend starting on http://localhost:$port (log: .demo-logs/frontend.log, PID $(cat "$pidfile"))"
+}
+
+# ---------------------------------------------------------------------- status
+
+cmd_status() {
+  local listeners payload pid tracked
+  listeners="$(port_listeners)"
+  payload="$(health_fetch 5)"
+
+  hr
+  info "SAGARDRISHTI DEMO STATUS"
+  hr
+
+  if tracked="$(demo_managed_pid)"; then
+    row "Process" "demo-managed"
+    row "PID" "$tracked"
+    row "Uptime (proc)" "$(proc_etime "$tracked")"
+    local runner
+    runner="$(state_get RUNNER)"
+    [[ -n "$runner" ]] && row "Runner" "$runner"
+  elif [[ -n "$listeners" ]]; then
+    row "Process" "not demo-managed"
+    row "PID" "$(printf '%s' "$listeners" | tr '\n' ' ' | sed 's/ $//')"
+    while IFS= read -r p; do
+      [[ -n "$p" ]] && row "" "$(proc_cmd "$p" | head -c 110)"
+    done <<<"$listeners"
+  else
+    row "Process" "not running"
+    if ! live_recorded_pid >/dev/null && [[ -f "$PID_FILE" ]]; then
+      row "PID file" "stale ($(pidfile_pid)); clear it with 'demo down'"
+    fi
+  fi
+
+  local elsewhere
+  if elsewhere="$(tracked_elsewhere)"; then
+    row "Also tracked" "demo-managed backend PID ${elsewhere% *} on port ${elsewhere#* } (run commands with --port ${elsewhere#* })"
+  fi
+
+  if [[ -n "$listeners" ]]; then
+    row "Port $PORT" "LISTENING"
+  else
+    row "Port $PORT" "free"
+  fi
+
+  if is_sagar_health "$payload"; then
+    local sha open_set
+    sha="$(printf '%s' "$payload" | jget model_sha256)"
+    open_set="$(printf '%s' "$payload" | jget optional_models.open_set.availability)"
+    row "Health" "$(printf '%s' "$payload" | jget status)"
+    row "API uptime" "$(printf '%s' "$payload" | jget uptime_seconds | awk '{printf "%.0fs", $1}')"
+    row "Model loaded" "$(printf '%s' "$payload" | jget model_loaded)"
+    row "Device" "$(printf '%s' "$payload" | jget device)"
+    if [[ "$sha" == "$EXPECTED_SHA" ]]; then
+      row "Checkpoint" "VERIFIED by backend ($(printf '%.12s' "$sha")...)"
+    else
+      row "Checkpoint" "MISMATCH: $sha"
+    fi
+    row "Open set" "$open_set"
+    row "Surveys" "$(printf '%s' "$payload" | jget runtime_surveys_retained) retained"
+    row "Evidence run" "$(printf '%s' "$payload" | jget frozen_evidence_run_id)"
+    row "Jobs" "in-memory per process; not exposed as an index (query /api/v1/jobs/{job_id})"
+  elif [[ -n "$payload" ]]; then
+    row "Health" "answered, but not a SagarDrishti payload"
+  else
+    row "Health" "unreachable at $(health_url)"
+  fi
+
+  row "Runtime store" "$RUNTIME_DIR"
+  row "Store size" "$(runtime_disk_used "$RUNTIME_DIR")"
+  row "Disk" "$(runtime_disk_free "$RUNTIME_DIR")"
+  if [[ -z "${tracked:-}" ]] && is_sagar_health "$payload"; then
+    row "Store note" "the serving process was not started here, so its own store may be elsewhere"
+    row "" "(health never reports paths; the retained count above is that process's, the size is this path's)"
+  fi
+  [[ -f "$BACKEND_LOG" ]] && row "Log" ".demo-logs/backend.log ($(wc -l <"$BACKEND_LOG" | tr -d ' ') lines)"
+  hr
+}
+
+# ---------------------------------------------------------------------- doctor
+
+cmd_doctor() {
+  hr
+  info "SAGARDRISHTI DEMO DOCTOR"
+  hr
+
+  info "-- environment"
+  if [[ -x "$VENV_PY" ]]; then
+    d_ok "Python environment" "$("$VENV_PY" -V 2>&1) at .venv/bin/python"
+  elif command -v uv >/dev/null 2>&1; then
+    d_warn "Python environment" "no $ROOT/.venv; 'uv run' will be used instead" "Create it with: uv sync --extra inference"
+  else
+    d_fail "Python environment" "no .venv/bin/python and no 'uv' on PATH" "Install uv, then: uv sync --extra inference"
+  fi
+
+  if command -v uv >/dev/null 2>&1; then
+    d_ok "uv available" "$(uv --version 2>&1)"
+  else
+    d_warn "uv available" "'uv' is not on PATH" "Only needed if .venv is missing or dependencies change."
+  fi
+
+  local dep_report
+  dep_report="$("$(backend_python)" - <<'PY' 2>&1
+import importlib, importlib.util, sys
+required = ["fastapi", "uvicorn", "numpy", "PIL", "multipart", "sagar.api"]
+lazy = ["torch", "ultralytics"]
+missing = []
+for name in required:
+    try:
+        importlib.import_module(name)
+    except Exception as exc:
+        missing.append(f"{name}: {type(exc).__name__}: {exc}")
+for name in lazy:
+    if importlib.util.find_spec(name) is None:
+        missing.append(f"{name}: not installed (needed to load the detector)")
+print("MISSING" if missing else "OK")
+for item in missing:
+    print(item)
+PY
+)"
+  if [[ "$(printf '%s' "$dep_report" | head -n1)" == "OK" ]]; then
+    d_ok "Dependencies" "fastapi, uvicorn, numpy, pillow, python-multipart, sagar.api, torch, ultralytics"
+  else
+    d_fail "Dependencies" "$(printf '%s' "$dep_report" | tail -n +2 | tr '\n' '; ')" "Install them with: uv sync --extra inference"
+  fi
+
+  info ""
+  info "-- model artifacts"
+  local model_override="${SAGARDRISHTI_MODEL_PATH:-}" effective="$MODEL_PATH"
+  if [[ -n "$model_override" ]]; then
+    [[ "$model_override" = /* ]] && effective="$model_override" || effective="$ROOT/$model_override"
+    d_ok "Model path" "SAGARDRISHTI_MODEL_PATH=$model_override"
+  else
+    d_ok "Model path" "repository default ml/artifacts/final_v1/detector/best.pt (no env override needed)"
+  fi
+
+  if [[ -f "$effective" ]]; then
+    d_ok "Detector artifact" "$effective"
+    local actual
+    actual="$(sha_of "$effective")"
+    if [[ "$actual" == "$EXPECTED_SHA" ]]; then
+      d_ok "Detector SHA256" "$EXPECTED_SHA"
+    else
+      d_fail "Detector SHA256" "expected $EXPECTED_SHA" "actual   $actual" "This is not the frozen detector. Restore the frozen artifact; do not demo another model."
+    fi
+  else
+    d_fail "Detector artifact" "Expected:" "ml/artifacts/final_v1/detector/best.pt" "The weights are gitignored and must be provisioned on this host."
+  fi
+
+  local os_dir="$OPEN_SET_DIR" os_override="${SAGARDRISHTI_OPEN_SET_DIR:-}"
+  if [[ -n "$os_override" ]]; then
+    [[ "$os_override" = /* ]] && os_dir="$os_override" || os_dir="$ROOT/$os_override"
+  fi
+  if [[ -d "$os_dir" ]]; then
+    d_ok "Open-set directory" "$os_dir"
+  else
+    d_fail "Open-set directory" "Expected:" "ml/artifacts/vnext/open_set_v1/" "Without it the backend starts with open_set NOT_CONFIGURED, which is not demo-ready."
+  fi
+  if [[ -f "$os_dir/config.json" ]]; then
+    local memory_version
+    memory_version="$(jget memory_version <"$os_dir/config.json")"
+    d_ok "Open-set config" "config.json${memory_version:+ (memory_version=$memory_version)}"
+  else
+    d_fail "Open-set config" "config.json not found in $os_dir"
+  fi
+  if [[ -f "$os_dir/memory_bank.npz" ]]; then
+    d_ok "Open-set memory bank" "memory_bank.npz ($(du -h "$os_dir/memory_bank.npz" | awk '{print $1}'))"
+  else
+    d_fail "Open-set memory bank" "memory_bank.npz not found in $os_dir"
+  fi
+  if [[ -f "$os_dir/threshold_calibration.json" ]]; then
+    d_ok "Open-set threshold" "threshold_calibration.json present (thresholds are frozen; this tool never changes them)"
+  else
+    d_warn "Open-set threshold" "threshold_calibration.json is absent" "The backend falls back to the config threshold."
+  fi
+
+  info ""
+  info "-- runtime metadata"
+  local missing=()
+  while IFS= read -r path; do
+    [[ -f "$path" ]] || missing+=("${path#$ROOT/}")
+  done < <(required_runtime_files)
+  if [[ ${#missing[@]} -eq 0 ]]; then
+    d_ok "Required runtime metadata" "frozen evidence run, dataset snapshot split, detector metrics"
+  else
+    d_fail "Required runtime metadata" "Missing:" "${missing[@]}" "The API loads these at construction time and refuses to start without them."
+  fi
+
+  info ""
+  info "-- port and process"
+  local listeners tracked
+  listeners="$(port_listeners)"
+  if [[ -z "$listeners" ]]; then
+    d_ok "Port $PORT" "free"
+  else
+    local payload
+    payload="$(health_fetch 5)"
+    if is_sagar_health "$payload"; then
+      d_ok "Port $PORT" "served by a SagarDrishti backend (PID $(printf '%s' "$listeners" | tr '\n' ' '))"
+    else
+      local first_pid first_cmd
+      first_pid="$(printf '%s' "$listeners" | head -n1)"
+      first_cmd="$(proc_cmd "$first_pid" | awk '{print $1}' | xargs -r basename 2>/dev/null)"
+      d_fail "Port $PORT" "Owned by PID $first_pid ${first_cmd:-unknown}" "Stop it manually or use a different port: DEMO_PORT=8010 ./scripts/demo up"
+    fi
+  fi
+
+  local elsewhere
+  if tracked="$(demo_managed_pid)"; then
+    d_ok "Backend process" "demo-managed PID $tracked, up $(proc_etime "$tracked")"
+  elif elsewhere="$(tracked_elsewhere)"; then
+    d_warn "Backend process" "the demo-managed backend (PID ${elsewhere% *}) is serving port ${elsewhere#* }, not $PORT" \
+      "Check that one with: ./scripts/demo --port ${elsewhere#* } status"
+  elif [[ -f "$PID_FILE" ]] && ! live_recorded_pid >/dev/null; then
+    d_warn "Backend process" "PID file records $(pidfile_pid), which is not a live backend" "Clear it with: ./scripts/demo down"
+  elif [[ -n "$listeners" ]]; then
+    d_warn "Backend process" "a backend is serving but this tool did not start it" \
+      "'demo down' and 'demo restart' will refuse to touch it, by design." \
+      "Its model path and runtime store are whatever its launcher set; health reports no paths, so a retained-survey count that disagrees with data/runtime is expected." \
+      "For a backend this tool verifies end to end: stop that process, then ./scripts/demo up"
+  else
+    d_warn "Backend process" "not running" "Start it with: ./scripts/demo up"
+  fi
+
+  info ""
+  info "-- live service"
+  local payload
+  payload="$(health_fetch 5)"
+  if [[ -z "$payload" ]]; then
+    d_fail "Health endpoint" "no response from $(health_url)" "Start the backend with: ./scripts/demo up"
+  elif ! is_sagar_health "$payload"; then
+    d_fail "Health endpoint" "something answered $(health_url) but it is not a SagarDrishti backend" "Check what owns port $PORT."
+  else
+    d_ok "Health endpoint" "status=$(printf '%s' "$payload" | jget status), api_version=$(printf '%s' "$payload" | jget api_version)"
+
+    if [[ "$(printf '%s' "$payload" | jget runtime_available)" == "true" ]]; then
+      d_ok "Runtime availability" "runtime_available=true"
+    else
+      d_fail "Runtime availability" "runtime_available=false" "The backend cannot see a SHA-matching detector artifact. Fix the artifact, then restart."
+    fi
+
+    if [[ "$(printf '%s' "$payload" | jget model_loaded)" == "true" ]]; then
+      d_ok "Detector loaded" "model_loaded=true on device $(printf '%s' "$payload" | jget device)"
+    else
+      d_fail "Detector loaded" "model_loaded=false: weights are not in memory yet" "A backend started outside this tool loads the detector only on the first upload." "Restart it through './scripts/demo up', which warms it before serving."
+    fi
+
+    local live_sha
+    live_sha="$(printf '%s' "$payload" | jget model_sha256)"
+    if [[ "$live_sha" == "$EXPECTED_SHA" ]]; then
+      d_ok "Checkpoint (as served)" "$live_sha"
+    else
+      d_fail "Checkpoint (as served)" "the running backend reports $live_sha" "expected $EXPECTED_SHA" "It is serving a different artifact than the frozen detector."
+    fi
+
+    local live_open_set
+    live_open_set="$(printf '%s' "$payload" | jget optional_models.open_set.availability)"
+    if [[ "$live_open_set" == "AVAILABLE" ]]; then
+      d_ok "Open-set availability" "AVAILABLE (memory_version=$(printf '%s' "$payload" | jget optional_models.open_set.memory_version))"
+    else
+      d_fail "Open-set availability" "the running backend reports $live_open_set" "Restart it with the artifact in place; open_set_v1 evidence is part of the demo."
+    fi
+
+    local index_code
+    index_code="$(http_code "$(base_url)/api/v1/runtime/surveys")"
+    if [[ "$index_code" == "200" ]]; then
+      d_ok "Survey index route" "HTTP 200, $(printf '%s' "$payload" | jget runtime_surveys_retained) surveys retained"
+    else
+      d_fail "Survey index route" "HTTP $index_code from /api/v1/runtime/surveys"
+    fi
+  fi
+
+  info ""
+  info "-- storage"
+  if [[ -d "$RUNTIME_DIR" && -w "$RUNTIME_DIR" ]]; then
+    local probe="$RUNTIME_DIR/.demo-write-probe"
+    if : >"$probe" 2>/dev/null; then
+      rm -f "$probe"
+      d_ok "Survey store writeable" "$RUNTIME_DIR ($(runtime_disk_used "$RUNTIME_DIR") used)"
+    else
+      d_fail "Survey store writeable" "cannot create files in $RUNTIME_DIR" "Fix the permissions; uploads and reviews are written here."
+    fi
+  else
+    d_fail "Survey store writeable" "$RUNTIME_DIR is missing or not writeable" "Create it or point SAGARDRISHTI_RUNTIME_DIR at a writeable directory."
+  fi
+
+  local avail_kb
+  avail_kb="$(df -k "$RUNTIME_DIR" 2>/dev/null | awk 'NR==2 {print $4}')"
+  if [[ -n "$avail_kb" ]] && [[ "$avail_kb" -lt 2097152 ]]; then
+    d_fail "Runtime disk space" "only $(runtime_disk_free "$RUNTIME_DIR") on the runtime volume" "Free space before demoing; uploads and extracted rasters are written here."
+  elif [[ -n "$avail_kb" ]] && [[ "$avail_kb" -lt 10485760 ]]; then
+    d_warn "Runtime disk space" "$(runtime_disk_free "$RUNTIME_DIR")" "Enough for a demo, but watch it if you upload repeatedly."
+  else
+    d_ok "Runtime disk space" "$(runtime_disk_free "$RUNTIME_DIR")"
+  fi
+
+  info ""
+  info "-- frontend wiring"
+  local origins="${SAGARDRISHTI_ALLOWED_ORIGINS:-}"
+  if [[ -z "$origins" ]]; then
+    d_ok "CORS configuration" "unset: the backend allows any http://localhost:<port> and http://127.0.0.1:<port>" "That already covers $ASTRA_ORIGINS. No change needed for a local demo."
+  else
+    local missing_origin=()
+    for origin in $ASTRA_ORIGINS; do
+      printf '%s' "$origins" | grep -q -- "$origin" || missing_origin+=("$origin")
+    done
+    if [[ ${#missing_origin[@]} -eq 0 ]]; then
+      d_ok "CORS configuration" "SAGARDRISHTI_ALLOWED_ORIGINS lists the local frontend origins"
+    else
+      d_fail "CORS configuration" "SAGARDRISHTI_ALLOWED_ORIGINS is set but omits: ${missing_origin[*]}" "Add them, or unset the variable entirely for a local demo (loopback is then allowed on any port)."
+    fi
+  fi
+
+  local astra="$HOME/Desktop/sagardrishti-astra"
+  if [[ -d "$astra" ]]; then
+    local configured=""
+    for envfile in "$astra/.env" "$astra/.env.local" "$astra/.env.development" "$astra/.env.development.local"; do
+      [[ -f "$envfile" ]] && grep -q '^VITE_API_BASE_URL=' "$envfile" 2>/dev/null && configured="${envfile##*/}"
+    done
+    if [[ -n "$configured" ]]; then
+      d_ok "Frontend origin config" "$configured defines VITE_API_BASE_URL (expected value: $(base_url)/api/v1)"
+    else
+      d_warn "Frontend origin config" "no VITE_API_BASE_URL found in the Astra frontend's env files" "Write it there yourself: ./scripts/demo env shows the exact value. This tool does not edit that project."
+    fi
+  else
+    d_ok "Frontend origin config" "no separate frontend checked out here; './scripts/demo env' prints the contract"
+  fi
+
+  info ""
+  info "-- backend log"
+  if [[ -f "$BACKEND_LOG" ]]; then
+    local fatal
+    fatal="$(grep -nE 'Traceback|CRITICAL|ERROR|REFUSING|FileNotFoundError|RuntimeError|Address already in use|DEMO_WARMUP (FAILED|UNAVAILABLE)' "$BACKEND_LOG" 2>/dev/null | tail -n 5)"
+    if [[ -z "$fatal" ]]; then
+      d_ok "Recent backend log" "no fatal entries in .demo-logs/backend.log"
+    else
+      d_warn "Recent backend log" "fatal-looking entries (most recent last):" "$(printf '%s' "$fatal" | tr '\n' '|' | sed 's/|/ | /g')" "Read the full context with: ./scripts/demo logs"
+    fi
+  else
+    d_ok "Recent backend log" "no log yet at .demo-logs/backend.log"
+  fi
+
+  hr
+  if [[ "$DOCTOR_FAILURES" -eq 0 && "$DOCTOR_WARNINGS" -eq 0 ]]; then
+    info "ALL CHECKS PASSED"
+  else
+    info "$DOCTOR_FAILURES failed, $DOCTOR_WARNINGS warning(s)"
+  fi
+  hr
+  [[ "$DOCTOR_FAILURES" -eq 0 ]]
+}
+
+# --------------------------------------------------------------------- restart
+
+cmd_restart() {
+  local tracked listeners
+  if tracked="$(tracked_pid)"; then
+    stop_tracked_backend || return 1
+  else
+    listeners="$(port_listeners)"
+    if [[ -n "$listeners" ]]; then
+      err "REFUSING: a process is serving port $PORT but this tool did not start it."
+      while IFS= read -r pid; do
+        [[ -n "$pid" ]] && err "  PID $pid  $(proc_cmd "$pid" | head -c 160)"
+      done <<<"$listeners"
+      err ""
+      err "Only processes started by this tool are restarted. Stop that one yourself, then run './scripts/demo up'."
+      return 1
+    fi
+    clear_stale_pid >/dev/null && info "Cleared a stale PID file."
+    info "Nothing demo-managed was running; starting fresh."
+  fi
+  cmd_up
+}
+
+# ------------------------------------------------------------------------ logs
+
+cmd_logs() {
+  local which="backend" lines=80 follow=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      backend | frontend) which="$1" ;;
+      --follow | -f) follow=1 ;;
+      -n) shift; lines="${1:-80}" ;;
+      -n*) lines="${1#-n}" ;;
+      *) die "unknown option for 'logs': $1" ;;
+    esac
+    shift
+  done
+  local target="$LOG_DIR/$which.log"
+  [[ -f "$target" ]] || die "no log at $target (nothing has been started by this tool yet)"
+  if [[ -n "$follow" ]]; then
+    info "--- tail -f $target (Ctrl-C to stop) ---"
+    tail -n "$lines" -f "$target"
+  else
+    info "--- last $lines lines of $target ---"
+    tail -n "$lines" "$target"
+  fi
+}
+
+# ------------------------------------------------------------------------ down
+
+cmd_down() {
+  stop_tracked_backend
+  local rc=$?
+  local fpid="$LOG_DIR/frontend.pid"
+  if [[ -f "$fpid" ]]; then
+    local pid
+    pid="$(tr -dc '0-9' <"$fpid")"
+    if proc_alive "$pid" && proc_cmd "$pid" | grep -qE 'next|pnpm|node'; then
+      info "Stopping demo-managed frontend (PID $pid) ..."
+      pkill -TERM -P "$pid" 2>/dev/null
+      kill -TERM "$pid" 2>/dev/null
+    fi
+    rm -f "$fpid"
+  fi
+  local listeners
+  listeners="$(port_listeners)"
+  if [[ -n "$listeners" ]]; then
+    info ""
+    info "Port $PORT is still served by a process this tool did not start:"
+    while IFS= read -r pid; do
+      [[ -n "$pid" ]] && info "  PID $pid  $(proc_cmd "$pid" | head -c 160)"
+    done <<<"$listeners"
+    info "It was left running on purpose."
+  fi
+  return $rc
+}
+
+# ----------------------------------------------------------------------- smoke
+
+cmd_smoke() {
+  local full=""
+  for arg in "$@"; do
+    case "$arg" in
+      --full) full=1 ;;
+      *) die "unknown option for 'smoke': $arg" ;;
+    esac
+  done
+
+  local payload
+  payload="$(health_fetch 5)"
+  is_sagar_health "$payload" || die "no SagarDrishti backend is answering $(health_url). Start it with './scripts/demo up'."
+
+  local script="$ROOT/scripts/internal_hack_check.sh"
+  [[ -x "$script" || -f "$script" ]] || die "the existing smoke check is missing at $script"
+
+  local args=()
+  # The frontend is a separate concern; a backend-only demo must be able to
+  # pass a smoke test. It is still checked when something is serving :3000.
+  if ! curl --silent --max-time 2 -o /dev/null "http://localhost:3000/" 2>/dev/null; then
+    args+=(--no-frontend)
+  fi
+  if [[ -n "$full" ]]; then
+    local zip
+    zip="$(find_epitome_zip)" || return 1
+    info "Running the full smoke test, including a real upload of $zip."
+    info "This creates one new runtime survey. Nothing existing is modified."
+    args+=(--with-upload)
+    EPITOME_ZIP="$zip" BASE_URL="$(base_url)" bash "$script" ${args[@]+"${args[@]}"}
+  else
+    BASE_URL="$(base_url)" bash "$script" ${args[@]+"${args[@]}"}
+  fi
+}
+
+# --------------------------------------------------------------------- epitome
+
+# The canonical judge bundle, as documented in docs/JUDGE_DEMO_RUNBOOK.md.
+find_epitome_zip() {
+  local explicit="${1:-}"
+  if [[ -n "$explicit" ]]; then
+    [[ -f "$explicit" ]] || { err "REFUSING: no bundle at $explicit"; return 1; }
+    printf '%s' "$explicit"
+    return 0
+  fi
+  if [[ -f "$EPITOME_ZIP_DEFAULT" ]]; then
+    printf '%s' "$EPITOME_ZIP_DEFAULT"
+    return 0
+  fi
+  err "REFUSING: the canonical Epitome bundle was not found at:"
+  err "  $EPITOME_ZIP_DEFAULT"
+  local candidates
+  candidates="$(find "$HOME/Desktop" "$ROOT" -maxdepth 2 -iname '*Epitome*.zip' 2>/dev/null | head -n 5)"
+  if [[ -n "$candidates" ]]; then
+    err ""
+    err "Other bundles exist on this machine, but none of them is the documented one:"
+    while IFS= read -r candidate; do err "  $candidate"; done <<<"$candidates"
+    err ""
+    err "Pass the one you mean explicitly: ./scripts/demo epitome <path-to-zip>"
+  fi
+  return 1
+}
+
+cmd_epitome() {
+  local zip
+  zip="$(find_epitome_zip "${1:-}")" || return 1
+
+  local payload
+  payload="$(health_fetch 5)"
+  is_sagar_health "$payload" || die "no SagarDrishti backend is answering $(health_url). Start it with './scripts/demo up'."
+  verify_live_health "$payload" || return 1
+
+  info "Uploading $zip"
+  local accepted job_id survey_id frames_declared
+  accepted="$(curl --silent --max-time 120 -X POST "$(base_url)/api/v1/surveys/upload" \
+    -F "file=@$zip;type=application/zip" -F "name=Epitome demo (terminal)" 2>/dev/null)"
+  job_id="$(printf '%s' "$accepted" | jget job_id)"
+  survey_id="$(printf '%s' "$accepted" | jget survey_id)"
+  frames_declared="$(printf '%s' "$accepted" | jget source_frame_count)"
+  if [[ -z "$job_id" ]]; then
+    err "The upload was not accepted. The service said:"
+    printf '%s\n' "$accepted" >&2
+    return 1
+  fi
+  info "Accepted. job_id=$job_id survey_id=$survey_id source_frames=$frames_declared"
+  hr
+  info "Phases (as the backend reports them):"
+
+  local state="" waited=0 job_json seen="|"
+  while [[ $waited -lt 900 ]]; do
+    job_json="$(curl --silent --max-time 10 "$(base_url)/api/v1/jobs/$job_id" 2>/dev/null)"
+    state="$(printf '%s' "$job_json" | jget state)"
+    while IFS=$'\t' read -r id label step_state detail; do
+      [[ -n "$id" ]] || continue
+      [[ "$step_state" == "queued" ]] && continue
+      local key="$id:$step_state|"
+      if [[ "$seen" != *"|$key"* ]]; then
+        seen="$seen$key"
+        printf '  %-10s %-38s %s\n' "$step_state" "$label" "${detail:-}"
+      fi
+    done < <(printf '%s' "$job_json" | python3 -c '
+import json, sys
+try:
+    job = json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+for step in job.get("steps") or []:
+    print("\t".join([step.get("id") or "", step.get("label") or "", step.get("state") or "", (step.get("detail") or "")]))
+' 2>/dev/null)
+    [[ "$state" == "COMPLETED" || "$state" == "FAILED" ]] && break
+    sleep 2
+    waited=$((waited + 2))
+  done
+
+  hr
+  if [[ "$state" != "COMPLETED" ]]; then
+    err "Job $job_id ended in state '${state:-unknown}' after ${waited}s."
+    printf '%s' "$job_json" | jget error >&2
+    err "No partial survey record is written when a run fails."
+    return 1
+  fi
+
+  local report
+  report="$(curl --silent --max-time 60 "$(base_url)/api/v1/runtime/surveys/$survey_id/report?format=json" 2>/dev/null)"
+  if [[ -z "$(printf '%s' "$report" | jget provenance.survey_id)" ]]; then
+    err "The job completed but the report could not be read back for $survey_id."
+    return 1
+  fi
+
+  local contacts_code
+  contacts_code="$(http_code "$(base_url)/api/v1/runtime/surveys/$survey_id/contacts")"
+
+  info "EPITOME RUN COMPLETE"
+  hr
+  row "Survey ID" "$survey_id"
+  row "Job ID" "$job_id"
+  row "Frames" "$(printf '%s' "$report" | jget provenance.record_counts.source_frames)"
+  row "Observations" "$(printf '%s' "$report" | jget provenance.record_counts.observations)"
+  row "Contacts" "$(printf '%s' "$report" | jget provenance.record_counts.contacts)"
+  row "Navigation" "$(printf '%s' "$report" | jget provenance.navigation.status) ($(printf '%s' "$report" | jget provenance.navigation.observations_with_position) observations positioned)"
+  row "Open-set" "$(printf '%s' "$report" | jget provenance.evidence_availability.open_set_observations_scored) observations scored"
+  row "Detector SHA" "$(printf '%s' "$report" | jget provenance.models.detector_model_sha256)"
+  row "Report" "$([[ -n "$(printf '%s' "$report" | jget provenance.generated_at)" ]] && echo "READY (JSON + CSV)" || echo "UNAVAILABLE")"
+  row "Contacts route" "HTTP $contacts_code"
+  hr
+  info "Report:   $(base_url)/api/v1/runtime/surveys/$survey_id/report?format=json"
+  info "Contacts: $(base_url)/api/v1/runtime/surveys/$survey_id/contacts"
+}
+
+# ----------------------------------------------------------------------- watch
+
+cmd_watch() {
+  local interval="${1:-10}"
+  case "$interval" in
+    *[!0-9]* | "") die "watch interval must be a whole number of seconds" ;;
+  esac
+  info "Watching $(health_url) every ${interval}s. Ctrl-C to stop."
+  info "This never restarts anything: a restart during live inference would discard a running job."
+  local last=""
+  while true; do
+    local payload now line
+    payload="$(health_fetch 5)"
+    now="$(date '+%H:%M:%S')"
+    if is_sagar_health "$payload"; then
+      local status model_loaded open_set
+      status="$(printf '%s' "$payload" | jget status)"
+      model_loaded="$(printf '%s' "$payload" | jget model_loaded)"
+      open_set="$(printf '%s' "$payload" | jget optional_models.open_set.availability)"
+      if [[ "$status" == "ok" && "$model_loaded" == "true" && "$open_set" == "AVAILABLE" ]]; then
+        line="OK status=ok model_loaded=true open_set=AVAILABLE surveys=$(printf '%s' "$payload" | jget runtime_surveys_retained)"
+      else
+        line="DEGRADED status=$status model_loaded=$model_loaded open_set=$open_set"
+      fi
+    elif [[ -n "$payload" ]]; then
+      line="FAIL something is answering $(health_url) but it is not a SagarDrishti backend"
+    else
+      line="FAIL no response from $(health_url)"
+    fi
+    if [[ "$line" != "$last" ]]; then
+      printf '%s  %s\n' "$now" "$line"
+      [[ "$line" == OK* ]] || printf '\a'
+      last="$line"
+    fi
+    sleep "$interval"
+  done
+}
+
+# ------------------------------------------------------------------------- env
+
+cmd_env() {
+  resolve_model_path 2>/dev/null
+  cat <<EOF
+SAGARDRISHTI_API_ORIGIN=$(base_url)
+SAGARDRISHTI_API_BASE=$(base_url)/api/v1
+SAGARDRISHTI_HEALTH_URL=$(health_url)
+VITE_API_BASE_URL=$(base_url)/api/v1
+NEXT_PUBLIC_API_BASE_URL=$(base_url)
+SAGARDRISHTI_MODEL_PATH=$MODEL_PATH
+SAGARDRISHTI_OPEN_SET_DIR=$OPEN_SET_DIR
+SAGARDRISHTI_RUNTIME_DIR=$RUNTIME_DIR
+SAGARDRISHTI_ALLOWED_ORIGINS=
+EOF
+}
+
+# -------------------------------------------------------------------- snapshot
+
+cmd_snapshot() {
+  ensure_log_dir
+  local stamp file payload
+  stamp="$(date -u '+%Y%m%dT%H%M%SZ')"
+  file="$LOG_DIR/snapshot-$stamp.txt"
+  payload="$(health_fetch 5)"
+
+  {
+    printf 'SagarDrishti demo snapshot %s\n' "$stamp"
+    printf 'repository: %s\n' "$ROOT"
+    printf 'host: %s  %s\n' "$(uname -s)" "$(uname -r)"
+    printf '\n-- git --\n'
+    git -C "$ROOT" log -1 --format='commit %H%n date   %ad%n subject %s' 2>/dev/null
+    printf 'branch %s\n' "$(git -C "$ROOT" rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    printf '\ngit status --short:\n'
+    git -C "$ROOT" status --short 2>/dev/null | head -n 40
+    printf '\n-- artifacts --\n'
+    printf 'model_path %s\n' "$MODEL_PATH"
+    printf 'model_sha256 %s\n' "$(sha_of "$MODEL_PATH")"
+    printf 'model_sha_expected %s\n' "$EXPECTED_SHA"
+    printf 'open_set_dir %s\n' "$OPEN_SET_DIR"
+    printf 'open_set_files %s\n' "$(ls "$OPEN_SET_DIR" 2>/dev/null | tr '\n' ' ')"
+    printf '\n-- live health --\n'
+    if [[ -n "$payload" ]]; then
+      printf '%s' "$payload" | python3 -m json.tool 2>/dev/null || printf '%s\n' "$payload"
+    else
+      printf 'no response from %s\n' "$(health_url)"
+    fi
+    printf '\n-- process and port --\n'
+    printf 'port %s listeners: %s\n' "$PORT" "$(port_listeners | tr '\n' ' ')"
+    while IFS= read -r pid; do
+      [[ -n "$pid" ]] && printf 'PID %s  %s\n' "$pid" "$(proc_cmd "$pid")"
+    done < <(port_listeners)
+    if [[ -f "$PID_FILE" ]]; then
+      printf 'pid file: %s\n' "$(tr -dc '0-9' <"$PID_FILE")"
+    else
+      printf 'pid file: absent\n'
+    fi
+    [[ -f "$STATE_FILE" ]] && { printf 'demo state:\n'; sed 's/^/  /' "$STATE_FILE"; }
+    printf '\n-- storage --\n'
+    printf 'runtime_dir %s\n' "$RUNTIME_DIR"
+    printf 'runtime_dir_size %s\n' "$(runtime_disk_used "$RUNTIME_DIR")"
+    printf 'uploads_entries %s\n' "$(ls "$RUNTIME_DIR/uploads" 2>/dev/null | wc -l | tr -d ' ')"
+    printf 'disk %s\n' "$(runtime_disk_free "$RUNTIME_DIR")"
+    printf '\n-- configured environment (names only; values are deliberately not recorded) --\n'
+    env | awk -F= '/^SAGARDRISHTI_/ {print "set: "$1}' | sort | grep . || printf 'no SAGARDRISHTI_* override set in this shell\n'
+    printf '\n-- backend log (last 60 lines) --\n'
+    if [[ -f "$BACKEND_LOG" ]]; then
+      tail -n 60 "$BACKEND_LOG"
+    else
+      printf 'no log at %s\n' "$BACKEND_LOG"
+    fi
+  } >"$file" 2>&1
+
+  info "Snapshot written to ${file#$ROOT/}"
+  info "It contains no environment values and no secrets. Attach it when reporting a failure."
+}
+
+# ------------------------------------------------------------------------ help
+
+cmd_help() {
+  cat <<EOF
+SagarDrishti internal demo operations
+
+  ./scripts/demo up [--with-frontend]   verify artifacts, start a warm backend, prove it is ready
+  ./scripts/demo status                 fast read of process, port, health, store
+  ./scripts/demo doctor                 diagnose every prerequisite and say what to do
+  ./scripts/demo restart                restart only a backend this tool started
+  ./scripts/demo logs [backend|frontend] [-n N] [--follow]
+  ./scripts/demo down                   stop only what this tool started
+  ./scripts/demo smoke [--full]         read-only smoke checks (--full does a real Epitome upload)
+  ./scripts/demo epitome [zip]          real Epitome run, in the terminal, with real counts
+  ./scripts/demo watch [seconds]        poll health, report failures, never auto-restart
+  ./scripts/demo env                    machine-readable API contract for a frontend
+  ./scripts/demo snapshot               diagnostic snapshot into .demo-logs/
+
+Environment:
+  DEMO_PORT=8010        run every command against another port (default 8000)
+  EPITOME_ZIP=<path>    override the canonical Epitome bundle
+EOF
+}
+
+# ------------------------------------------------------------------------ main
+
+COMMAND=""
+ARGS=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --port)
+      shift
+      PORT="${1:-}"
+      [[ "$PORT" =~ ^[0-9]+$ ]] || die "--port needs a number"
+      ;;
+    --port=*)
+      PORT="${1#--port=}"
+      [[ "$PORT" =~ ^[0-9]+$ ]] || die "--port needs a number"
+      ;;
+    -h | --help | help) COMMAND="help" ;;
+    *)
+      if [[ -z "$COMMAND" ]]; then COMMAND="$1"; else ARGS+=("$1"); fi
+      ;;
+  esac
+  shift
+done
+
+case "${COMMAND:-help}" in
+  up) cmd_up "${ARGS[@]+"${ARGS[@]}"}" ;;
+  status) cmd_status ;;
+  doctor) cmd_doctor ;;
+  restart) cmd_restart ;;
+  logs) cmd_logs "${ARGS[@]+"${ARGS[@]}"}" ;;
+  down) cmd_down ;;
+  smoke) cmd_smoke "${ARGS[@]+"${ARGS[@]}"}" ;;
+  epitome) cmd_epitome "${ARGS[@]+"${ARGS[@]}"}" ;;
+  watch) cmd_watch "${ARGS[@]+"${ARGS[@]}"}" ;;
+  env) cmd_env ;;
+  snapshot) cmd_snapshot ;;
+  help) cmd_help ;;
+  *)
+    err "Unknown command: $COMMAND"
+    cmd_help >&2
+    exit 64
+    ;;
+esac

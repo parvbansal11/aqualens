@@ -1,0 +1,39 @@
+dataset_id: ai4shipwrecks
+name: AI4Shipwrecks — Shipwreck Segmentation from Side-Scan Sonar
+original_source: https://umfieldrobotics.github.io/ai4shipwrecks/
+doi: 10.7302/dmf4-x492
+licence: CC-BY-4.0               # VERIFIED: authoritative Deep Blue Data record, DOI 10.7302/dmf4-x492.
+access: OPEN
+local_path: data/raw/ai4shipwrecks
+internal_status: P0
+
+sensor: EdgeTech 2205 dual-frequency ultra-high resolution sidescan sonar # VERIFIED: authoritative Deep Blue Data record
+platform: Thunder Bay National Marine Sanctuary, Lake Huron (freshwater)
+annotation_type: MASK
+n_samples: 286                   # VERIFIED
+n_sites: 28                      # VERIFIED: paper/DOI record says 28 distinct shipwrecks. The prior 24-site figure is unsupported.
+n_samples_with_wrecks: null      # Not required for Stage 2; retain as unknown until observed in the downloaded archive.
+
+group_key:
+  field: site_id
+  derivation: use the dataset's OFFICIAL site-aware split as given
+  strength: STRONG
+
+capability_gates:                # set by scripts/verify_gates.py — DO NOT hand-edit
+  ping_order_recoverable: null
+  nadir_recoverable: null
+  range_scale_known: null
+  nav_available: null            # expected false -> capped at L1
+
+notes: |
+  Supplies the second unified class and the only pixel-level masks. Ships a site-aware
+  split; use it as given — the dataset exists partly to demonstrate that shuffling
+  overlapping sonar tiles inflates results.
+
+  Freshwater Great Lakes vs SubPipe's Atlantic coastal site is a real domain difference.
+  Useful for robustness reporting; must be disclosed, never averaged away silently.
+
+  Provenance: the authoritative Deep Blue Data record for DOI 10.7302/dmf4-x492 declares
+  CC BY 4.0 and identifies the EdgeTech 2205 / Iver3 platform. The associated paper states
+  28 distinct shipwrecks totaling 286 images. A previously reported 24-site count was not
+  corroborated and must not be used.

@@ -1,0 +1,369 @@
+{
+  "adjudication": {
+    "if_ever_performed": "a separate record type by a third person who sees the image and both marks only (never estimator, detector, GT or anomaly output); it never overwrites or edits either original record; it cannot change any frozen formula; it requires a new protocol version",
+    "required_by_primary_or_secondary_analysis": false,
+    "rule": "disagreements are kept as reference uncertainty and enter the symmetric human benchmark; no routine adjudication"
+  },
+  "ai4": {
+    "note": "no independent physical altitude evidence exists for AI4",
+    "reference_status": "ANNOTATION_REFERENCED_NOT_PHYSICALLY_VALIDATED"
+  },
+  "annotation_schema": {
+    "declaration_fields": [
+      "record_type",
+      "record_id",
+      "supersedes",
+      "annotator",
+      "role",
+      "prior_sonar_experience",
+      "participated_in_estimator_development",
+      "protocol_version",
+      "protocol_sha256",
+      "declared_at"
+    ],
+    "record_fields": [
+      "record_type",
+      "record_id",
+      "supersedes",
+      "annotator",
+      "protocol_version",
+      "protocol_sha256",
+      "opaque_id",
+      "source_sha256",
+      "image_width",
+      "image_height",
+      "sides",
+      "view",
+      "submitted_at"
+    ],
+    "segment": {
+      "row_end": "int, inclusive",
+      "row_start": "int, inclusive",
+      "state": "one of states",
+      "x_end": "int or null",
+      "x_start": "int or null"
+    },
+    "segment_rules": [
+      "segments of a side are contiguous, non-overlapping and cover rows 0..H-1 exactly once",
+      "AVAILABLE: integers 0 <= x_start <= x_end <= W-1",
+      "AMBIGUOUS: both null, or integers as for AVAILABLE (recorded, never scored)",
+      "NOT_VISIBLE: both null"
+    ],
+    "semantics": {
+      "AMBIGUOUS": "a transition appears present but cannot be placed (includes: onset may lie inside a uniform/blank region)",
+      "AVAILABLE": "a visible water-column-to-seabed transition; the interval contains it for every row of the segment",
+      "NOT_VISIBLE": "no transition observable on that side in those rows; no location is recorded"
+    },
+    "sides": [
+      "IMAGE_LEFT",
+      "IMAGE_RIGHT"
+    ],
+    "states": [
+      "AVAILABLE",
+      "AMBIGUOUS",
+      "NOT_VISIBLE"
+    ],
+    "transition": "moving outward from nadir along a row: the change from water column (including any uniform, blank or zero-valued region) to seabed backscatter"
+  },
+  "annotators": {
+    "count": 2,
+    "declaration_required_before_first_annotation": true,
+    "expertise_claims": "none beyond the declared category",
+    "independence": [
+      "each role writes only its own file; the tool never opens another role's file",
+      "no communication about marks until both reference files are frozen",
+      "participation in estimator development is declared and disclosed; it is not grounds to edit marks"
+    ],
+    "prior_sonar_experience_values": [
+      "NONE",
+      "LIMITED",
+      "EXPERIENCED"
+    ],
+    "role": "independent annotator",
+    "roles": [
+      "ANNOTATOR_A",
+      "ANNOTATOR_B"
+    ]
+  },
+  "authority": {
+    "spec": "ROUND2_HARDENING_SPEC.md Amendment E-2 (\u00a77.1 exception; PID-02 availability; geometry record)",
+    "tickets": "ROUND2_TICKETS.md PID-02 (amended by E-2)"
+  },
+  "availability_semantics": {
+    "humans": "the same rules apply to each annotator scored against the other",
+    "reference AMBIGUOUS": "excluded from localization and FA scoring; estimator behaviour reported",
+    "reference AVAILABLE": "scored for localization; estimator UNAVAILABLE there is a miss",
+    "reference NOT_VISIBLE": "scores false availability (estimator AVAILABLE there)"
+  },
+  "blinding": {
+    "hidden_from_annotators": [
+      "image_id",
+      "source path",
+      "dataset/sensor/channel labels",
+      "split",
+      "Survey/site/block",
+      "GT boxes and masks",
+      "classes",
+      "detector output",
+      "H0-6 nadir",
+      "estimator output",
+      "anomaly and D1 results",
+      "DVL",
+      "the other annotator's marks"
+    ],
+    "limitation": "dataset and sensor identity cannot be hidden (distinct widths and appearance); strata are interleaved",
+    "shown": [
+      "the image pixels under an opaque id",
+      "image width and height",
+      "the annotator's own marks",
+      "the instructions"
+    ]
+  },
+  "catastrophic_errors": {
+    "consequence": "FAIL for that stratum (a structurally invalid output is not geometry); count reported",
+    "rule": "any estimator AVAILABLE row-side with a column outside [0, W-1], a non-integer column, an IMAGE_LEFT column >= the H0-6 nadir column, or an IMAGE_RIGHT column <= it"
+  },
+  "confidence": {
+    "numeric_confidence": "UNAVAILABLE",
+    "reason": "D invariant, C step 1 and F items 1-2 consume boundaries and availability only; availability states carry abstention"
+  },
+  "coordinate_convention": "native pixel grid, 0-indexed; x = column (slant range for SubPipe and AI4, spec KD-12), y = row (ping); intervals inclusive; sides named IMAGE_LEFT/IMAGE_RIGHT, never port/starboard; SubPipe row 0 is the newest ping (DERIVED_FROM_SOURCE, B4); display scaling never changes stored coordinates",
+  "counts": {
+    "datasets": [
+      "AI4SHIPWRECKS",
+      "SUBPIPE"
+    ],
+    "splits": [
+      "train"
+    ],
+    "strata": {
+      "AI4": {
+        "clusters": 13,
+        "images": 140,
+        "surveys": 140
+      },
+      "SUBPIPE_HF": {
+        "clusters": 24,
+        "images": 56,
+        "surveys": 8
+      },
+      "SUBPIPE_LF": {
+        "clusters": 26,
+        "images": 61,
+        "surveys": 7
+      }
+    },
+    "total_images": 257
+  },
+  "data_governance": {
+    "annotation_file_access": "annotation files are opened only by the annotation tool (own role) and the frozen benchmark and evaluation scripts; estimator development code never opens them",
+    "developer_access_to_selected_images_before_estimator_freeze": "NO; an annotator who also develops the estimator declares it, and the limitation is disclosed",
+    "estimator_development_data": "non-selected train imagery only, and only after the human reference and benchmark are frozen",
+    "estimator_development_never_uses": [
+      "reference annotations",
+      "val/test imagery for fitting",
+      "target GT",
+      "detector outcomes",
+      "anomaly outcomes"
+    ],
+    "reference_frame_access": "after freeze, selected images are viewed only for annotation and protocol QA until the human reference is frozen",
+    "spec_conflict": "none: spec \u00a77.1 as amended by E-2 permits these train uses; H0-2 guards are unchanged"
+  },
+  "display": {
+    "controls": [
+      "zoom",
+      "pan",
+      "switch between the two views"
+    ],
+    "default_view": "NATIVE",
+    "forbidden": [
+      "any other intensity edit",
+      "filters",
+      "cropping",
+      "resampling of the coordinate system",
+      "overlays other than the annotator's own marks"
+    ],
+    "view_recorded": "the view active at submission is stored in each record",
+    "views": {
+      "CONTRAST_HISTEQ": "global histogram equalization of the whole image: v' = rint(255 (cdf(v) - cdf_min) / (N - cdf_min)), cdf over all N pixels, cdf_min = cdf of the lowest present value, rint = round half to even; a constant image is shown unchanged",
+      "NATIVE": "the stored 8-bit single-channel values, unchanged (linear identity over the stored range 0-255)"
+    }
+  },
+  "dvl_secondary_check": {
+    "alignment": "frame level only; three windows: [t - 25 s, t] (timestamp = newest ping, row 0), [t - 12.5 s, t + 12.5 s], [t, t + 25 s] (timestamp = oldest ping)",
+    "altitude": "median of valid (!= -1) 'DVL Filtered' samples of the SubPipe Altitude.csv in the frame window",
+    "cannot_show": [
+      "pixel accuracy",
+      "metric scale",
+      "blanking versus seabed separation",
+      "cross-Survey comparability"
+    ],
+    "expected_sign": "positive",
+    "role": "SECONDARY and descriptive; never gating; cannot rescue a stratum that fails the primary criterion",
+    "scope": "SubPipe train reference frames in Surveys with DVL altitude",
+    "significance_threshold": null,
+    "statement_rule": "a direction is stated only if the point estimates agree in sign under all three windows and both annotators",
+    "statistic": "Spearman rho within each (channel, Survey) with n reported (not computed for n < 3); per channel, the Pearson correlation of within-Survey centred mid-ranks, cluster-bootstrap CI over blocks (B = 1000)",
+    "width": "per annotator and frame: median over rows where both sides are AVAILABLE of (right midpoint - left midpoint), px"
+  },
+  "eligible_population": {
+    "AI4SHIPWRECKS": "all train images of the frozen H0-1 manifest",
+    "PING_GHOSTVISION": "not eligible",
+    "SUBPIPE": "all train frames of the frozen H0-1 manifest, HF and LF as separate strata",
+    "datasets": [
+      "SUBPIPE",
+      "AI4SHIPWRECKS"
+    ],
+    "split": "train"
+  },
+  "estimator_acceptance": {
+    "FA_est": "(FA(E->A) + FA(E->B)) / 2",
+    "estimator_output": "per image, side and row: AVAILABLE with an integer column, or UNAVAILABLE",
+    "evidence_floor": "stratum scorable iff, for each annotator X, >= 30 images contain an X-AVAILABLE row-side (spec \u00a77.8); otherwise INSUFFICIENT_REFERENCE",
+    "fa_gating": "FA gates only if, for each annotator X, >= 30 images contain an X-NOT_VISIBLE row-side; otherwise descriptive and disclosed",
+    "fail": "any other outcome; the stratum stays UNAVAILABLE",
+    "h_est": "(E(->A) + E(->B)) / 2, E(->X) = |{u in U(X): estimator AVAILABLE at u and column in X's interval}| / |U(X)|",
+    "order": [
+      "reference frozen",
+      "benchmark instantiated and frozen",
+      "estimator developed and hash-frozen",
+      "one evaluation against the sealed reference"
+    ],
+    "pass": "scorable AND h_est >= h_human AND (FA not gating OR FA_est <= FA_human) AND zero catastrophic errors",
+    "pooling": "none",
+    "reported_uncertainty": "paired cluster-bootstrap percentile 95 % CI of h_est - h_human (B = 2000); always reported",
+    "secondary_diagnostics": [
+      "constant baseline (leave-one-cluster-out: per side, the median of both annotators' AVAILABLE midpoints over the other clusters of the stratum) scored like the estimator and disclosed",
+      "signed bias by side",
+      "abstention rate on AVAILABLE rows",
+      "behaviour on AMBIGUOUS rows",
+      "per-Survey/site/side breakdown",
+      "image-averaged h_est",
+      "DVL check on estimator widths"
+    ],
+    "strata": [
+      "SUBPIPE_HF",
+      "SUBPIPE_LF",
+      "AI4"
+    ],
+    "threshold_source": "blinded human inter-annotator agreement under the identical scoring rule; no pixel tolerance, minimum rate or margin is introduced"
+  },
+  "files": {
+    "instructions.md": "3e083ce201d5f4a79f42c6ef7bce45091c0b96817e43139e1f492c29d484a096",
+    "sample.jsonl": "21a72bbbd64f586a5eb5548d9bce64f3dd41234320b06d74713d6d828827ec1f"
+  },
+  "human_benchmark": {
+    "FA(P->R)": "|{u in V(R): P AVAILABLE at u}| / |V(R)|, V(R) = row-sides where R is NOT_VISIBLE",
+    "FA_human": "(FA(A->B) + FA(B->A)) / 2, per stratum",
+    "H(P->R)": "|{u in U(R): P AVAILABLE at u and point_P(u) in [x_start_R(u), x_end_R(u)]}| / |U(R)|, U(R) = row-sides where R is AVAILABLE",
+    "h_human": "(H(A->B) + H(B->A)) / 2, per stratum",
+    "human_point": "interval midpoint (x_start + x_end) / 2 of an AVAILABLE segment",
+    "instantiation": "computed from the frozen annotation files by a script whose code is hash-recorded, written as a hashed benchmark artifact of summaries only, before any estimator is evaluated; formulas never change after annotations are opened",
+    "unit": "row-side: one (image, side, row) triple",
+    "weighting": "every row-side counts once (ping weighting); image-averaged values are reported descriptively"
+  },
+  "inputs": {
+    "corpus_metadata_sha256": "5ae1e94cad76d6dcb7c4f2af27e31c5d4ab57dfd28362719c98cb7d7cf2a10e4",
+    "frozen_manifest_sha256": "68e52c1072329bbdd31accaaa3fa1c662373643a4b20fee7ceabcd80d14ee815",
+    "harness_source_sha256": {
+      "guards.py": "1105365e8487b06353d0aeed04addac36d5b662a5c7474298962372ed09beff4",
+      "manifest.py": "ddfbdd2091eda6a5a7caacfdad3606aeb33317e876a97247344ab4eda65522b2",
+      "wc_annotate.py": "be14efcc5bda497e31c14835c8859f1d1573aa9808ae2e1f1a7fd094ce1d6e76",
+      "wc_prereg.py": "6acc42c6489927c0bba7feb9267c2030e11920a6b5b24fda90ea85e49a9d8496"
+    },
+    "spec_sha256": "6588fea19873fe4ad7d8427c064a5e88f9291c58b237db84e12bc41b9859a132",
+    "tickets_sha256": "441fae35be54379dab1b32748e602ace8018330f7499e6cfa652f01e76b73934"
+  },
+  "inter_rater": {
+    "pass_threshold": null,
+    "reported": [
+      "h_human with cluster-bootstrap CI",
+      "row-side interval overlap rate among rows both mark AVAILABLE",
+      "signed and absolute midpoint difference (native px) per stratum and side, Bland-Altman bias and limits",
+      "interval widths",
+      "4x4 state confusion matrix and Cohen's kappa per stratum",
+      "per-Survey/site breakdown"
+    ]
+  },
+  "iteration_policy": "any change to this protocol is a new version and iteration; the estimator is evaluated once; a re-evaluation after seeing results is a declared iteration (spec \u00a77.2) and is disclosed as post hoc",
+  "leakage_prohibitions": [
+    "val or test images in the sample or in estimator fitting",
+    "gt_* fields in selection or display",
+    "detector, anomaly or D1 output anywhere in annotation or selection",
+    "estimator output visible to annotators or adjudicators",
+    "formulas or strata changed after annotations are opened",
+    "thresholds chosen from estimator results"
+  ],
+  "limitations": [
+    "SubPipe non-selected train frames share pings with selected frames (the lattice spans every train ping), so developing on them exposes reference pixel content; the sealed quantity is the annotations",
+    "the AI4 census leaves no non-selected AI4 train image; an AI4 procedure must be developed without AI4 imagery",
+    "dataset/sensor identity is visible to annotators",
+    "SubPipe covers one mission; AI4 has 13 train sites; intervals will be wide"
+  ],
+  "open_criteria": [],
+  "pid02_status": "Water-column geometry is UNAVAILABLE for every dataset. No procedure is validated. This protocol fixes only how a sensor-specific procedure may later be validated.",
+  "ping": {
+    "reason": "range axis, orientation, cropping and augmentation geometry undocumented",
+    "status": "UNAVAILABLE"
+  },
+  "protocol_id": "PID02-WCREF",
+  "protocol_version": "PID02-WCREF-v1",
+  "purpose": "A train-only blinded human pixel reference for validating a future water-column boundary procedure. Validates geometry only: not detection, artificiality, anomalies, object depth or height, or bathymetry.",
+  "qa": {
+    "consecutive_lattice_pairs_checked": 102,
+    "max_identical_rows_shared": 0,
+    "source_sha256_verified": 257
+  },
+  "selection": {
+    "ai4_rule": "census: every train image; short or cropped images are not removed (states handle them)",
+    "fields_read": [
+      "image_id",
+      "dataset",
+      "sensor",
+      "channel",
+      "split",
+      "survey_id",
+      "bootstrap_group",
+      "source_sha256",
+      "source_path",
+      "image_width",
+      "image_height",
+      "original_filename (SubPipe time only)"
+    ],
+    "frame_seconds": "25",
+    "frame_seconds_derivation": "one frame = 500 rows; B4 row shift = 20 rows between frames 1 s apart (audit F4; k = 20 in test_row_shift_verification), so 25 s; frames >= 25 s apart share no pings",
+    "never_used": [
+      "pixels",
+      "gt_* fields",
+      "classes",
+      "detector output",
+      "anomaly output",
+      "estimator output",
+      "DVL",
+      "random seed"
+    ],
+    "opaque_id": "first 16 hex digits of SHA-256(salt | image_id)",
+    "ping_rule": "none selected",
+    "presentation_order": "ascending SHA-256(salt | image_id), identical for both annotators",
+    "salt": "PID02-WCREF-v1",
+    "subpipe_rule": "per (channel, train Survey): frames sorted by (source timestamp, image_id); select the first, then repeatedly the earliest frame with t >= t_last + FRAME_SECONDS; every lattice frame is annotated",
+    "subpipe_timestamp_source": "corpus metadata original_filename (SSS_<channel>_images/.../<timestamp>.pbm), read through manifest._subpipe_identity"
+  },
+  "uncertainty": {
+    "bootstrap_B": {
+      "paired": 2000,
+      "single": 1000
+    },
+    "clusters": {
+      "AI4": "wreck/terrain site (spec \u00a77.3)",
+      "SUBPIPE": "H0-1 60-s block (spec \u00a77.3)"
+    },
+    "interval": "percentile 95 %",
+    "note": "frames sharing a block are resampled together and never counted as independent blocks",
+    "seed": 4096772766
+  },
+  "unresolved_not_blocking_annotation": [
+    "AI4 estimator development data (see limitations)",
+    "D1 treatment of PING"
+  ]
+}

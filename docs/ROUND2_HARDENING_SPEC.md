@@ -11,6 +11,13 @@
 
 Affected clauses, each marked "Erratum E-1": §5 A interim rule; §5 B rules 3(b) and 6.
 
+**Amendment E-2 (PID-02 water-column validation; pre-registration `PID02-WCREF-v1`):**
+- **§7.1 exception.** Train images may also be used, only under the frozen pre-registration `artifacts/round2/PID02/wc_reference_protocol/iter-1/`, for (1) a blinded two-annotator human water-column boundary reference, (2) a scale-free DVL consistency check on SubPipe, and (3) development and one-shot validation of a water-column geometry procedure. These uses read image pixels, H0-1 grouping fields and source altitude only; they never read `gt_*` fields, detector, anomaly, probe or D results, and fit no parameter of any scientific hypothesis. val and test are never used for geometry development or validation. The reference is sealed until the procedure is frozen; each evaluation counts under §7.2.
+- **PID-02 availability.** Water-column geometry is UNAVAILABLE unless a sensor-specific procedure passes that pre-registered validation. A passing procedure may emit, per image, side and row, a boundary column with an availability state and provenance (procedure SHA-256 and protocol SHA-256). AI4 results are annotation-referenced, never physically validated. PING remains UNAVAILABLE. Numeric confidence (water column and nadir) remains UNAVAILABLE unless separately validated. No sensor is validated by this amendment.
+- **Geometry record (additive).** New fields: `water_column_status` ∈ {UNAVAILABLE, VALIDATED_ANNOTATION_REFERENCED}, `water_column_boundaries` (nullable: per side IMAGE_LEFT/IMAGE_RIGHT, row segments with state ∈ {AVAILABLE, UNAVAILABLE} and a native boundary column where AVAILABLE), `water_column_provenance` (nullable). `water_column_halfwidth_px` and `nadir_confidence` are kept; the half-width is never derived from the boundaries without a separate decision. Records without the new fields (H0-6 iter-1) read as `water_column_status` = UNAVAILABLE; no values are back-filled.
+
+Affected clauses, each marked "Amendment E-2": §5 H0 item 2; §6 Geometry record; §7.1.
+
 Modules are named by their Python module or product surface, not by file path or line number. Line-level evidence for every defect is in the audit and the plan.
 
 ---
@@ -306,7 +313,7 @@ Reproduced defects (plan Part E): same-frame FULL_FRAME crab pots 340 px apart �
 
 **Required behaviour:**
 1. **Held-out manifest** built only from the detector's own split field in the frozen corpus metadata. Per image it records: sensor, dataset, split, Survey id (SubPipe: contiguous time segments; AI4: one waterfall image; PING: one image), augmentation parent (PING), bootstrap group, GT boxes, and AI4 merged object regions.
-2. **Geometry record per image:** range axis (known for SubPipe/AI4, UNKNOWN for PING), nadir column, water-column half-width with a confidence value, or UNAVAILABLE.
+2. **Geometry record per image:** range axis (known for SubPipe/AI4, UNKNOWN for PING), nadir column, water-column half-width with a confidence value, or UNAVAILABLE. *(Amendment E-2: water-column geometry is per-side row-segment boundaries with an availability state, UNAVAILABLE unless a sensor-specific procedure passes the pre-registered validation; confidence stays UNAVAILABLE.)*
 3. **Runtime-path inference** over val/test images using the production detection path with the SHIPWRECK recovery heuristic **disabled via an explicit runtime configuration switch** (not by bypassing code). The harness may lower the confidence floor for calibration sweeps only as a declared harness parameter.
 4. **Frozen layer-16 cell embeddings** captured in the same forward pass and cached.
 5. **One-image-per-augmentation-parent subset** for PING.
@@ -667,7 +674,7 @@ A **claims ledger** document maps every PPT number to artifact path + hash + com
 | Record | Required fields |
 |---|---|
 | **Held-out manifest row** | image_id, dataset, sensor, split, survey_id, augmentation_parent (nullable), bootstrap_group, gt_boxes[class, xyxy_px], gt_object_regions (AI4), source_sha256 |
-| **Geometry record** | image_id, range_axis ∈ {COLUMNS, UNKNOWN}, nadir_col (nullable), nadir_confidence, water_column_halfwidth_px (nullable), provenance |
+| **Geometry record** | image_id, range_axis ∈ {COLUMNS, UNKNOWN}, nadir_col (nullable), nadir_confidence, water_column_halfwidth_px (nullable), provenance; *(Amendment E-2, additive)* water_column_status, water_column_boundaries (nullable), water_column_provenance (nullable) |
 | **Observation (additions)** | inference_mode, tile_id, frame_id, survey_id, look_id, recovery_candidate (must be false in evaluation) |
 | **Contact (additions)** | survey_id, association_basis, look_count, member observation ids, per-channel evidence {value, availability, provenance} |
 | **Local anomaly record** | candidate_id, survey_id, side, range_band, variant ∈ {RANGE_CONDITIONED, RANGE_UNCONDITIONED, GLOBAL_*, INTENSITY_CFAR}, statistic T, N_calibration, p_value (nullable), availability, α, q |
@@ -681,7 +688,7 @@ A **claims ledger** document maps every PPT number to artifact path + hash + com
 
 ## 7. Statistical contracts
 
-1. **Splits.** `train` is used only for memory banks and probes. `val` is used only for fitting (fusion, calibration, cross-frequency mapping, optional hyperparameter checks). `test` is evaluated once per pre-registered configuration.
+1. **Splits.** `train` is used only for memory banks and probes *(Amendment E-2: and for the pre-registered PID-02 water-column reference, DVL check and geometry-procedure development/validation)*. `val` is used only for fitting (fusion, calibration, cross-frequency mapping, optional hyperparameter checks). `test` is evaluated once per pre-registered configuration.
 2. **Pre-registration.** Hypotheses, thresholds, α, q, k, window parameters and success/failure criteria are written and hashed before the test run. Any rerun after seeing test increments a declared iteration counter, and the ledger shows it.
 3. **Uncertainty.** Cluster bootstrap (B ≥ 1,000; 2,000 for paired comparisons) over:
    - SubPipe: 60-s time blocks;

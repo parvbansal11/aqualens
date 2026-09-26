@@ -1,0 +1,23 @@
+{
+  "artifact": "PID-02 water-column reference pre-registration",
+  "iteration": "iter-1",
+  "protocol_version": "PID02-WCREF-v1",
+  "protocol_sha256": "0c99d65df1622f1db6ff0ee53e422e00c4047048a79d0a85d0a51ce944f5eac3",
+  "scientific_files_sha256": {
+    "protocol.json": "0c99d65df1622f1db6ff0ee53e422e00c4047048a79d0a85d0a51ce944f5eac3",
+    "sample.jsonl": "21a72bbbd64f586a5eb5548d9bce64f3dd41234320b06d74713d6d828827ec1f",
+    "instructions.md": "3e083ce201d5f4a79f42c6ef7bce45091c0b96817e43139e1f492c29d484a096"
+  },
+  "git_sha": "2d47d97b320732f456847e109592067066fd75c6",
+  "git_dirty": true,
+  "corpus_root": "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831",
+  "annotations_present_at_freeze": false,
+  "command": [
+    "/Users/parvbansal/Desktop/aqualens/ml/round2/wc_prereg.py",
+    "--corpus-root",
+    "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831"
+  ],
+  "started_at": "2026-09-26T16:21:07.088968+00:00",
+  "finished_at": "2026-09-26T16:21:08.756887+00:00",
+  "note": "runtime metadata only; not part of the scientific content"
+}

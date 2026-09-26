@@ -1,0 +1,1721 @@
+{
+  "screens": [
+    {
+      "name": "landing",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1920,
+      "height": 1080,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1920,
+      "height": 1080,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1512,
+      "height": 982,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1512,
+      "height": 982,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1440,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1440,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1180,
+      "height": 820,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 1180,
+      "height": 820,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 860,
+      "height": 900,
+      "theme": "light",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "landing",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "intake",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "roles",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "workspace",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "navigation-menu",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "upload",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "processing",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contacts",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "contact",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "evidence-drawer",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "map-layers",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "review-desk",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "report",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "memory",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "model-lab",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    },
+    {
+      "name": "change",
+      "width": 860,
+      "height": 900,
+      "theme": "dark",
+      "overflow": false,
+      "forbiddenBranding": false,
+      "brokenImages": []
+    }
+  ],
+  "errors": [],
+  "accessibility": [
+    {
+      "name": "landing",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "intake",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "roles",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "workspace",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "contacts",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "contact",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "review-desk",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "report",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "model-lab",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "name": "landing",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "intake",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "roles",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "workspace",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "contacts",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "contact",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "review-desk",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "report",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "name": "model-lab",
+      "theme": "dark",
+      "violations": []
+    }
+  ],
+  "interactions": [
+    "Role selection and reduced motion verified",
+    "Glass chrome and solid sonar surface verified"
+  ]
+}

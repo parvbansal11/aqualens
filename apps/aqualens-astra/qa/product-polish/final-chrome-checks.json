@@ -1,0 +1,92 @@
+[
+  {
+    "width": 1920,
+    "height": 1080,
+    "theme": "light",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "theme": "dark",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1512,
+    "height": 982,
+    "theme": "light",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1512,
+    "height": 982,
+    "theme": "dark",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "theme": "light",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "theme": "dark",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1180,
+    "height": 820,
+    "theme": "light",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 1180,
+    "height": 820,
+    "theme": "dark",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 860,
+    "height": 900,
+    "theme": "light",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  },
+  {
+    "width": 860,
+    "height": 900,
+    "theme": "dark",
+    "overflow": false,
+    "mapScaleTextShadow": "none",
+    "menuEscape": true,
+    "menuOutsideClick": true
+  }
+]

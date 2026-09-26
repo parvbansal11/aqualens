@@ -1,0 +1,28 @@
+{
+  "formats": [
+    {
+      "format": "mp4",
+      "readyState": 4,
+      "playing": true,
+      "width": 1600,
+      "height": 1034,
+      "duration": 16.366667,
+      "error": null
+    },
+    {
+      "format": "webm",
+      "readyState": 4,
+      "playing": true,
+      "width": 1440,
+      "height": 930,
+      "duration": 16.366,
+      "error": null
+    }
+  ],
+  "reducedMotion": {
+    "posterLoaded": true,
+    "videoDisplay": "none",
+    "canvasDisplay": "none",
+    "shaderInitialized": false
+  }
+}

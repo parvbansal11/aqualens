@@ -1,0 +1,123 @@
+{
+  "errors": [],
+  "audits": [
+    {
+      "name": "landing-dark",
+      "violations": []
+    },
+    {
+      "name": "roles-dark",
+      "violations": []
+    },
+    {
+      "name": "home-dark",
+      "violations": []
+    },
+    {
+      "name": "upload-dark",
+      "violations": []
+    },
+    {
+      "name": "processing-dark",
+      "violations": []
+    },
+    {
+      "name": "results-dark",
+      "violations": []
+    },
+    {
+      "name": "contact-dark",
+      "violations": []
+    },
+    {
+      "name": "evidence-drawer-dark",
+      "violations": []
+    },
+    {
+      "name": "map-dark",
+      "violations": []
+    },
+    {
+      "name": "selected-map-dark",
+      "violations": []
+    },
+    {
+      "name": "selected-map-light",
+      "violations": []
+    },
+    {
+      "name": "evidence-drawer-light",
+      "violations": []
+    }
+  ],
+  "water": {
+    "active": {
+      "frames": 49,
+      "strength": 1.149198919735461,
+      "peak": 1.3134603039564934,
+      "clickAge": 0.059500000011920975,
+      "playing": true,
+      "ready": 4,
+      "resolution": [
+        1440,
+        900
+      ]
+    },
+    "afterRest": {
+      "frames": 114,
+      "strength": 0.00019798191063120162,
+      "peak": 1.3134603039564934,
+      "clickAge": 2.2261000000119213
+    },
+    "pausesOffscreen": true,
+    "motionPreferenceResumes": true,
+    "staticFallback": true
+  },
+  "assets": [
+    {
+      "asset": "media/oceaneye-hero.mp4",
+      "status": 200,
+      "type": "video/mp4"
+    },
+    {
+      "asset": "media/oceaneye-hero.webm",
+      "status": 200,
+      "type": "video/webm"
+    },
+    {
+      "asset": "media/oceaneye-poster.jpg",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "asset": "sonar/viator-detail.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "asset": "sonar/barge-detail.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "asset": "sonar/viator-03.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "asset": "sonar/barge-01.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "asset": "sonar/barge-02.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "asset": "favicon.svg",
+      "status": 200,
+      "type": "image/svg+xml"
+    }
+  ]
+}

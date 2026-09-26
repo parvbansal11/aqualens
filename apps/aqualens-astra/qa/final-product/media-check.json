@@ -1,0 +1,27 @@
+{
+  "media": [
+    {
+      "source": "http://127.0.0.1:5174/media/oceaneye-hero.webm",
+      "width": 1440,
+      "height": 930,
+      "duration": 16.366,
+      "muted": true,
+      "readyState": 4,
+      "error": null
+    },
+    {
+      "source": "http://127.0.0.1:5174/media/oceaneye-hero.mp4",
+      "width": 1600,
+      "height": 1034,
+      "duration": 16.366667,
+      "muted": true,
+      "readyState": 4,
+      "error": null
+    }
+  ],
+  "moving": 0.8800866603851318,
+  "resting": 0.0014623143943026662,
+  "clickAge": 0.08160000294446945,
+  "offscreenPaused": true,
+  "errors": []
+}

@@ -210,6 +210,10 @@ bash scripts/internal_hack_check.sh
 
 Then open <http://localhost:3000/app>. The start script verifies the frozen detector checksum and `open_set_v1`, then starts FastAPI on port 8000 and the workstation on port 3000. The health check is read-only by default; add `--with-upload` to run the Epitome bundle end to end. Full presentation guidance lives in [JUDGE_DEMO_RUNBOOK.md](docs/JUDGE_DEMO_RUNBOOK.md).
 
+## Aqualens web frontend
+
+The production web source is `apps/aqualens-astra`, a React/Vite interface with landing, intake, analysis, Contact, map, review, report, and light/dark themes. It reads `VITE_API_BASE_URL` at build time. Set it to the deployed API base ending in `/api/v1` for production; local development uses `http://127.0.0.1:8000/api/v1`. See [deployment configuration](docs/DEPLOYMENT.md).
+
 ## API / runtime
 
 Runtime concepts are intentionally small: asynchronous survey processing and job lifecycle, durable survey records, a health endpoint, Contacts and observations, reports, and review memory. Read [RUNTIME_API.md](docs/RUNTIME_API.md) for the live surface and [API_CONTRACT.md](docs/API_CONTRACT.md) for the frozen contract.
@@ -218,7 +222,8 @@ Runtime concepts are intentionally small: asynchronous survey processing and job
 
 ```text
 aqualens/
-├── apps/workstation/      # Next.js analyst interface
+├── apps/aqualens-astra/   # Aqualens Vite web product
+├── apps/workstation/      # Next.js analyst workstation
 ├── packages/sagar/        # FastAPI runtime, perception, fusion, evidence
 ├── ml/                    # frozen runtime artifacts and experiments
 ├── configs/               # taxonomy, datasets, pipeline configuration

@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "commands": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "unit": "16 PASS",
+    "e2e": "10 PASS",
+    "build": "PASS"
+  },
+  "runtime": {
+    "surveyId": "survey_upload_d69d5f2ef659",
+    "jobId": "job_58ac54cb2259",
+    "uploadPosts": 1,
+    "contacts": 3,
+    "observations": 8,
+    "frames": 7,
+    "source": "REAL BACKEND",
+    "fixtureSubstitution": false
+  },
+  "responsiveScreens": 102,
+  "overflows": [],
+  "browserErrors": [],
+  "brokenImages": [],
+  "sourceGitStatus": "clean",
+  "sourceHead": "9d9dc127bd4cc1ab5b3ca66dd5dc53817b71f466",
+  "createdProductAndScriptFiles": [
+    ".env.development.local",
+    "scripts/start-local-runtime.sh",
+    "src/components/IntakeShell.tsx",
+    "src/pages/Review.tsx",
+    "src/pages/Report.tsx",
+    "src/pages/Memory.tsx",
+    "src/pages/ModelLab.tsx",
+    "src/pages/Change.tsx",
+    "src/lib/runtime/useRemote.ts",
+    "src/styles/product.css",
+    "qa/runtime-integration/verify-runtime.mjs"
+  ],
+  "modifiedProductAndConfigFiles": [
+    ".env.example",
+    ".gitignore",
+    "package.json",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "src/main.tsx",
+    "src/lib/store.tsx",
+    "src/lib/runtime/api.ts",
+    "src/lib/runtime/adapters.ts",
+    "src/lib/runtime/types.ts",
+    "src/lib/runtime/wire.ts",
+    "src/components/Shell.tsx",
+    "src/components/SurveyMap.tsx",
+    "src/pages/Landing.tsx",
+    "src/pages/Roles.tsx",
+    "src/pages/Home.tsx",
+    "src/pages/Upload.tsx",
+    "src/pages/Processing.tsx",
+    "src/pages/Contact.tsx",
+    "tests/workflow.spec.ts",
+    "scripts/visual-qa.mjs",
+    "README.md",
+    "docs/FIRST-PASS-REPORT.md"
+  ],
+  "generatedEvidence": [
+    "qa/runtime-integration/",
+    "qa/final-product/"
+  ],
+  "astraIsGitRepository": false,
+  "noCommit": true,
+  "noPush": true,
+  "sourceInitialHead": "62b8567769482b13abbe50ef80b79ab35369bb6b",
+  "sourceHistoryNote": "External history reset observed; working tree clean; API tree unchanged; no writes or Git mutations made by this agent."
+}

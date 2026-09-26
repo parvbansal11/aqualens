@@ -1,0 +1,38 @@
+{
+  "sonar": [
+    {
+      "file": "viator-detail.png",
+      "source_matches_record": true,
+      "copied_matches_source": true
+    },
+    {
+      "file": "barge-detail.png",
+      "source_matches_record": true,
+      "copied_matches_source": true
+    },
+    {
+      "file": "viator-03.png",
+      "source_matches_record": true,
+      "copied_matches_source": true
+    },
+    {
+      "file": "barge-01.png",
+      "source_matches_record": true,
+      "copied_matches_source": true
+    },
+    {
+      "file": "barge-02.png",
+      "source_matches_record": true,
+      "copied_matches_source": true
+    }
+  ],
+  "video": {
+    "source": "/Users/parvbansal/Downloads/oceaneye.mov",
+    "source_bytes": 30720672,
+    "source_sha256": "2d504a49d3fb71ee6d6dc9b621578077c4a69afadf51268272fcb94596193e56",
+    "mp4_faststart": true,
+    "mp4_bytes": 8198021,
+    "webm_bytes": 4445535,
+    "poster_bytes": 153121
+  }
+}

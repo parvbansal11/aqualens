@@ -74,3 +74,10 @@ wandb/
 !runs/
 !runs/run_stage3c_v4/
 !runs/run_stage3c_v4/**
+
+apps/aqualens-astra/node_modules/
+apps/aqualens-astra/dist/
+apps/aqualens-astra/playwright-report/
+apps/aqualens-astra/test-results/
+apps/aqualens-astra/qa/runtime-integration/*.csv
+apps/aqualens-astra/qa/runtime-integration/*.json

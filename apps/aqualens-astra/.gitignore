@@ -1,0 +1,15 @@
+
+.demo-logs/
+.DS_Store
+.env
+.env.*.local
+.env.local
+.local-runtime/
+.vercel/
+*.tsbuildinfo
+# Local/runtime only
+dist/
+node_modules/
+playwright-report/
+test-results/
+qa/product-polish/*.png

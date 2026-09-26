@@ -1,6 +1,6 @@
 # Aqualens deployment
 
-Aqualens uses a Next.js frontend on Vercel and a Docker-based FastAPI backend on Render. The original SagarDrishti services remain separate rollback resources.
+Aqualens uses the rebranded Astra Vite frontend on Vercel and a Docker-based FastAPI backend on Render. The separate Next.js workstation remains available in `apps/workstation`. Existing fallback services remain separate resources.
 
 ## Render API
 
@@ -18,7 +18,7 @@ The existing variable names remain because the backend reads them. Do not copy a
 
 ## Vercel frontend
 
-Create the `aqualens-web` project from the new GitHub repository and set its root directory to `apps/workstation`. Set `NEXT_PUBLIC_API_BASE_URL` to `https://aqualens-api.onrender.com` in the Production environment. Local development keeps the default `http://127.0.0.1:8000`. The frontend reads this value from one place in `src/lib/api-config.ts`.
+Create the `aqualens-web` project from the new GitHub repository and set its root directory to `apps/aqualens-astra`. Use `npm run build` with output directory `dist`. Set `VITE_API_BASE_URL` to `https://aqualens-api.onrender.com/api/v1` in the Production environment. Local development uses `http://127.0.0.1:8000/api/v1`; the API base comes from `src/lib/runtime/api.ts`.
 
 The Render CORS value must match the production Vercel origin exactly. Update both settings together if the assigned Vercel hostname differs.
 

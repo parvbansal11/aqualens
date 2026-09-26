@@ -1,0 +1,81 @@
+{
+  "ticket": "H0-7",
+  "artifact": "PING one-image-per-augmentation-parent subset",
+  "iteration": "iter-1",
+  "git_sha": "08476ad211a990810bec6200751beae019989515",
+  "git_dirty": true,
+  "harness_source_sha256": {
+    "__init__.py": "40ce1fe4fc81701be7748e74c227676c659076b4f01371552d669cb0aa55dee8",
+    "manifest.py": "ddfbdd2091eda6a5a7caacfdad3606aeb33317e876a97247344ab4eda65522b2",
+    "guards.py": "1105365e8487b06353d0aeed04addac36d5b662a5c7474298962372ed09beff4",
+    "geometry.py": "0845ff6616adac598cf4452968b90556898270eda5566ec9a2e27cf8f8f913f8",
+    "ping_subset.py": "171c83d07557392b2ffb196e13ec53592b66321d6d677c7508c8227bf85db59a"
+  },
+  "source_manifest_sha256": "68e52c1072329bbdd31accaaa3fa1c662373643a4b20fee7ceabcd80d14ee815",
+  "corpus_metadata": "/Users/parvbansal/Desktop/aqualens/data/processed/multidomain_sonar_v1_1_20260831/canonical/metadata.jsonl",
+  "corpus_metadata_sha256": "5ae1e94cad76d6dcb7c4f2af27e31c5d4ab57dfd28362719c98cb7d7cf2a10e4",
+  "h0_6_geometry_sha256": "cb404978d476a2303a2b6647f3f31ef18c1b17d4a239d3870bc115d90935d928",
+  "selection_method": "ping_min_original_filename_codepoint_per_split_and_parent@v1",
+  "pid_03": "Within each split, each PING augmentation parent is represented by the sibling whose full source path string is lexicographically smallest under code-point ordering. The rule uses no labels and makes no claim that the selected sibling is the original or physically preferred orientation; it exists only to prevent augmentation siblings from being counted as independent observations.",
+  "selection_key": "corpus metadata original_filename (full source path); Python str ordering = Unicode code points",
+  "fields_read": [
+    "sample_id",
+    "source_dataset",
+    "split",
+    "augmentation_parent_id",
+    "original_filename"
+  ],
+  "labels_used": false,
+  "pixels_used": false,
+  "detections_used": false,
+  "ping_images_by_split": {
+    "test": 873,
+    "train": 5010,
+    "val": 791
+  },
+  "representatives_by_split": {
+    "test": 324,
+    "train": 1521,
+    "val": 294
+  },
+  "total_representatives": 2139,
+  "sibling_count_distribution": {
+    "test": {
+      "1": 134,
+      "2": 2,
+      "3": 159,
+      "6": 1,
+      "9": 28
+    },
+    "train": {
+      "1": 447,
+      "2": 20,
+      "3": 792,
+      "4": 23,
+      "6": 39,
+      "9": 193,
+      "12": 7
+    },
+    "val": {
+      "1": 101,
+      "3": 174,
+      "6": 3,
+      "9": 14,
+      "12": 2
+    }
+  },
+  "versions": {
+    "python": "3.13.14"
+  },
+  "command": [
+    "PYTHONPATH=packages:ml",
+    "python",
+    "-m",
+    "round2.ping_subset"
+  ],
+  "started_at": "2026-09-26T14:28:49.552267+00:00",
+  "finished_at": "2026-09-26T14:28:49.705964+00:00",
+  "outputs": [
+    "ping_one_per_parent.jsonl"
+  ]
+}

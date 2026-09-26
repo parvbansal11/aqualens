@@ -1,0 +1,50 @@
+{
+  "ticket": "H0-1",
+  "artifact": "held-out manifest",
+  "iteration": "iter-2",
+  "git_sha": "08476ad211a990810bec6200751beae019989515",
+  "git_dirty": true,
+  "harness_source_sha256": {
+    "__init__.py": "40ce1fe4fc81701be7748e74c227676c659076b4f01371552d669cb0aa55dee8",
+    "manifest.py": "ddfbdd2091eda6a5a7caacfdad3606aeb33317e876a97247344ab4eda65522b2"
+  },
+  "detector_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+  "detector_path": "ml/artifacts/final_v1/detector/best.pt",
+  "corpus_snapshot_id": "multidomain_sonar_v1_1_20260831",
+  "corpus_root": "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831",
+  "corpus_metadata_sha256": "5ae1e94cad76d6dcb7c4f2af27e31c5d4ab57dfd28362719c98cb7d7cf2a10e4",
+  "corpus_qa_sha256": "363b45409c92d3fabbfdc21a657b5125af214db91b95c2aca6c397b9268e2d77",
+  "splits_used": [
+    "train",
+    "val",
+    "test"
+  ],
+  "split_source": "corpus metadata field 'split' (the detector's own split)",
+  "seeds": null,
+  "device": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "runtime_config": null,
+  "preregistration_hash": null,
+  "decisions": {
+    "PID-01": "deferred: AI4 gt_object_regions UNAVAILABLE_PENDING_PID_01; GT boxes carry derived_annotation_type",
+    "subpipe_survey": "maximal chains of time-adjacent frames per channel, every link confirmed by the frozen B4 verifier",
+    "subpipe_bootstrap_block": "60-s blocks anchored at the first frame of the frame's Survey",
+    "row_shift_policy": {
+      "version": "row_shift_identity@v1",
+      "max_shift_fraction": 0.5
+    }
+  },
+  "command": [
+    "ml/round2/manifest.py",
+    "--corpus-root",
+    "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831",
+    "--out",
+    "artifacts/round2/H0/manifest/iter-2"
+  ],
+  "started_at": "2026-09-26T13:16:49.744588+00:00",
+  "finished_at": "2026-09-26T13:17:26.073995+00:00",
+  "outputs": [
+    "manifest.jsonl",
+    "summary.json"
+  ],
+  "rows": 11844
+}

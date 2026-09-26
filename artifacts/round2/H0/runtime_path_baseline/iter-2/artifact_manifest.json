@@ -1,0 +1,177 @@
+{
+  "ticket": "H0-8",
+  "artifact": "runtime-path detector baseline",
+  "iteration": "iter-2",
+  "git_sha": "08476ad211a990810bec6200751beae019989515",
+  "git_dirty": true,
+  "harness_source_sha256": {
+    "__init__.py": "40ce1fe4fc81701be7748e74c227676c659076b4f01371552d669cb0aa55dee8",
+    "manifest.py": "ddfbdd2091eda6a5a7caacfdad3606aeb33317e876a97247344ab4eda65522b2",
+    "guards.py": "1105365e8487b06353d0aeed04addac36d5b662a5c7474298962372ed09beff4",
+    "infer.py": "7d8defe00781425e3cef8a66bc9456c0e9ceee41a69d8865d6a0dfc0b92ce5e5",
+    "features.py": "a4e7a2bd6bee815cfb393c23ba2d5cd95bccfd357b2264e715b5584e4ab75335",
+    "evaluation.py": "690c2b269a569473ba3d915d2afef2a0cc60ace3123acca04fb967908cd9370f",
+    "baseline.py": "9ad3cbc17f9aed5e71d475241002c1ddee40f4f833a6995d5e77c3ca494db268"
+  },
+  "source_manifest_sha256": "68e52c1072329bbdd31accaaa3fa1c662373643a4b20fee7ceabcd80d14ee815",
+  "ping_subset_sha256": "ba87d07eb55f2f4974c6ac267dc6808a41c35db8f1b6b46eb636f3e4dac65dd6",
+  "runtime_records": "/Users/parvbansal/Desktop/aqualens/artifacts/round2/H0/cells/iter-1/records.jsonl",
+  "runtime_records_sha256": "23a80945a16bbef9a8ed913681db9fd54484a2f4bed0f28a8ed8610acea73b13",
+  "corpus_root": "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831",
+  "detector_model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+  "detector_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+  "inference_config": {
+    "detector_sha256": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+    "detector_path": "/Users/parvbansal/Desktop/aqualens/ml/artifacts/final_v1/detector/best.pt",
+    "classes": {
+      "0": "PIPELINE",
+      "1": "SHIPWRECK",
+      "2": "CRAB_POT"
+    },
+    "shipwreck_recovery": false,
+    "floor_override": 0.001,
+    "floor_override_purpose": "calibration sweep (spec H0 item 3)",
+    "floors": {
+      "TILED": 0.001,
+      "FULL_FRAME": 0.001
+    },
+    "imgsz": 640,
+    "tile_size": 768,
+    "tile_overlap": 0.3,
+    "nms_iou": 0.45,
+    "device": "mps",
+    "raw_detection_fields": [
+      "raw_class_id",
+      "raw_class",
+      "raw_confidence",
+      "bbox_px",
+      "tile_id"
+    ]
+  },
+  "shipwreck_recovery": false,
+  "recovery_invocations": 0,
+  "production_floors": {
+    "TILED": 0.12,
+    "FULL_FRAME": "ULTRALYTICS_DEFAULT (0.25 at ultralytics 8.4.135)"
+  },
+  "sweep": {
+    "confidence_floor": 0.001,
+    "max_det": 300,
+    "passes": 22204,
+    "saturated_passes": 208,
+    "saturation_rate": 0.00936768149882904,
+    "saturation_by_dataset_split": {
+      "AI4SHIPWRECKS|test": {
+        "saturated": 186,
+        "passes": 2812
+      },
+      "AI4SHIPWRECKS|val": {
+        "saturated": 22,
+        "passes": 988
+      },
+      "PING_GHOSTVISION|test": {
+        "saturated": 0,
+        "passes": 873
+      },
+      "PING_GHOSTVISION|val": {
+        "saturated": 0,
+        "passes": 791
+      },
+      "SUBPIPE|test": {
+        "saturated": 0,
+        "passes": 13875
+      },
+      "SUBPIPE|val": {
+        "saturated": 0,
+        "passes": 2865
+      }
+    }
+  },
+  "sweep_consistency": {
+    "images_checked": 3992,
+    "images_where_filtered_sweep_differs_from_runtime": 0,
+    "rule": "sweep detections with raw_confidence > the production floor of their mode vs the runtime-floor detections"
+  },
+  "matching_method": "class_aware_score_ordered_greedy_one_to_one@v1",
+  "iou_thresholds": {
+    "primary": 0.5,
+    "secondary": 0.3
+  },
+  "bootstrap": {
+    "b": 1000,
+    "seed": 26057,
+    "unit": "frozen manifest bootstrap_group",
+    "interval": "percentile 95 %",
+    "also": "Clopper\u2013Pearson 95 % on pooled counts"
+  },
+  "evaluated_split": "test",
+  "val_use": "sweep cache only (fitting); never scored (\u00a77.1 as locked)",
+  "ai4": {
+    "fragment_level": "AVAILABLE",
+    "object_level": "UNAVAILABLE_PENDING_PID_01"
+  },
+  "ping": {
+    "primary": "PID-03 one-per-parent representatives",
+    "sensitivity": "all variants"
+  },
+  "populations": {
+    "SUBPIPE|Klein 3500|ALL_TEST": {
+      "images": 1800,
+      "role": "PRIMARY",
+      "evaluation_level": "BOX"
+    },
+    "SUBPIPE|Klein 3500|HF": {
+      "images": 975,
+      "role": "CHANNEL_BREAKDOWN",
+      "evaluation_level": "BOX"
+    },
+    "SUBPIPE|Klein 3500|LF": {
+      "images": 825,
+      "role": "CHANNEL_BREAKDOWN",
+      "evaluation_level": "BOX"
+    },
+    "AI4SHIPWRECKS|EdgeTech 2205|FRAGMENT_LEVEL": {
+      "images": 120,
+      "role": "PRIMARY",
+      "evaluation_level": "FRAGMENT_LEVEL"
+    },
+    "PING_GHOSTVISION|Humminbird|PRIMARY_ONE_PER_PARENT": {
+      "images": 324,
+      "role": "PRIMARY",
+      "evaluation_level": "BOX"
+    },
+    "PING_GHOSTVISION|Humminbird|SENSITIVITY_ALL_VARIANTS": {
+      "images": 873,
+      "role": "SENSITIVITY",
+      "evaluation_level": "BOX"
+    }
+  },
+  "figures": "none (no figure is defined by the spec or ticket)",
+  "versions": {
+    "python": "3.13.14",
+    "numpy": "2.5.2",
+    "torch": "2.13.0",
+    "ultralytics": "8.4.135",
+    "pillow": "12.3.0",
+    "machine": "macOS-27.2-arm64-arm-64bit-Mach-O"
+  },
+  "command": [
+    "PYTHONPATH=packages:ml",
+    "python",
+    "-m",
+    "round2.baseline",
+    "--corpus-root",
+    "/Users/parvbansal/Desktop/sagardrishti/data/processed/multidomain_sonar_v1_1_20260831",
+    "--out",
+    "artifacts/round2/H0/runtime_path_baseline/iter-2"
+  ],
+  "started_at": "2026-09-26T14:58:16.605440+00:00",
+  "finished_at": "2026-09-26T15:05:17.668495+00:00",
+  "outputs": [
+    "metrics.json",
+    "metrics.md",
+    "test_match_labels.jsonl",
+    "sweep/val.jsonl",
+    "sweep/test.jsonl"
+  ]
+}

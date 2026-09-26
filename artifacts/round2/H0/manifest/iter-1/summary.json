@@ -1,0 +1,84 @@
+{
+  "counts_vs_qa": {
+    "manifest": {
+      "splits": {
+        "train": 7852,
+        "val": 1199,
+        "test": 2793
+      },
+      "datasets": {
+        "SUBPIPE": 4884,
+        "AI4SHIPWRECKS": 286,
+        "PING_GHOSTVISION": 6674
+      }
+    },
+    "qa_splits": {
+      "train": 7852,
+      "val": 1199,
+      "test": 2793
+    },
+    "qa_images": {
+      "SUBPIPE": 4884,
+      "AI4SHIPWRECKS": 286,
+      "PING_GHOSTVISION": 6674
+    },
+    "match": true
+  },
+  "images_by_split": {
+    "test": 2793,
+    "train": 7852,
+    "val": 1199
+  },
+  "images_by_dataset_sensor_split": {
+    "AI4SHIPWRECKS|EdgeTech 2205|test": 120,
+    "AI4SHIPWRECKS|EdgeTech 2205|train": 140,
+    "AI4SHIPWRECKS|EdgeTech 2205|val": 26,
+    "PING_GHOSTVISION|Humminbird|test": 873,
+    "PING_GHOSTVISION|Humminbird|train": 5010,
+    "PING_GHOSTVISION|Humminbird|val": 791,
+    "SUBPIPE|Klein 3500|test": 1800,
+    "SUBPIPE|Klein 3500|train": 2702,
+    "SUBPIPE|Klein 3500|val": 382
+  },
+  "subpipe_images_by_channel_split": {
+    "HF|test": 975,
+    "HF|train": 1277,
+    "HF|val": 191,
+    "LF|test": 825,
+    "LF|train": 1425,
+    "LF|val": 191,
+    "None|test": 993,
+    "None|train": 5150,
+    "None|val": 817
+  },
+  "subpipe_surveys_by_channel_split": {
+    "HF|test": 4,
+    "HF|train": 8,
+    "HF|val": 2,
+    "LF|test": 6,
+    "LF|train": 7,
+    "LF|val": 2
+  },
+  "bootstrap_groups_by_dataset_split": {
+    "AI4SHIPWRECKS|test": 13,
+    "AI4SHIPWRECKS|train": 13,
+    "AI4SHIPWRECKS|val": 3,
+    "PING_GHOSTVISION|test": 145,
+    "PING_GHOSTVISION|train": 384,
+    "PING_GHOSTVISION|val": 123,
+    "SUBPIPE|test": 37,
+    "SUBPIPE|train": 53,
+    "SUBPIPE|val": 10
+  },
+  "ping_test_augmentation_parents": 324,
+  "gt_object_regions_status": {
+    "AI4SHIPWRECKS|UNAVAILABLE_PENDING_PID_01": 286,
+    "PING_GHOSTVISION|NOT_APPLICABLE": 6674,
+    "SUBPIPE|NOT_APPLICABLE": 4884
+  },
+  "gt_boxes_derivation": {
+    "AI4SHIPWRECKS|BBOX_FROM_CONNECTED_COMPONENTS": 286,
+    "PING_GHOSTVISION|BBOX": 6674,
+    "SUBPIPE|BBOX": 4884
+  }
+}

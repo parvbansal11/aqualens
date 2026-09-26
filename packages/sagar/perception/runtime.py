@@ -143,7 +143,21 @@ def _strongest_coherent_cluster(
 
 
 class FinalDetector:
-    def __init__(self, weights: Path) -> None:
+    def __init__(self, weights: Path, *, shipwreck_recovery: bool = True, confidence_floor: float | None = None) -> None:
+        # The SHIPWRECK recovery pass is an internal demo heuristic (Round-2 Q4, KD-8). Scientific
+        # paths construct the detector with shipwreck_recovery=False (spec H0 item 3); the production
+        # default is unchanged. Only a real bool is accepted, so a mistyped value fails loudly.
+        if not isinstance(shipwreck_recovery, bool):
+            raise TypeError(f"shipwreck_recovery must be True or False, not {shipwreck_recovery!r}")
+        self.shipwreck_recovery = shipwreck_recovery
+        # A declared lower detection floor for calibration sweeps only (spec H0 item 3). None keeps the
+        # production floors: TILE_CONFIDENCE_FLOOR when tiled, the Ultralytics default at full frame.
+        if confidence_floor is not None and (isinstance(confidence_floor, bool) or not isinstance(confidence_floor, (int, float))):
+            raise TypeError(f"confidence_floor must be a number or None, not {confidence_floor!r}")
+        if confidence_floor is not None and not 0 < confidence_floor <= TILE_CONFIDENCE_FLOOR:
+            raise ValueError(f"confidence_floor may only lower the production floors: 0 < value <= {TILE_CONFIDENCE_FLOOR}, got {confidence_floor}")
+        self.confidence_floor = confidence_floor
+        self.recovery_invocations = 0  # entries into the recovery path (I-H0-3: 0 when switched off)
         self.weights = weights
         self.model: Any | None = None
         # Cheap to compute (availability flags only, no weights loaded) so it can be
@@ -172,7 +186,8 @@ class FinalDetector:
 
     def health(self) -> dict[str, Any]:
         digest = self.checkpoint_digest()
-        return {"runtime_available": digest == EXPECTED_SHA256, "device": self.device, "model_loaded": self.model is not None, "model_sha256": digest, "class_names": CLASSES}
+        return {"runtime_available": digest == EXPECTED_SHA256, "device": self.device, "model_loaded": self.model is not None, "model_sha256": digest, "class_names": CLASSES,
+                "shipwreck_recovery": self.shipwreck_recovery}
 
     def load(self) -> None:
         if self.model is not None: return
@@ -218,7 +233,7 @@ class FinalDetector:
         return boxes
 
     def _infer_full_frame(self, image_array: np.ndarray) -> list[dict[str, Any]]:
-        candidates = self._predict_boxes(image_array)
+        candidates = self._predict_boxes(image_array, conf=self.confidence_floor)
         for candidate in candidates:
             candidate["tile_id"] = None
         return candidates
@@ -235,7 +250,8 @@ class FinalDetector:
                 if pad_bottom or pad_right:
                     crop = np.pad(crop, ((0, pad_bottom), (0, pad_right), (0, 0)), constant_values=0)
                 tile_id = f"tile_r{row:02d}_c{col:02d}_x{ox:05d}_y{oy:05d}"
-                for candidate in self._predict_boxes(crop, conf=TILE_CONFIDENCE_FLOOR):
+                floor = TILE_CONFIDENCE_FLOOR if self.confidence_floor is None else self.confidence_floor
+                for candidate in self._predict_boxes(crop, conf=floor):
                     tx1, ty1, tx2, ty2 = candidate["bbox"]
                     fx1, fy1 = max(0.0, ox + tx1), max(0.0, oy + ty1)
                     fx2, fy2 = min(float(width), ox + tx2), min(float(height), oy + ty2)
@@ -252,6 +268,9 @@ class FinalDetector:
         no such cluster exists -- never the single strongest isolated box.
         raw_confidence on the returned candidate is the true maximum YOLO score
         among the cluster's members, never fabricated or adjusted."""
+        if not self.shipwreck_recovery:
+            raise RuntimeError("the SHIPWRECK recovery pass is switched off for this detector")
+        self.recovery_invocations += 1
         xs, ys = _tile_origins(width), _tile_origins(height)
         proposals: list[dict[str, Any]] = []
         for row, oy in enumerate(ys):
@@ -308,7 +327,7 @@ class FinalDetector:
             # INTERNAL HACKATHON DEMO ONLY: only when the normal >=0.12 tiled pass
             # found no SHIPWRECK at all does the weak-evidence recovery pass run.
             # A real SHIPWRECK survivor always bypasses this entirely.
-            if not any(c["class_id"] == SHIPWRECK_CLASS_ID for c in candidates):
+            if self.shipwreck_recovery and not any(c["class_id"] == SHIPWRECK_CLASS_ID for c in candidates):
                 recovered = self._recover_weak_shipwreck_cluster(prepared, width, height)
                 if recovered is not None:
                     candidates.append(recovered)

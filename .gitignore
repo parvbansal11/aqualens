@@ -98,3 +98,6 @@ apps/aqualens-astra/qa/runtime-integration/*.json
 !ml/artifacts/vnext/kaggle_20260902_final/experiment_decision.json
 !runs/run_internal_v2_evidence_v1/
 !runs/run_internal_v2_evidence_v1/**
+
+# Round-2 H0-5 layer-16 cell cache binaries (~4.6 GB, rebuildable from cache_manifest.json provenance)
+artifacts/round2/H0/cells/**/*.npy

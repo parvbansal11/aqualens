@@ -40,7 +40,7 @@
 | association tests | the Contact-association unit tests (`tests/test_vnext`) |
 | API tests | test-client tests with a faked detector (`tests/test_navigation_ingest`, `tests/test_runtime_api_resilience`) |
 | tiling tests | `tests/test_runtime_tiling`, `tests/test_final_runtime` |
-| **round2 harness** | **new** research package in the ML experiments area. Sub-modules: manifest, infer, features, geometry, windows, probe, localanomaly, persistence, relief, fusion, runtime_eval, artifacts, ledger, demo. Location fixed in H0-1. |
+| **round2 harness** | **new** research package in the ML experiments area. Sub-modules: manifest, infer, features, geometry, windows, probe, localanomaly, persistence, relief, fusion, runtime_eval, artifacts, ledger, demo. Location fixed in H0-1: `ml/round2/` (import `round2`; pytest `pythonpath` includes `ml`), outside `packages/` so it never ships in the service image. |
 | artifact store | `artifacts/round2/<workstream>/<experiment>/iter-<n>/` |
 | corpus metadata | frozen `multidomain_sonar_v1_1_20260831` canonical metadata and QA |
 
@@ -78,9 +78,19 @@ Each must be resolved, with its value and rationale recorded, before any ticket 
 | **PID-24** | Which box's width is *w* in the Slant-range position match max(0.25·w, 20 px) | A3, A7, E4 | — |
 
 **Resolved (value and rationale):**
+- **PID-05:** The declared H0-8 sweep/extraction confidence floor is 0.001, matching the externally anchored Ultralytics validation confidence floor. This floor exists only to retain low-scoring raw detections for scientific threshold sweeps; it is not an operating threshold and does not change production inference floors (tiled 0.12; full frame Ultralytics' implicit 0.25). Every H0-8 sweep cache must record the effective confidence floor and max_det, and saturation at max_det must be reported.
+- **PID-06:** Detector-to-GT matching uses deterministic class-aware score-ordered greedy one-to-one matching. Predictions are processed in descending raw-confidence order with deterministic bbox-coordinate tie-breaking (x1, y1, x2, y2 ascending); a prediction may match only an unmatched GT of the same class, choosing the eligible GT with highest IoU with deterministic coordinate tie-breaking (x1, y1, x2, y2 ascending). Metrics are evaluated at the already locked IoU thresholds 0.5 primary and 0.3 secondary. The TP-label IoU for fusion and calibration (D4, G1) remains open.
+- **H0-8 evaluation scope (not a PID):** AI4 is evaluated against the frozen GT fragment boxes only and every AI4 metric is labelled FRAGMENT-LEVEL; AI4 physical-object-level detector metrics remain UNAVAILABLE_PENDING_PID_01 (PID-01 stays open). The primary PING test population is the PID-03 one-per-parent subset (n = 324); all 873 variants are a SENSITIVITY population only and are never described as independent physical observations.
+- **PID-03:** Within each split, each PING augmentation parent is represented by the sibling whose full source path string is lexicographically smallest under code-point ordering. The rule uses no labels and makes no claim that the selected sibling is the original or physically preferred orientation; it exists only to prevent augmentation siblings from being counted as independent observations. The source path is the frozen corpus metadata field `original_filename`; a PING image without it or without an augmentation parent is an error, never guessed. PING's range axis stays UNKNOWN.
+- **PID-02:** Nadir x_i is the argmax of the image column mean within ±5% of the centre column. Water-column half-width and nadir confidence remain UNAVAILABLE unless and until a validated water-column edge procedure exists. Downstream methods must treat those fields as unavailable and must not infer, guess, tune, or substitute them. Conventions (H0-6): the window is the integer columns x with |x − W/2| ≤ 0.05·W (inclusive), the column mean is taken on the native single-channel pixel values, and a tied maximum resolves to the midpoint of the first and last tied columns (the tied interval is recorded). Rationale: the spec gives the ±5 % centre prior and a val-only descriptive check supports it; no water-column edge picker has been validated (the HF feasibility case failed), so no derivative threshold, smoothing, search bound or morphology is introduced, and unavailable evidence stays unavailable. SubPipe nadir maxima are saturated plateaus (up to 10 HF / 12 LF columns on val), so the tie rule is material.
 - **PID-22:** per-Frame Survey membership is `survey_ref` (the legacy `survey_id` stays the Upload identifier). DECLARED membership is `mission.json` `declared_surveys`: a list of groups of raster file names. It groups Frames only; a group spanning raster geometries is rejected (HTTP 422), never split. Rationale: keeps the Upload id; an explicit declaration fails closed rather than being repaired by inference.
 - **PID-23:** an Upload may declare `navigation_provenance` MEASURED or SYNTHETIC_DEMO (existing demo labels normalize to SYNTHETIC_DEMO); undeclared is null. DERIVED_FROM_SOURCE is system-only (B4) and a declaration of it is rejected. An uploader's declaration alone is not trusted as evidence. See spec Erratum E-1. Rationale: provenance is a declaration, not a verification; evidence fails closed.
 - **PID-24:** *w* = min(*w*₁, *w*₂), the narrower box width in source-raster pixel columns: |x̄₁ − x̄₂| ≤ max(0.25·min(*w*₁, *w*₂), 20 px), for spec A req 2(b) and E3 only. Rationale: symmetric and order-invariant, the most merge-conservative reading, no new constant, no data used. The 20 px floor is a pixel quantity, not a metric or calibrated distance.
+
+**Deferred:**
+- **PID-01 (H0-1):** not resolved. The manifest records AI4 `gt_object_regions` as UNAVAILABLE_PENDING_PID_01 and keeps the GT boxes with their derivation (`BBOX_FROM_CONNECTED_COMPONENTS`, one box per mask fragment). C12, C15 and F7 remain gated on PID-01.
+
+**H0-1 interpretations (where spec §7.3 / H0 item 1 leave a choice open):** SubPipe Survey = maximal chain of time-adjacent frames of one channel with every link confirmed by the frozen B4 verifier (no time threshold); SubPipe 60-s bootstrap blocks are anchored at the first frame of the frame's Survey.
 
 ---
 
@@ -469,6 +479,7 @@ Each must be resolved, with its value and rationale recorded, before any ticket 
 
 > ### FZ-H0: freeze
 > A and B complete; H0-1–H0-8 artifacts exist; all suites green; diff reviewed. Claim wording decided for "runtime-path detection per sensor". No deploy.
+> **Recorded:** `docs/ROUND2_H0_FREEZE.md` (ticket status, decided claim wording, unavailable capabilities, known limitations, artifact hashes).
 
 ---
 

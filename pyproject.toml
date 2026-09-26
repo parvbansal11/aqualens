@@ -30,7 +30,7 @@ package-dir = {"" = "packages"}
 where = ["packages"]
 
 [tool.pytest.ini_options]
-pythonpath = ["packages"]
+pythonpath = ["packages", "ml"]
 testpaths = ["tests"]
 
 [tool.ruff]

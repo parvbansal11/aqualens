@@ -12,6 +12,7 @@ import {
   Waves,
 } from "lucide-react";
 import { Logo } from "../components/ui";
+import { HeroInstrument } from "../components/HeroInstrument";
 import { OceanEnvironment } from "../components/OceanEnvironment";
 import { epitomeNavigated } from "../fixtures/epitomeNavigated";
 const SurveyMap = lazy(() => import("../components/SurveyMap"));
@@ -84,9 +85,7 @@ export default function Landing() {
           </Link>
         </nav>
         <div className="hero-copy">
-          <h1 id="hero-heading" className="hero-brand">
-            Aqualens
-          </h1>
+          <HeroInstrument />
           <p className="hero-tagline">EVERY RETURN IS EVIDENCE.</p>
           <p className="hero-description">
             Side-scan sonar intelligence for detection, evidence review, mapping

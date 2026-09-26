@@ -6,7 +6,7 @@ def prioritize(contact: dict[str, Any], ecological_metadata: dict[str, Any] | No
     available={k:v for k,v in parts.items() if v is not None}; score=sum(available.values())/len(available) if available else None
     change=contact.get("change_state"); nav=contact.get("navigation_status")=="AVAILABLE"; review=contact.get("reviews",{}).get("latest_verdict")
     if score is None: action="REVIEW"
-    elif contact.get("quality_score",0)<.45: action="REACQUIRE" if nav else "REVIEW"
+    elif (contact.get("quality_score") or 0)<.45: action="REACQUIRE" if nav else "REVIEW"  # unknown quality is treated as low, as when absent
     elif review=="CONFIRMED" and score>=.75: action="RECOVERY_CANDIDATE"
     elif score>=.6: action="INSPECT"
     else: action="REVIEW"

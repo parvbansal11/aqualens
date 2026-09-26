@@ -486,3 +486,106 @@ def test_a5_one_verdict_changes_exactly_the_contact_holding_the_reviewed_observa
         # Only Contact A holds review history anywhere in the Survey.
         holders = [item["contact_id"] for item in after["contacts"] if (item.get("reviews") or {}).get("history")]
         assert holders == [contact_a["contact_id"]]
+
+
+# ------------------------------------------------ B2 · duplicate rasters (KD-6)
+
+def _textured_png_bytes(seed: int, size: tuple[int, int] = (32, 32)) -> bytes:
+    """A deterministic raster whose bytes differ per seed (and are not uniform)."""
+    pixels = np.random.default_rng(seed).integers(0, 256, size=(size[1], size[0], 3), dtype=np.uint8)
+    buffer = io.BytesIO()
+    Image.fromarray(pixels).save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _declared_sequence_bundle(rasters: dict[str, bytes], reverse_entries: bool = False) -> bytes:
+    """Rasters with contiguous MEASURED ping bounds (by filename) and a sequential contract.
+
+    Before A7 these declared bounds, with the fake detector's repeated box, would have been
+    INDEPENDENT_LOOKS_ALONG_TRACK. Since A7 declared bounds relate nothing; the duplicate-raster guard
+    on the verified (pixel-derived) relationship is tested in test_a7_association.py.
+    """
+    names = sorted(rasters)
+    navigation = "frame,timestamp_utc,latitude,longitude,heading_deg,ping_start,ping_end\n" + "".join(
+        f"{name},2026-09-01T15:30:{index:02d}Z,18.92184,72.83466,128.4,{120000 + index * 800},{120799 + index * 800}\n"
+        for index, name in enumerate(names)
+    )
+    entries = list(rasters.items())
+    if reverse_entries:
+        entries.reverse()
+    return _zip_bytes({
+        **dict(entries), "navigation.csv": navigation,
+        "mission.json": '{"sequence_mode":"SEQUENTIAL_PING","sequential_ping_evidence":true,"navigation_provenance":"MEASURED"}',
+    })
+
+
+def _frames_by_filename(survey: dict) -> dict[str, dict]:
+    return {Path(frame["source_path"]).name: frame for frame in survey["frames"]}
+
+
+@pytest.mark.parametrize("names", [
+    ("sonar_0001.png", "sonar_0002.png", "sonar_0003.png"),
+    ("pass_a.png", "renamed copy.png", "zz_export.png"),
+], ids=["sequential_names", "renamed"])
+def test_b2_byte_identical_rasters_are_flagged_and_never_form_independent_looks(client, names):
+    raster = _png_bytes()
+    body, job = _upload(client, "bundle.zip", _declared_sequence_bundle({name: raster for name in names}), "application/zip")
+    assert job["state"] == "COMPLETED"
+    survey = client.get(f"/api/v1/runtime/surveys/{body['survey_id']}").json()
+
+    frames = _frames_by_filename(survey)
+    assert sorted(frames) == sorted(names)
+    frame_ids = sorted(frame["frame_id"] for frame in frames.values())
+    for frame in frames.values():
+        assert frame["raster_duplicate_status"] == "DUPLICATE_RASTER"
+        assert frame["raster_sha256"] == frames[names[0]]["raster_sha256"]
+        assert frame["duplicate_raster_frame_ids"] == frame_ids
+    # I-B4: duplicate rasters never yield independent Looks.
+    assert survey["contacts"]
+    for contact in survey["contacts"]:
+        assert contact["look_count"] == 1
+        assert contact["association_basis"] != "INDEPENDENT_LOOKS_ALONG_TRACK"
+        assert contact["persistence_evidence_type"] != "SEQUENTIAL_PING"
+    # Duplicates stay inspectable: every Frame, Observation and raster is still served.
+    assert len(survey["findings"]) == len(names)
+    for frame in frames.values():
+        assert client.get(f"/api/v1/runtime/surveys/{body['survey_id']}/frames/{frame['frame_id']}/raster").status_code == 200
+    # B1 membership is untouched: one SINGLETON Survey per Frame, referenced by survey_ref.
+    assert [item["membership_provenance"] for item in survey["surveys"]] == ["SINGLETON"] * len(names)
+    assert {frame["survey_ref"] for frame in frames.values()} == {item["survey_ref"] for item in survey["surveys"]}
+
+
+def test_b2_byte_different_rasters_are_not_duplicates(client):
+    names = ("sonar_0001.png", "sonar_0002.png", "sonar_0003.png")
+    rasters = {name: _textured_png_bytes(seed) for seed, name in enumerate(names)}
+    body, job = _upload(client, "bundle.zip", _declared_sequence_bundle(rasters), "application/zip")
+    assert job["state"] == "COMPLETED"
+    survey = client.get(f"/api/v1/runtime/surveys/{body['survey_id']}").json()
+
+    frames = _frames_by_filename(survey)
+    assert len({frame["raster_sha256"] for frame in frames.values()}) == 3
+    for frame in frames.values():
+        assert frame["raster_duplicate_status"] == "UNIQUE"
+        assert frame["duplicate_raster_frame_ids"] == []
+    # B2 does not flag them; and since A7 their declared MEASURED contiguous pings relate nothing.
+    assert [contact["look_count"] for contact in survey["contacts"]] == [1, 1, 1]
+
+
+def test_b2_duplicate_flags_and_contacts_do_not_depend_on_upload_order(client):
+    duplicate = _textured_png_bytes(7)
+    rasters = {"sonar_0001.png": duplicate, "sonar_0002.png": _textured_png_bytes(8), "sonar_0003.png": duplicate}
+    results = []
+    for reverse in (False, True):
+        body, job = _upload(client, "bundle.zip", _declared_sequence_bundle(rasters, reverse_entries=reverse), "application/zip")
+        assert job["state"] == "COMPLETED"
+        survey = client.get(f"/api/v1/runtime/surveys/{body['survey_id']}").json()
+        frames = _frames_by_filename(survey)
+        results.append({
+            "flags": {name: frame["raster_duplicate_status"] for name, frame in frames.items()},
+            "contacts": sorted((contact["look_count"], contact["association_basis"],
+                                tuple(sorted(Path(frames_by_id).name for frames_by_id in contact["provenance"]["source_raster_identities"])))
+                               for contact in survey["contacts"]),
+        })
+        assert all(contact["look_count"] == 1 for contact in survey["contacts"])
+    assert results[0] == results[1]
+    assert results[0]["flags"] == {"sonar_0001.png": "DUPLICATE_RASTER", "sonar_0002.png": "UNIQUE", "sonar_0003.png": "DUPLICATE_RASTER"}

@@ -77,6 +77,11 @@ Each must be resolved, with its value and rationale recorded, before any ticket 
 | **PID-23** | How MEASURED and DERIVED_FROM_SOURCE navigation provenance is declared in an Upload, and whether an uploader's declaration alone is trusted | B3, A7 (API fixtures) | — |
 | **PID-24** | Which box's width is *w* in the Slant-range position match max(0.25·w, 20 px) | A3, A7, E4 | — |
 
+**Resolved (value and rationale):**
+- **PID-22:** per-Frame Survey membership is `survey_ref` (the legacy `survey_id` stays the Upload identifier). DECLARED membership is `mission.json` `declared_surveys`: a list of groups of raster file names. It groups Frames only; a group spanning raster geometries is rejected (HTTP 422), never split. Rationale: keeps the Upload id; an explicit declaration fails closed rather than being repaired by inference.
+- **PID-23:** an Upload may declare `navigation_provenance` MEASURED or SYNTHETIC_DEMO (existing demo labels normalize to SYNTHETIC_DEMO); undeclared is null. DERIVED_FROM_SOURCE is system-only (B4) and a declaration of it is rejected. An uploader's declaration alone is not trusted as evidence. See spec Erratum E-1. Rationale: provenance is a declaration, not a verification; evidence fails closed.
+- **PID-24:** *w* = min(*w*₁, *w*₂), the narrower box width in source-raster pixel columns: |x̄₁ − x̄₂| ≤ max(0.25·min(*w*₁, *w*₂), 20 px), for spec A req 2(b) and E3 only. Rationale: symmetric and order-invariant, the most merge-conservative reading, no new constant, no data used. The 20 px floor is a pixel quantity, not a metric or calibrated distance.
+
 ---
 
 ## Workstream A — Contact association correctness
@@ -204,7 +209,7 @@ Each must be resolved, with its value and rationale recorded, before any ticket 
   - Frames in different Surveys never associate, even with contiguous declared pings.
   - A ping relationship backed only by SYNTHETIC_DEMO or missing (null) provenance never associates Frames and never produces INDEPENDENT_LOOKS.
   - VERIFIED row-shift Frames (B4) associate as SAME_LOOK_OVERLAPPING_WINDOWS **only when their mapped boxes overlap** (spec A-AC5).
-- **Task:** cross-Frame association requires the same Survey **and** a verified ping relationship: pixel-verified (B4), or ping bounds of MEASURED provenance (spec B rule 3b). Then the (a)/(b) criteria from spec A req 2 apply.
+- **Task:** cross-Frame association requires the same Survey **and** a verified ping relationship: pixel-verified (B4), or ping bounds of MEASURED provenance (spec B rule 3b) *(Erratum E-1: the MEASURED route is suspended; A7 uses the B4 pixel-verified relationship only)*. Then the (a)/(b) criteria from spec A req 2 apply.
 - **Acceptance:** spec I-A2, I-B3, I-B5 hold; A-AC1–A-AC10 all green.
 - **Artifacts:** none.
 - **Regression risk:** API fixtures must declare provenance per PID-23 or change expectation (documented).
@@ -264,7 +269,7 @@ Each must be resolved, with its value and rationale recorded, before any ticket 
   - Mission metadata carrying the existing synthetic labels (as in the v2 and v4 bundles) → provenance SYNTHETIC_DEMO.
   - With SYNTHETIC_DEMO, no ping relationship, Survey membership or persistence is established.
   - Navigation without declared provenance → `navigation_provenance` is **null**, and it never establishes ping relationships, VERIFIED membership or persistence.
-- **Task:** record navigation provenance using **only** the spec values {MEASURED, DERIVED_FROM_SOURCE, SYNTHETIC_DEMO}, or null when undeclared (the product contract's null convention). Only MEASURED, or DERIVED_FROM_SOURCE with pixel verification, may support ping relationships.
+- **Task:** record navigation provenance using **only** the spec values {MEASURED, DERIVED_FROM_SOURCE, SYNTHETIC_DEMO}, or null when undeclared (the product contract's null convention). Only MEASURED, or DERIVED_FROM_SOURCE with pixel verification, may support ping relationships. *(Erratum E-1: MEASURED is declaration-only and DERIVED_FROM_SOURCE is assigned only by B4; no declared provenance supports ping relationships.)*
 - **Acceptance:** spec I-B3, I-B5; B-AC6 carries the provenance field.
 - **Artifacts:** none.
 - **Regression risk:** the multi-frame persistence API test (a sequence without provenance) changes expectation; documented.
@@ -1754,7 +1759,7 @@ PIDs lie on the critical path wherever a critical ticket lists them. Resolving a
 | 54 | J5 | Duplicate-raster flag check (not in J-AC3) | SPEC_DRIFT_REMOVE | Removed (scope) |
 | 55 | J6 | "Correct statuses" in claims and status documents | SPEC_DRIFT_REMOVE | Removed (scope); J-AC2 + DoD 5 only |
 | 56 | Preamble | "Skipped P1/P2 tickets" rule | SPEC_DRIFT_REMOVE | Replaced by the DoD-based priority rule |
-| 57 | B3, A7 | DERIVED_FROM_SOURCE ping bounds allowed to support ping relationships without pixel verification | SPEC_DRIFT_REMOVE | MEASURED, or DERIVED_FROM_SOURCE with pixel verification (spec B rule 3b; H item 1) |
+| 57 | B3, A7 | DERIVED_FROM_SOURCE ping bounds allowed to support ping relationships without pixel verification | SPEC_DRIFT_REMOVE | MEASURED, or DERIVED_FROM_SOURCE with pixel verification (spec B rule 3b; H item 1). Superseded by spec Erratum E-1: DERIVED_FROM_SOURCE from B4 only |
 | 58 | B1, B6 | Invented field name `survey_ref` (spec §6 says `survey_id`, which collides with the legacy Upload identifier kept by spec B item 1) | REQUIRES_PREIMPLEMENTATION_DECISION | → PID-22 |
 | 59 | H0-6 | "Low-confidence pick → UNAVAILABLE" with no threshold | REQUIRES_PREIMPLEMENTATION_DECISION | → PID-02 |
 | 60 | H6 | Counting rule "pings counted once per disjoint coverage" | REQUIRES_PREIMPLEMENTATION_DECISION | → PID-20 |

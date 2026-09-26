@@ -36,6 +36,14 @@ def _png_bytes() -> bytes:
     return buffer.getvalue()
 
 
+def _textured_png_bytes(seed: int) -> bytes:
+    """A deterministic, non-uniform raster whose bytes differ per seed."""
+    pixels = np.random.default_rng(seed).integers(0, 256, size=(8, 8, 3), dtype=np.uint8)
+    buffer = io.BytesIO()
+    Image.fromarray(pixels).save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
 def _zip_bytes(entries: dict[str, bytes | str]) -> bytes:
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w") as archive:
@@ -214,19 +222,29 @@ def test_upload_with_valid_navigation_and_mission(client):
     }
 
 
-def test_multiframe_declared_sequence_persists_contacts_for_runtime_api(client):
+def test_multiframe_declared_sequence_without_navigation_provenance_does_not_persist(client):
+    """A declared sequence with ping bounds but no navigation provenance is not evidence (B3, I-B3/I-B5).
+
+    This test used to expect SEQUENTIAL_PING persistence. Undeclared (null) provenance never
+    establishes a ping relationship, so each Frame is its own single-Look Contact; the Contact
+    confidence contract is unchanged.
+    """
     names = [f"sonar_{index:04d}.png" for index in range(1, 4)]
     navigation = "frame,timestamp_utc,latitude,longitude,heading_deg,ping_start,ping_end\n" + "\n".join(
         f"{name},2026-09-01T15:30:{index:02d}Z,18.92184,72.83466,128.4,{120000 + index * 800},{120799 + index * 800}"
         for index, name in enumerate(names)
     ) + "\n"
     mission = '{"sequence_mode":"SEQUENTIAL_PING","sequential_ping_evidence":true}'
-    payload = _zip_bytes({**{name: _png_bytes() for name in names}, "navigation.csv": navigation, "mission.json": mission})
+    # Each Frame needs its own raster bytes: byte-identical copies are DUPLICATE_RASTER and can
+    # never be independent Looks (B2, I-B4), so identical fixtures would no longer test persistence.
+    payload = _zip_bytes({**{name: _textured_png_bytes(seed) for seed, name in enumerate(names)},
+                          "navigation.csv": navigation, "mission.json": mission})
     upload_body, _ = _upload(client, "sequence.zip", payload, "application/zip")
     survey = client.get(f"/api/v1/runtime/surveys/{upload_body['survey_id']}").json()
-    assert survey["contacts"]
+    assert survey["mission"]["navigation_provenance"] is None
+    assert len(survey["contacts"]) == 3
+    assert all(item["look_count"] == 1 and item["persistence_evidence_type"] == "SINGLE_OBSERVATION" for item in survey["contacts"])
     contact = survey["contacts"][0]
-    assert contact["persistence_evidence_type"] == "SEQUENTIAL_PING"
     assert 0 <= contact["confidence"] <= 1
     assert contact["confidence"] == contact["normalized_confidence"]
     assert 0.70 < contact["normalized_confidence"] < 0.90

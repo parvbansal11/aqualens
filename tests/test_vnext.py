@@ -11,13 +11,18 @@ from sagar.mission.change import compare_detections
 from sagar.core.models import SpatialReferenceLevel, ChangeStatus
 
 def finding(identifier, frame, confidence=.5):
-    return {"detection_id":identifier,"source_frame_id":f"f{frame}","frame_index":frame,"raw_class":"PIPELINE","raw_confidence":confidence,"bbox_normalized":[.1,.1,.2,.2],"pixel_dimensions":[640,640],"geo":{"lat":None,"lon":None},"model_sha256":"sha"}
+    return {"detection_id":identifier,"source_frame_id":f"f{frame}","frame_index":frame,"raw_class":"PIPELINE","raw_confidence":confidence,"bbox_px":[64.,64.,128.,128.],"bbox_normalized":[.1,.1,.2,.2],"pixel_dimensions":[640,640],"geo":{"lat":None,"lon":None},"model_sha256":"sha"}
+
+def on_verified_axis(item, start, end, survey="survey.verified.f0"):
+    """Round-2 A7: Frames relate only on a VERIFIED Survey's pixel-derived (DERIVED_FROM_SOURCE) ping
+    axis, which ingest records on each Observation; declared ping bounds relate nothing."""
+    item.update({"survey_ref": survey, "survey_membership_provenance": "VERIFIED", "ping_relationship_provenance": "DERIVED_FROM_SOURCE",
+                 "survey_ping_start": start, "survey_ping_end": end, "sequential_observation_supported": True})
+    return item
 
 def test_contact_association_preserves_raw_confidence_and_persistence():
     raw=[finding("a",0,.4),finding("b",1,.8)]
-    raw[0]["sequential_observation_supported"] = raw[1]["sequential_observation_supported"] = True
-    raw[0].update({"ping_start": 100, "ping_end": 199})
-    raw[1].update({"ping_start": 200, "ping_end": 299})
+    on_verified_axis(raw[0], 100, 199); on_verified_axis(raw[1], 200, 299)
     contact=fuse_contacts(raw,"survey")[0]
     assert contact["observation_count"] == 2 and contact["max_raw_confidence"] == .8
     assert raw[0]["raw_confidence"] == .4 and contact["persistence_score"] > .15
@@ -76,8 +81,7 @@ def test_window_overlap_within_one_frame_is_not_temporal_persistence():
     assert contact["persistence_evidence_type"] == "WINDOW_OVERLAP_ONLY"
     assert contact["persistence_score"] == .15
     # Genuine cross-frame observations (different frame_index) remain true persistence.
-    x,y=finding("x",0),finding("y",1); x["sequential_observation_supported"]=y["sequential_observation_supported"]=True
-    x.update({"ping_start": 100, "ping_end": 199}); y.update({"ping_start": 200, "ping_end": 299})
+    x,y=on_verified_axis(finding("x",0),100,199),on_verified_axis(finding("y",1),200,299)
     cross=fuse_contacts([x,y],"survey")[0]
     assert cross["persistence_evidence_type"] == "SEQUENTIAL_PING"
     assert cross["persistence_score"] > .15
@@ -196,7 +200,7 @@ def test_multi_observation_persistence_increases_contact_confidence():
     single = fuse_contacts([finding("a", 0, .5)], "s")[0]
     first, second = finding("a", 0, .5), finding("b", 1, .5)
     for item, start, end in ((first, 100, 199), (second, 200, 299)):
-        item.update({"sequential_observation_supported": True, "ping_start": start, "ping_end": end})
+        on_verified_axis(item, start, end)
     sequential = fuse_contacts([first, second], "s")[0]
     assert fuse_contact_confidence(sequential)["raw_fused_confidence"] > fuse_contact_confidence(single)["raw_fused_confidence"]
 
@@ -237,12 +241,11 @@ def test_unrelated_frames_cannot_gain_sequential_persistence():
     assert all(contact["persistence_score"] == .15 for contact in contacts)
 
 def test_declared_ping_order_not_filename_or_frame_order_controls_persistence():
-    # Deliberately reverse frame indices: declared ping bounds, not file order,
-    # establish first/last observation and sequential support.
+    # Deliberately reverse frame indices: the ping axis (since A7, the verified Survey axis),
+    # not file order, establishes first/last observation and sequential support.
     later, earlier = finding("later", 0), finding("earlier", 9)
     for item, start, end in ((later, 200, 299), (earlier, 100, 199)):
-        item.update({"sequential_observation_supported": True, "ping_start": start, "ping_end": end,
-                     "geo": {"lat": 18.0, "lon": 72.0}})
+        on_verified_axis(item, start, end)["geo"] = {"lat": 18.0, "lon": 72.0}
     contact = fuse_contacts([later, earlier], "survey")[0]
     assert contact["persistence_evidence_type"] == "SEQUENTIAL_PING"
     assert contact["first_ping"] == 100 and contact["last_ping"] == 299
@@ -425,10 +428,11 @@ def test_a2_declared_sequence_does_not_merge_same_frame_non_duplicates():
         item.update({"sequential_observation_supported": True, "ping_start": 0, "ping_end": 499})
     assert a1_memberships(fuse_contacts(observations, "s")) == a2_separate(observations)
 
-# --- Round-2 ticket A3: interim cross-Frame association rule ------------------------
-# Different Frames associate only when both carry a declared sequence with valid ping bounds
-# that overlap or are directly contiguous, and their Slant-range (column) positions match within
-# max(0.25·w, 20 px). PIPE is a 60-px-wide along-track pipeline, so its tolerance is 20 px.
+# --- Round-2 ticket A3: cross-Frame association rule ---------------------------------
+# Different Frames associate only when both carry ping bounds that overlap or are directly
+# contiguous. Since A7 those bounds are the verified Survey ping axis (on_verified_axis): overlapping
+# windows need their mapped boxes to overlap, and contiguous windows need Slant-range (column)
+# positions within max(0.25·min(w₁, w₂), 20 px). PIPE is 60 px wide, so its tolerance is 20 px.
 
 PIPE = (2000, 0, 2060, 500)
 
@@ -438,6 +442,8 @@ def a3_observation(frame_index, pings, box_px=PIPE, frame=SUBPIPE_FRAME, fix=Non
     item["sequential_observation_supported"] = sequential
     if pings:
         item.update({"ping_start": pings[0], "ping_end": pings[1]})
+        if sequential:
+            on_verified_axis(item, *pings)  # A7: the relationship is the verified Survey axis
     return item
 
 def a3_at_positions(observations, positions):
@@ -550,7 +556,7 @@ def test_a4_mixed_contact_counts_independent_looks_not_frames_or_observations():
     # ping-contiguous independent Look chained off the second. 3 Observations, 2 Looks.
     dup1, dup2 = a1_tile_duplicate()
     for item in (dup1, dup2):
-        item.update({"sequential_observation_supported": True, "ping_start": 0, "ping_end": 499})
+        on_verified_axis(item, 0, 499)
     third = a3_observation(1, (500, 999), box_px=(770, 100, 870, 200))
     contacts = fuse_contacts([dup1, dup2, third], "s")
     assert a1_memberships(contacts) == [sorted(item["detection_id"] for item in (dup1, dup2, third))]

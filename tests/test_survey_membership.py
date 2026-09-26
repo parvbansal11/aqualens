@@ -139,7 +139,11 @@ def test_existing_api_response_fields_are_unchanged(client):
 def test_survey_membership_fields_are_additive(client):
     _, record = _upload(client, THREE_FRAMES)
     assert set(record) - LEGACY_RECORD_KEYS == {"surveys"}
-    assert all(set(frame) - LEGACY_FRAME_KEYS == {"survey_ref"} for frame in record["frames"])
+    # B1 adds survey_ref; B2 adds the per-Frame raster identity (duplicate-raster flag); B5 persists
+    # the per-Frame geometry signature that Survey membership is checked against.
+    b2_frame_keys = {"raster_sha256", "raster_duplicate_status", "duplicate_raster_frame_ids"}
+    b5_frame_keys = {"geometry_signature"}
+    assert all(set(frame) - LEGACY_FRAME_KEYS == {"survey_ref"} | b2_frame_keys | b5_frame_keys for frame in record["frames"])
 
 
 def _legacy_record() -> dict:

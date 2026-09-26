@@ -18,6 +18,19 @@ REQUIRED_NAV_COLUMNS = {"frame", "timestamp_utc", "latitude", "longitude"}
 OPTIONAL_NAV_FLOAT_COLUMNS = ("heading_deg", "speed_mps", "altitude_m")
 OPTIONAL_NAV_INT_COLUMNS = ("ping_start", "ping_end")
 MISSION_FIELDS = ("mission_id", "survey_name", "platform", "operator", "sensor", "frequency_khz", "mission_type", "notes", "sequential_observations")
+# Spec B rule 6 (PID-23). Undeclared provenance is null, never inferred from coordinates existing.
+NAVIGATION_PROVENANCE_VALUES = ("MEASURED", "DERIVED_FROM_SOURCE", "SYNTHETIC_DEMO")
+# DERIVED_FROM_SOURCE is produced only by Aqualens after source verification (B4); an Upload may
+# declare only these.
+DECLARABLE_NAVIGATION_PROVENANCE = ("MEASURED", "SYNTHETIC_DEMO")
+SYSTEM_ONLY_PROVENANCE_MESSAGE = (
+    "DERIVED_FROM_SOURCE is assigned by Aqualens after verifying the source rasters and cannot be declared by an upload"
+)
+# The structured labels the internal demo bundle builders write into provenance.json.
+_SYNTHETIC_DEMO_LABELS = {"SYNTHETIC_DEMO_METADATA", "SYNTHETIC_DEMO_NAVIGATION"}
+# No declared navigation provenance establishes a ping relationship between Frames. MEASURED is a
+# declaration, not a verification; SYNTHETIC_DEMO and null are never evidence. Frames relate only
+# through the ping relationship Aqualens derives from source pixels (B4) within one Survey (A7).
 
 
 class NavigationValidationError(ValueError):
@@ -129,9 +142,71 @@ def parse_mission_json(path: Path) -> dict[str, Any]:
         raise NavigationValidationError("mission.json field sequential_ping_evidence must be boolean when supplied", field="sequential_ping_evidence")
     if sequential is None:
         sequential = sequence_mode == "SEQUENTIAL_PING" and sequential_ping_evidence is True
+    provenance = raw.get("navigation_provenance")
+    if provenance == "DERIVED_FROM_SOURCE":
+        raise NavigationValidationError(f"mission.json: {SYSTEM_ONLY_PROVENANCE_MESSAGE}", field="navigation_provenance")
+    if provenance is not None and provenance not in DECLARABLE_NAVIGATION_PROVENANCE:
+        raise NavigationValidationError(
+            f"mission.json field navigation_provenance must be one of {', '.join(DECLARABLE_NAVIGATION_PROVENANCE)} when supplied",
+            field="navigation_provenance",
+        )
     parsed = {field: raw.get(field) for field in MISSION_FIELDS}
     parsed["sequential_observations"] = sequential
+    parsed["navigation_provenance"] = provenance
+    parsed["declared_surveys"] = _declared_surveys(raw.get("declared_surveys"))
     return parsed
+
+
+def _declared_surveys(raw: Any) -> list[list[str]] | None:
+    """Explicit Survey groups (spec B rule 3a): a list of groups, each a list of raster file names.
+
+    Only the structure is checked here; whether the names exist in the Upload and share one geometry
+    is checked against the rasters. A Frame may be declared in at most one Survey (I-B1).
+    """
+    if raw is None:
+        return None
+    problem = "mission.json field declared_surveys must be a list of non-empty lists of raster file names"
+    if not isinstance(raw, list) or not all(isinstance(group, list) and group for group in raw):
+        raise NavigationValidationError(problem, field="declared_surveys")
+    if not all(isinstance(name, str) and name.strip() for group in raw for name in group):
+        raise NavigationValidationError(problem, field="declared_surveys")
+    names = [name for group in raw for name in group]
+    repeated = sorted({name for name in names if names.count(name) > 1})
+    if repeated:
+        raise NavigationValidationError(f"mission.json declared_surveys names a Frame more than once: {', '.join(repeated)}", field="declared_surveys")
+    return [list(group) for group in raw]
+
+
+def parse_bundle_provenance(path: Path) -> str | None:
+    """Navigation provenance stated by a bundle's provenance.json, or None when it states none.
+
+    The existing demo labels (``navigation_provenance: SYNTHETIC_DEMO_METADATA``, ``navigation_source:
+    SYNTHETIC_DEMO_NAVIGATION``, ``navigation_is_synthetic: true``) normalize to SYNTHETIC_DEMO.
+    """
+    try:
+        raw = json.loads(path.read_text())
+    except json.JSONDecodeError as exc:
+        raise NavigationValidationError(f"provenance.json is not valid JSON: {exc}") from exc
+    if not isinstance(raw, dict):
+        raise NavigationValidationError("provenance.json must be a JSON object")
+    labels = {raw.get("navigation_provenance"), raw.get("navigation_source")}
+    if "DERIVED_FROM_SOURCE" in labels:
+        raise NavigationValidationError(f"provenance.json: {SYSTEM_ONLY_PROVENANCE_MESSAGE}", field="navigation_provenance")
+    if raw.get("navigation_is_synthetic") is True or labels & (_SYNTHETIC_DEMO_LABELS | {"SYNTHETIC_DEMO"}):
+        return "SYNTHETIC_DEMO"
+    declared = raw.get("navigation_provenance")
+    return declared if declared in DECLARABLE_NAVIGATION_PROVENANCE else None
+
+
+def resolve_navigation_provenance(mission_value: str | None, bundle_value: str | None) -> str | None:
+    """One Upload-level provenance; two different declarations are contradictory metadata and rejected."""
+    if mission_value is not None and bundle_value is not None and mission_value != bundle_value:
+        raise NavigationValidationError(
+            f"mission.json declares navigation_provenance {mission_value} but provenance.json declares {bundle_value}",
+            field="navigation_provenance",
+        )
+    return mission_value if mission_value is not None else bundle_value
+
 
 
 def frame_navigation_view(record: dict[str, Any] | None) -> dict[str, Any]:

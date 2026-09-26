@@ -4,6 +4,12 @@
 **Supersedes, where they conflict:** the sprint ordering in `ROUND2_RESEARCH_AND_EXPERIMENT_PLAN.md` and the candidate list in `ROUND2_TECHNICAL_NOVELTY.md`. Those documents remain the evidence base.
 **Vocabulary:** `CONTEXT.md` (Upload, Survey, Look, Observation, Contact, Persistence, Local Anomaly, Comparable seabed, Raised-relief evidence, Missing evidence, Contact score, Analyst verdict, Failed class).
 **Date:** 2026-09-26
+**Erratum E-1 (PID-23, locked with A7):** where this specification or the ticket backlog implies otherwise, navigation provenance means:
+- **MEASURED** is an Upload's declaration. It is stored and reported, but it does not establish VERIFIED Survey membership, a ping relationship, cross-Frame association, independent Looks or persistence until an explicit MEASURED verification procedure is specified and implemented.
+- **DERIVED_FROM_SOURCE** is assigned only by Aqualens when B4 row-shift verification succeeds; an Upload that declares it is rejected. It is currently the only provenance that makes Frames eligible for cross-Frame relationships (A7, within one VERIFIED Survey).
+- **DECLARED** Survey membership groups Frames only and is never evidence by itself. **SYNTHETIC_DEMO** is never scientific evidence. Undeclared provenance is **null** and is never relationship evidence.
+
+Affected clauses, each marked "Erratum E-1": §5 A interim rule; §5 B rules 3(b) and 6.
 
 Modules are named by their Python module or product surface, not by file path or line number. Line-level evidence for every defect is in the audit and the plan.
 
@@ -203,7 +209,7 @@ Reproduced defects (plan Part E): same-frame FULL_FRAME crab pots 340 px apart �
 5. **Each Contact records** its `association_basis` ∈ {SINGLE, TILE_OVERLAP_DUPLICATE, SAME_LOOK_OVERLAPPING_WINDOWS, INDEPENDENT_LOOKS_ALONG_TRACK} and its **Look count**. The persistence type derives from Looks, not Frames.
 6. **A verdict** applies to the Contact containing the reviewed Observation only. Because of invariant I-A1, that Contact is one object hypothesis.
 
-**Interim rule until B lands:** different Frames associate only if both are flagged sequential with valid, contiguous or overlapping ping bounds of non-synthetic provenance. Otherwise they never associate.
+**Interim rule until B lands:** different Frames associate only if both are flagged sequential with valid, contiguous or overlapping ping bounds of non-synthetic provenance. Otherwise they never associate. *(Superseded by the final rule, A7; see Erratum E-1.)*
 
 **Invariants:**
 - **I-A1:** no Contact holds two Observations from one Frame unless they are tile-overlap duplicates.
@@ -254,11 +260,11 @@ Reproduced defects (plan Part E): same-frame FULL_FRAME crab pots 340 px apart �
 2. **Each Frame gains a Survey membership** within the Upload record. The Upload record gains a list of Surveys, each with membership provenance ∈ {DECLARED, VERIFIED, SINGLETON}.
 3. **Survey formation rules:**
    - (a) explicit membership declared in mission metadata → DECLARED;
-   - (b) membership verified from acquisition evidence → VERIFIED. Evidence means pixel-verified overlapping pings (for waterfall exports, row-shift identity between consecutive Frames), or ping bounds of **measured** provenance that are contiguous and overlapping;
+   - (b) membership verified from acquisition evidence → VERIFIED. Evidence means pixel-verified overlapping pings (for waterfall exports, row-shift identity between consecutive Frames), or ping bounds of **measured** provenance that are contiguous and overlapping; *(Erratum E-1: the measured-ping-bounds route is suspended. MEASURED is declaration-only until a verification procedure exists.)*
    - (c) otherwise each Frame is a SINGLETON Survey.
 4. **Frames with different raster geometry** (width, height, channel layout) never share a Survey.
 5. **Byte-identical rasters** within an Upload are flagged DUPLICATE_RASTER and never form separate Looks.
-6. **Navigation carries provenance** ∈ {MEASURED, DERIVED_FROM_SOURCE, SYNTHETIC_DEMO}. SYNTHETIC_DEMO navigation may be displayed but never establishes Survey membership, ping relationships, persistence or any evaluation quantity.
+6. **Navigation carries provenance** ∈ {MEASURED, DERIVED_FROM_SOURCE, SYNTHETIC_DEMO}. SYNTHETIC_DEMO navigation may be displayed but never establishes Survey membership, ping relationships, persistence or any evaluation quantity. *(Erratum E-1: DERIVED_FROM_SOURCE is assigned only by Aqualens after B4 verification and cannot be declared; MEASURED is declaration-only; undeclared provenance is null and is never relationship evidence.)*
 7. **Persistence, association and Local Anomaly references** are bounded by Survey membership. Persistence requires VERIFIED membership.
 
 **Invariants:**

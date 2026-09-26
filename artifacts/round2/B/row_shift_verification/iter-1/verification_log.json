@@ -1,0 +1,149 @@
+{
+  "ticket": "B4",
+  "acceptance": "spec B-AC3",
+  "policy": {
+    "version": "row_shift_identity@v1",
+    "max_shift_fraction": 0.5
+  },
+  "checks": [
+    {
+      "directory": "/Users/parvbansal/Desktop/sagardrishti/data/raw/subpipe/full_extracted/SubPipe/DATA/Chunk1/SSS_HF_images/Image",
+      "frames": [
+        "1693573517.84.pbm",
+        "1693573518.84.pbm",
+        "1693573519.84.pbm"
+      ],
+      "frame_timestamps_s": [
+        1693573517.84,
+        1693573518.84,
+        1693573519.84
+      ],
+      "frame_spacing_s": [
+        1.0,
+        1.0
+      ],
+      "geometry": {
+        "width_px": 5000,
+        "height_px": 500,
+        "mode": "RGB"
+      },
+      "source_sha256": {
+        "1693573517.84.pbm": "a22da08f9d3c7699f3292c8f57a4085d02e7704c8e8c5bcc9b2f5c67c0d003c4",
+        "1693573518.84.pbm": "e8974436e84c12b877e544d534a439577748b33b3e88b1b31d65917ed4270ee0",
+        "1693573519.84.pbm": "8e96a52be6de4e455c0fdb3cc42635d5886c6c59ffc53a43825b93eba2217737"
+      },
+      "sources_unchanged": true,
+      "groups": [
+        {
+          "frame_ids": [
+            "1693573519.84.pbm",
+            "1693573518.84.pbm",
+            "1693573517.84.pbm"
+          ],
+          "ping_offsets": {
+            "1693573519.84.pbm": 0,
+            "1693573518.84.pbm": 20,
+            "1693573517.84.pbm": 40
+          },
+          "verified_pairs": [
+            {
+              "frame_ids": [
+                "1693573518.84.pbm",
+                "1693573517.84.pbm"
+              ],
+              "row_shift": 20
+            },
+            {
+              "frame_ids": [
+                "1693573519.84.pbm",
+                "1693573517.84.pbm"
+              ],
+              "row_shift": 40
+            },
+            {
+              "frame_ids": [
+                "1693573519.84.pbm",
+                "1693573518.84.pbm"
+              ],
+              "row_shift": 20
+            }
+          ],
+          "method": "ROW_SHIFT_IDENTITY",
+          "policy": "row_shift_identity@v1"
+        }
+      ],
+      "verified_as_one_survey": true,
+      "verification_seconds": 0.0259
+    },
+    {
+      "directory": "/Users/parvbansal/Desktop/sagardrishti/data/raw/subpipe/full_extracted/SubPipe/DATA/Chunk1/SSS_LF_images/Image",
+      "frames": [
+        "1693573517.84.pbm",
+        "1693573518.84.pbm",
+        "1693573519.84.pbm"
+      ],
+      "frame_timestamps_s": [
+        1693573517.84,
+        1693573518.84,
+        1693573519.84
+      ],
+      "frame_spacing_s": [
+        1.0,
+        1.0
+      ],
+      "geometry": {
+        "width_px": 2500,
+        "height_px": 500,
+        "mode": "RGB"
+      },
+      "source_sha256": {
+        "1693573517.84.pbm": "b675bcbefb29476a4e841b21281f8d33449aa9c93bfe4eb4a16485c6fc7ebe72",
+        "1693573518.84.pbm": "26665bd451721678689a60e94d3d10d853a3d57461990755b24c66bb0bf6f629",
+        "1693573519.84.pbm": "c70ee83dfe04188ca0cffce0ed5ea8299b361ef28854e50bfe9edc061eb5b831"
+      },
+      "sources_unchanged": true,
+      "groups": [
+        {
+          "frame_ids": [
+            "1693573519.84.pbm",
+            "1693573518.84.pbm",
+            "1693573517.84.pbm"
+          ],
+          "ping_offsets": {
+            "1693573519.84.pbm": 0,
+            "1693573518.84.pbm": 20,
+            "1693573517.84.pbm": 40
+          },
+          "verified_pairs": [
+            {
+              "frame_ids": [
+                "1693573518.84.pbm",
+                "1693573517.84.pbm"
+              ],
+              "row_shift": 20
+            },
+            {
+              "frame_ids": [
+                "1693573519.84.pbm",
+                "1693573517.84.pbm"
+              ],
+              "row_shift": 40
+            },
+            {
+              "frame_ids": [
+                "1693573519.84.pbm",
+                "1693573518.84.pbm"
+              ],
+              "row_shift": 20
+            }
+          ],
+          "method": "ROW_SHIFT_IDENTITY",
+          "policy": "row_shift_identity@v1"
+        }
+      ],
+      "verified_as_one_survey": true,
+      "verification_seconds": 0.0124
+    }
+  ],
+  "all_verified": true
+}

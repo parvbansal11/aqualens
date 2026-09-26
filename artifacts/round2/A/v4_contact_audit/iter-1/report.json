@@ -1,0 +1,2765 @@
+{
+  "ticket": "A6",
+  "acceptance_criterion": "spec A-AC8",
+  "mission_id": "SD-EPITOME-V4-REAL-DATA-VARIED-CONFIDENCE",
+  "state_path": "/Users/parvbansal/Desktop/sagardrishti/data/runtime/runtime_surveys.json",
+  "state_sha256_before": "903059a96bc5a8efacda0221433d454a9ed95cbc987fd00d671d24633263160e",
+  "state_sha256_after": "903059a96bc5a8efacda0221433d454a9ed95cbc987fd00d671d24633263160e",
+  "state_unchanged": true,
+  "raster_sha256": {
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/1693573517.84.pbm": "b675bcbefb29476a4e841b21281f8d33449aa9c93bfe4eb4a16485c6fc7ebe72",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_218aad1a6055/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/1693573517.84.pbm": "b675bcbefb29476a4e841b21281f8d33449aa9c93bfe4eb4a16485c6fc7ebe72",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_76e6fb42a615/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/1693573517.84.pbm": "b675bcbefb29476a4e841b21281f8d33449aa9c93bfe4eb4a16485c6fc7ebe72",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_c4c56e532038/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/1693569590.819.pbm": "35d61e2b3c1519d58b007822ad5751316a79e4ce17cee44468155d0d98199f96",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_cf27561ba42f/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/1693573517.84.pbm": "b675bcbefb29476a4e841b21281f8d33449aa9c93bfe4eb4a16485c6fc7ebe72",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d0e6c30d23b7/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/1693569590.819.pbm": "35d61e2b3c1519d58b007822ad5751316a79e4ce17cee44468155d0d98199f96",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Grecian_02.png": "40cd843951bf5001405bb7ae3a9b9653cb35a805919cc5cf9cd5cac5faa93479",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Rec13_wcp_ss_star_00029_png_jpg.rf.89f531857e353d477c6de79b141fe4a7.jpg": "3455cbce25b54c55e2ad7feef8a4cc5c1c3fc743a17d00d30e908e140010eafc",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Rec15_wcp_ss_star_00024_png_jpg.rf.7b9252e75bfcf81bdfc1f783cc9bef76.jpg": "2630c39dc02fabbc1d124422a3bbc27b540a93664b2e71079fa7eadd14c6304d",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Rec17_wcp_ss_port_00030_png_jpg.rf.f3be22b92e9a682663d1f7daba4b397c.jpg": "4e0838e172525cbebc11abbe3b891256476e9609f2d6aa0129dc85889d553170",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Rec19_wcp_ss_star_00021_png_jpg.rf.4904518a51b091fe344095bef0f9d582.jpg": "85c6a2b5b025586896ec855024658f91763934087114f95aab60c7f56a2c5326",
+    "/Users/parvbansal/Desktop/sagardrishti/data/runtime/uploads/upload_d429408e6802/Rec9_wcp_ss_star_00051_png_jpg.rf.5e4c3a8abd081b4de636fccb57b67425.jpg": "5c361364486979fced7a072300a5263d11beb3e80708d5bfc8e4912038ba052b"
+  },
+  "rasters_unchanged": true,
+  "records": [
+    {
+      "survey_id": "survey_upload_218aad1a6055",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T09:03:15.264022+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_218aad1a6055.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_aa38cec06493",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_31ff408acb51",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_4a3830dd5d39",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_1127ff16a420",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0000",
+              "det_survey_upload_218aad1a6055_frame_0002_0001",
+              "det_survey_upload_218aad1a6055_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_ff314d72ca4e",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0000",
+              "det_survey_upload_218aad1a6055_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_2caba1e8d8cc",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0000",
+              "det_survey_upload_218aad1a6055_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_e77f1547deeb",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_1127ff16a420",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_218aad1a6055_frame_0002_0000",
+                "det_survey_upload_218aad1a6055_frame_0002_0001",
+                "det_survey_upload_218aad1a6055_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_ff314d72ca4e",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_218aad1a6055_frame_0004_0000",
+                "det_survey_upload_218aad1a6055_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_2caba1e8d8cc",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_218aad1a6055_frame_0005_0000",
+                "det_survey_upload_218aad1a6055_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_aa38cec06493",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_31ff408acb51",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_4a3830dd5d39",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_03c955f22cf2",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_eb754929d40e",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_623003db6bf7",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_650b041b25fb",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_cbb882024d0f",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_65e275dd0d97",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_7b332ada2b51",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_e77f1547deeb",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_1127ff16a420",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0000",
+              "det_survey_upload_218aad1a6055_frame_0002_0001",
+              "det_survey_upload_218aad1a6055_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_ff314d72ca4e",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0000",
+              "det_survey_upload_218aad1a6055_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_2caba1e8d8cc",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0000",
+              "det_survey_upload_218aad1a6055_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_03c955f22cf2",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_eb754929d40e",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_623003db6bf7",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_650b041b25fb",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_cbb882024d0f",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_65e275dd0d97",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_218aad1a6055_7b332ada2b51",
+            "source_detection_ids": [
+              "det_survey_upload_218aad1a6055_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "survey_id": "survey_upload_76e6fb42a615",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T08:49:57.148771+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_76e6fb42a615.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_f383b8b3435b",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_f167ace06530",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_75c05e9a6729",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_5fd76a0e4dbd",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0000",
+              "det_survey_upload_76e6fb42a615_frame_0002_0001",
+              "det_survey_upload_76e6fb42a615_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_ce684590f65a",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0000",
+              "det_survey_upload_76e6fb42a615_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_67ef80684aa4",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0000",
+              "det_survey_upload_76e6fb42a615_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_3b96d23c9fb5",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_5fd76a0e4dbd",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_76e6fb42a615_frame_0002_0000",
+                "det_survey_upload_76e6fb42a615_frame_0002_0001",
+                "det_survey_upload_76e6fb42a615_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_ce684590f65a",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_76e6fb42a615_frame_0004_0000",
+                "det_survey_upload_76e6fb42a615_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_67ef80684aa4",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_76e6fb42a615_frame_0005_0000",
+                "det_survey_upload_76e6fb42a615_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_f383b8b3435b",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_f167ace06530",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_75c05e9a6729",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_5f34ec3cf7a9",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_bbe1d73818df",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_e25c3b4fcc54",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_645c6b9975c3",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_e617d36ec45d",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_4c3ff23e3d41",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_8907e839f592",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_3b96d23c9fb5",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_5fd76a0e4dbd",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0000",
+              "det_survey_upload_76e6fb42a615_frame_0002_0001",
+              "det_survey_upload_76e6fb42a615_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_ce684590f65a",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0000",
+              "det_survey_upload_76e6fb42a615_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_67ef80684aa4",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0000",
+              "det_survey_upload_76e6fb42a615_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_5f34ec3cf7a9",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_bbe1d73818df",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_e25c3b4fcc54",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_645c6b9975c3",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_e617d36ec45d",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_4c3ff23e3d41",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_76e6fb42a615_8907e839f592",
+            "source_detection_ids": [
+              "det_survey_upload_76e6fb42a615_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "survey_id": "survey_upload_c4c56e532038",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T09:07:21.637003+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_c4c56e532038.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_1ac2273203b5",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_f56914b1d0b8",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_93ffb88ab7dd",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_9e3b2c26ed63",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0000",
+              "det_survey_upload_c4c56e532038_frame_0002_0001",
+              "det_survey_upload_c4c56e532038_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_b353c12c226d",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0000",
+              "det_survey_upload_c4c56e532038_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_7358b9132dc3",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0000",
+              "det_survey_upload_c4c56e532038_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_da75536f6b6d",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_9e3b2c26ed63",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_c4c56e532038_frame_0002_0000",
+                "det_survey_upload_c4c56e532038_frame_0002_0001",
+                "det_survey_upload_c4c56e532038_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_b353c12c226d",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_c4c56e532038_frame_0004_0000",
+                "det_survey_upload_c4c56e532038_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_7358b9132dc3",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_c4c56e532038_frame_0005_0000",
+                "det_survey_upload_c4c56e532038_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_1ac2273203b5",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_f56914b1d0b8",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_93ffb88ab7dd",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_3f72a3a32f55",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_029b4e81925c",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_986c7529ca39",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_c3da129b20a6",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_9a4fc2870cc6",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_f15f2ea0e716",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_bf61e6f57c65",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_da75536f6b6d",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_9e3b2c26ed63",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0000",
+              "det_survey_upload_c4c56e532038_frame_0002_0001",
+              "det_survey_upload_c4c56e532038_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_b353c12c226d",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0000",
+              "det_survey_upload_c4c56e532038_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_7358b9132dc3",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0000",
+              "det_survey_upload_c4c56e532038_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_3f72a3a32f55",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_029b4e81925c",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_986c7529ca39",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_c3da129b20a6",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_9a4fc2870cc6",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_f15f2ea0e716",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_c4c56e532038_bf61e6f57c65",
+            "source_detection_ids": [
+              "det_survey_upload_c4c56e532038_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "survey_id": "survey_upload_cf27561ba42f",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T07:26:42.451994+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_cf27561ba42f.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_0c64f1791d19",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_79ee092d2186",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_8ca9bf43a9e9",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_ddf25da524ed",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0000",
+              "det_survey_upload_cf27561ba42f_frame_0002_0001",
+              "det_survey_upload_cf27561ba42f_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_e002dfae5b2f",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0000",
+              "det_survey_upload_cf27561ba42f_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_f54f2e943ff3",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0000",
+              "det_survey_upload_cf27561ba42f_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_abc86d840ed8",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_ddf25da524ed",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_cf27561ba42f_frame_0002_0000",
+                "det_survey_upload_cf27561ba42f_frame_0002_0001",
+                "det_survey_upload_cf27561ba42f_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_e002dfae5b2f",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_cf27561ba42f_frame_0004_0000",
+                "det_survey_upload_cf27561ba42f_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_f54f2e943ff3",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_cf27561ba42f_frame_0005_0000",
+                "det_survey_upload_cf27561ba42f_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_0c64f1791d19",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_79ee092d2186",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_8ca9bf43a9e9",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_f1e31a5d6690",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_1ea5defbe0d3",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_a731b7b53ecc",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_3ff3bc7795ca",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_29e4bd534219",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_780007d683c4",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_5b9b471f3d05",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_abc86d840ed8",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_ddf25da524ed",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0000",
+              "det_survey_upload_cf27561ba42f_frame_0002_0001",
+              "det_survey_upload_cf27561ba42f_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_e002dfae5b2f",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0000",
+              "det_survey_upload_cf27561ba42f_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_f54f2e943ff3",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0000",
+              "det_survey_upload_cf27561ba42f_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_f1e31a5d6690",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_1ea5defbe0d3",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_a731b7b53ecc",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_3ff3bc7795ca",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_29e4bd534219",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_780007d683c4",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_cf27561ba42f_5b9b471f3d05",
+            "source_detection_ids": [
+              "det_survey_upload_cf27561ba42f_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "survey_id": "survey_upload_d0e6c30d23b7",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T07:27:47.573886+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d0e6c30d23b7.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_ed2b1b68efd1",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_9fd1c36ba368",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_108270637901",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_efd8fa0580ee",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0001",
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_0b60300956a8",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_dad4bbf09c3e",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_c367f6b1563c",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_efd8fa0580ee",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_d0e6c30d23b7_frame_0002_0000",
+                "det_survey_upload_d0e6c30d23b7_frame_0002_0001",
+                "det_survey_upload_d0e6c30d23b7_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_0b60300956a8",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_d0e6c30d23b7_frame_0004_0000",
+                "det_survey_upload_d0e6c30d23b7_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_dad4bbf09c3e",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_d0e6c30d23b7_frame_0005_0000",
+                "det_survey_upload_d0e6c30d23b7_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_ed2b1b68efd1",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_9fd1c36ba368",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_108270637901",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_37b9c9512f6a",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_fe7aed7cf0d3",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_dfba6041c569",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_aa35bedb5705",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_205659ee605c",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_36b82e84060f",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_40663ceacf14",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_c367f6b1563c",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_efd8fa0580ee",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0001",
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_0b60300956a8",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_dad4bbf09c3e",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0000",
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_37b9c9512f6a",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_fe7aed7cf0d3",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_dfba6041c569",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_aa35bedb5705",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_205659ee605c",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_36b82e84060f",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d0e6c30d23b7_40663ceacf14",
+            "source_detection_ids": [
+              "det_survey_upload_d0e6c30d23b7_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "survey_id": "survey_upload_d429408e6802",
+      "name": "SagarDrishti Epitome v4 Real-Data Varied-Confidence Demo",
+      "created_at": "2026-09-16T07:21:41.201776+00:00",
+      "frame_count": 7,
+      "observation_count": 11,
+      "surveys_after": [
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0000",
+          "frame_ids": [
+            "frame_0000"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0001",
+          "frame_ids": [
+            "frame_0001"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0002",
+          "frame_ids": [
+            "frame_0002"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0003",
+          "frame_ids": [
+            "frame_0003"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0004",
+          "frame_ids": [
+            "frame_0004"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0005",
+          "frame_ids": [
+            "frame_0005"
+          ],
+          "membership_provenance": "SINGLETON"
+        },
+        {
+          "survey_ref": "survey_upload_d429408e6802.frame_0006",
+          "frame_ids": [
+            "frame_0006"
+          ],
+          "membership_provenance": "SINGLETON"
+        }
+      ],
+      "before": {
+        "contact_count": 7,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_af7b157c170a",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0000_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_1f9bfd068eb4",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0000_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_066671dbd7a1",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0001_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_f6af34356654",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0000",
+              "det_survey_upload_d429408e6802_frame_0002_0001",
+              "det_survey_upload_d429408e6802_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_b4d603f2199f",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0000",
+              "det_survey_upload_d429408e6802_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_60004655b318",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0000",
+              "det_survey_upload_d429408e6802_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_8015ccd38f3e",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0006_0000"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 3,
+        "merged_contacts": [
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_f6af34356654",
+            "frames": {
+              "frame_0002": [
+                "det_survey_upload_d429408e6802_frame_0002_0000",
+                "det_survey_upload_d429408e6802_frame_0002_0001",
+                "det_survey_upload_d429408e6802_frame_0002_0002"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_b4d603f2199f",
+            "frames": {
+              "frame_0004": [
+                "det_survey_upload_d429408e6802_frame_0004_0000",
+                "det_survey_upload_d429408e6802_frame_0004_0001"
+              ]
+            }
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_60004655b318",
+            "frames": {
+              "frame_0005": [
+                "det_survey_upload_d429408e6802_frame_0005_0000",
+                "det_survey_upload_d429408e6802_frame_0005_0001"
+              ]
+            }
+          }
+        ]
+      },
+      "after": {
+        "contact_count": 11,
+        "contacts": [
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_af7b157c170a",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0000_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "PIPELINE"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_1f9bfd068eb4",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0000_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_066671dbd7a1",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0001_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "SHIPWRECK"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_f7c2d0792b5e",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_c3f183d7894f",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_074d5eee9c25",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_b80c9f814942",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_9ba1fdf7079a",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_c0993a4b78f9",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_fc0681d4f0d7",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_8015ccd38f3e",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0006_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "same_frame_full_frame_merges": 0,
+        "merged_contacts": []
+      },
+      "changed": {
+        "removed": [
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_f6af34356654",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0000",
+              "det_survey_upload_d429408e6802_frame_0002_0001",
+              "det_survey_upload_d429408e6802_frame_0002_0002"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_b4d603f2199f",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0000",
+              "det_survey_upload_d429408e6802_frame_0004_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_60004655b318",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0000",
+              "det_survey_upload_d429408e6802_frame_0005_0001"
+            ],
+            "association_basis": null,
+            "look_count": null,
+            "persistence_evidence_type": "WINDOW_OVERLAP_ONLY",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ],
+        "added": [
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_f7c2d0792b5e",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_c3f183d7894f",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_074d5eee9c25",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0002_0002"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_b80c9f814942",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_9ba1fdf7079a",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0004_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_c0993a4b78f9",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0000"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          },
+          {
+            "contact_id": "contact_survey_upload_d429408e6802_fc0681d4f0d7",
+            "source_detection_ids": [
+              "det_survey_upload_d429408e6802_frame_0005_0001"
+            ],
+            "association_basis": "SINGLE",
+            "look_count": 1,
+            "persistence_evidence_type": "SINGLE_OBSERVATION",
+            "classes": [
+              "CRAB_POT"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "acceptance": {
+    "A-AC8": true
+  }
+}

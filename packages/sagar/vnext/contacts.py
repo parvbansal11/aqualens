@@ -31,20 +31,40 @@ def _tile_overlap_duplicate(a:dict[str,Any],b:dict[str,Any],policy:ContactFusion
     return _iou(ba,bb)>=policy.min_tile_duplicate_iou or _contains_centre(ba,bb) or _contains_centre(bb,ba)
 def _world(f: dict[str, Any]) -> tuple[float,float] | None:
     g=f.get("geo") or {}; return (g["lat"],g["lon"]) if g.get("lat") is not None and g.get("lon") is not None else None
+# A7: the only ping relationship that relates Frames is the one Aqualens derives from the source
+# pixels (B4) for the Frames of one VERIFIED Survey. Declared navigation of any provenance does not.
+_VERIFIED_RELATIONSHIP=("VERIFIED","DERIVED_FROM_SOURCE")
 def _ping_bounds(f:dict[str,Any])->tuple[int,int] | None:
-    if f.get("sequential_observation_supported") is not True: return None
-    try: start,end=int(f["ping_start"]),int(f["ping_end"])
+    """The Observation's Frame on its Survey's ping axis, when a verified relationship places it there."""
+    if f.get("sequential_observation_supported") is not True or not f.get("survey_ref"): return None
+    if (f.get("survey_membership_provenance"),f.get("ping_relationship_provenance"))!=_VERIFIED_RELATIONSHIP: return None
+    try: start,end=int(f["survey_ping_start"]),int(f["survey_ping_end"])
     except (KeyError,TypeError,ValueError): return None
     return (start,end) if start<=end else None
+def _same_raster_geometry(a:dict[str,Any],b:dict[str,Any])->bool:
+    dims=a.get("pixel_dimensions")
+    return bool(dims) and list(dims)==list(b.get("pixel_dimensions") or [])
 def _slant_range_match(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->bool:
-    # Raster columns are Slant range, a shared axis only within one raster geometry. The narrower
-    # box sets the tolerance so the test is symmetric.
-    width=(a.get("pixel_dimensions") or [None])[0]
-    if not width or width != (b.get("pixel_dimensions") or [None])[0]: return False
-    ba,bb=a["bbox_normalized"],b["bbox_normalized"]
-    offset_px=abs((ba[0]+ba[2])-(bb[0]+bb[2]))/2*width
-    box_width_px=min(ba[2]-ba[0],bb[2]-bb[0])*width
-    return offset_px<=max(policy.slant_range_match_width_fraction*box_width_px,policy.min_slant_range_match_px)
+    """Spec A req 2(b) with PID-24: |x̄₁ − x̄₂| ≤ max(0.25·min(w₁, w₂), 20 px).
+
+    x̄ is the box centre column and w the box width, in source-raster pixel columns (Slant-range
+    samples), a shared axis only within one raster geometry. The narrower box sets the tolerance, so
+    the test is symmetric and one oversized box cannot widen it. The 20 px floor is a pixel quantity:
+    this is neither a metric nor a calibrated distance.
+    """
+    if not _same_raster_geometry(a,b): return False
+    ba,bb=a["bbox_px"],b["bbox_px"]
+    offset_px=abs((ba[0]+ba[2])/2-(bb[0]+bb[2])/2)
+    w=min(ba[2]-ba[0],bb[2]-bb[0])
+    return offset_px<=max(policy.slant_range_match_width_fraction*w,policy.min_slant_range_match_px)
+def _mapped_boxes_overlap(a:dict[str,Any],b:dict[str,Any],pa:tuple[int,int],pb:tuple[int,int])->bool:
+    """Spec A req 2(a): the boxes overlap (positive area) on the Survey's ping axis (row + Frame
+    offset) and range axis (column)."""
+    if not _same_raster_geometry(a,b): return False
+    ba,bb=a["bbox_px"],b["bbox_px"]
+    columns=min(ba[2],bb[2])-max(ba[0],bb[0])
+    pings=min(pa[0]+ba[3],pb[0]+bb[3])-max(pa[0]+ba[1],pb[0]+bb[1])
+    return columns>0 and pings>0
 def _association_relation(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->str | None:
     """Why two Observations may join one Contact, or None if they may not.
 
@@ -55,34 +75,28 @@ def _association_relation(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPo
     if policy.min_class_compatibility and a.get("raw_class") != b.get("raw_class"): return None
     if a.get("source_frame_id") == b.get("source_frame_id"):
         return "TILE_OVERLAP_DUPLICATE" if _tile_overlap_duplicate(a,b,policy) else None
-    # Different Frames relate only through declared ping bounds that overlap or are directly
-    # contiguous. Frame-level navigation, frame index and upload order never associate Frames.
+    # Different Frames relate only within one Survey, through a verified ping relationship whose
+    # windows overlap or are directly contiguous (spec A req 2, I-A2). Frame-level navigation,
+    # declared ping bounds, frame index and upload order never associate Frames.
     pa,pb=_ping_bounds(a),_ping_bounds(b)
-    if pa is None or pb is None: return None
+    if pa is None or pb is None or a["survey_ref"]!=b["survey_ref"]: return None
     gap=max(pa[0],pb[0])-min(pa[1],pb[1])
-    if gap>1 or not _slant_range_match(a,b,policy): return None
-    return "SAME_LOOK_OVERLAPPING_WINDOWS" if gap<=0 else "INDEPENDENT_LOOKS_ALONG_TRACK"
+    if gap<=0: return "SAME_LOOK_OVERLAPPING_WINDOWS" if _mapped_boxes_overlap(a,b,pa,pb) else None
+    if gap==1: return "INDEPENDENT_LOOKS_ALONG_TRACK" if _slant_range_match(a,b,policy) else None
+    return None
 def _compatible(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->bool:
     return _association_relation(a,b,policy) is not None
 
 def _ping_order(group:list[dict[str,Any]]) -> tuple[list[dict[str,Any]], bool]:
-    """Return observations in declared ping order only when that order is real.
+    """Return observations in Survey ping-axis order only when every one has a verified place on it.
 
-    Frame indices are upload-processing positions and deliberately never become
-    sequential evidence.  Ping bounds are supplied navigation/acquisition
-    metadata, so they are the only accepted order for this runtime path.
+    Frame indices are upload-processing positions and deliberately never become sequential
+    evidence. Only a verified ping relationship (see _ping_bounds) orders Observations.
     """
-    if not group or not all(item.get("sequential_observation_supported") is True for item in group):
+    bounds = [_ping_bounds(item) for item in group]
+    if not group or any(item is None for item in bounds):
         return group, False
-    try:
-        ordered = sorted(group, key=lambda item: int(item["ping_start"]))
-        valid = all(
-            int(item["ping_start"]) <= int(item["ping_end"])
-            for item in ordered
-        )
-    except (KeyError, TypeError, ValueError):
-        return group, False
-    return ordered, valid
+    return [item for _, item in sorted(zip(bounds, group), key=lambda pair: (pair[0][0], pair[1]["detection_id"]))], True
 
 def _processing_order(f:dict[str,Any]) -> tuple[tuple[int,int],int,str]:
     # Frames are compared in declared ping order, so filename or upload order cannot decide
@@ -117,7 +131,7 @@ def fuse_contacts(findings:list[dict[str,Any]], survey_id:str, policy:ContactFus
         sequential_supported=genuine_ping_order
         consecutive=1
         if sequential_supported:
-            ordered_pings = [(int(item["ping_start"]), int(item["ping_end"])) for item in ordered_group]
+            ordered_pings = [_ping_bounds(item) for item in ordered_group]
             for (_, previous_end), (next_start, _) in zip(ordered_pings, ordered_pings[1:]):
                 consecutive = consecutive + 1 if next_start == previous_end + 1 else 1
         # Persistence is re-observation across independent Looks, not Frames (spec Q8): a
@@ -137,7 +151,7 @@ def fuse_contacts(findings:list[dict[str,Any]], survey_id:str, policy:ContactFus
           "observation_count":len(group),"distinct_frame_observation_count":n_frames,"window_overlap_duplicate_count":window_overlap_duplicate_count,
           "association_basis":association_basis,"look_count":look_count,
           "persistence_evidence_type":persistence_evidence_type,
-          "first_frame":frames[0],"last_frame":frames[-1],"first_ping":ordered_group[0].get("ping_start") if sequential_supported else None,"last_ping":ordered_group[-1].get("ping_end") if sequential_supported else None,"source_frame_ids":frames,"source_detection_ids":[x["detection_id"] for x in ordered_group],"best_observation_id":ordered_group[conf.index(max(conf))]["detection_id"],
+          "first_frame":frames[0],"last_frame":frames[-1],"first_ping":_ping_bounds(ordered_group[0])[0] if sequential_supported else None,"last_ping":_ping_bounds(ordered_group[-1])[1] if sequential_supported else None,"source_frame_ids":frames,"source_detection_ids":[x["detection_id"] for x in ordered_group],"best_observation_id":ordered_group[conf.index(max(conf))]["detection_id"],
           "max_raw_confidence":max(conf),"mean_raw_confidence":mean(conf),"class_consistency":1.0 if len(set(classes))==1 else 0.0,
           "bbox_stability":None if variance is None else max(0.,1-variance/.12),"normalized_position_stability":None if variance is None else max(0.,1-variance/.12),"world_position_variance":None,
           "persistence_score":persistence,"consecutive_observation_count":consecutive,"observation_span":max(distinct_idx)-min(distinct_idx)+1,

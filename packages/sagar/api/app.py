@@ -26,15 +26,24 @@ from sagar.perception.navigation import (
     NavigationValidationError,
     finding_navigation_view,
     frame_navigation_view,
+    parse_bundle_provenance,
     parse_mission_json,
     parse_navigation_csv,
+    resolve_navigation_provenance,
 )
 from sagar.perception.runtime import FinalDetector
 from sagar.vnext import ModelRegistry, SonarConditionEngine, fuse_contact_confidence, fuse_contacts, score_contact
 from sagar.vnext.openset import OpenSetMemoryBank, OpenSetUnavailable
 from sagar.vnext.physics import verify_candidate, verify_pipeline_acoustics
 from sagar.vnext.priority import prioritize
-from sagar.vnext.surveys import singleton_surveys
+from sagar.vnext.surveys import (
+    NO_PING_RELATIONSHIP,
+    form_surveys,
+    load_native_pixels,
+    ping_relationships,
+    raster_identities,
+    verified_survey_groups,
+)
 
 
 class ReviewInput(BaseModel):
@@ -137,22 +146,84 @@ class Store:
         self.runtime_state_path = runtime_root / "runtime_surveys.json"
         self.runtime_state_path.parent.mkdir(parents=True, exist_ok=True)
         self.runtime_surveys: dict[str, dict[str, Any]] = json.loads(self.runtime_state_path.read_text()) if self.runtime_state_path.exists() else {}
+        # Survey membership first: rebuilt Contacts are bounded by it (A7).
+        self._hydrate_survey_membership()
         # Records written before VNEXT contact/evidence materialization retain
         # raw detector observations but not a Contact payload. Rehydrate only
         # those records from their retained upload and declared metadata; never
         # rerun or alter detector inference.
         if self._hydrate_legacy_runtime_surveys():
             self.save_runtime_surveys()
-        self._hydrate_survey_membership()
+
+    @staticmethod
+    def _stored_bundle_metadata(frames: list[dict[str, Any]]) -> dict[str, Any]:
+        """Navigation, mission and navigation provenance of a stored record's retained bundle.
+
+        Resolved exactly as ingest resolves them (B3). Metadata that ingest would now reject, such as
+        an uploader-declared DERIVED_FROM_SOURCE, fails closed: no navigation, no declared sequence and
+        null provenance, rather than a startup failure or evidence that ingest would refuse.
+        """
+        source_paths = [Path(frame["source_path"]) for frame in frames if frame.get("source_path")]
+        bundle = source_paths[0].parent if source_paths else None
+        empty = {"navigation": {}, "mission": None, "navigation_provenance": None}
+        if bundle is None:
+            return empty
+        try:
+            navigation = parse_navigation_csv(bundle / "navigation.csv") if (bundle / "navigation.csv").is_file() else {}
+            mission = parse_mission_json(bundle / "mission.json") if (bundle / "mission.json").is_file() else None
+            declared = parse_bundle_provenance(bundle / "provenance.json") if (bundle / "provenance.json").is_file() else None
+            provenance = resolve_navigation_provenance((mission or {}).get("navigation_provenance"), declared)
+        except NavigationValidationError:
+            return empty
+        if mission is not None:
+            mission["navigation_provenance"] = provenance
+        return {"navigation": navigation, "mission": mission, "navigation_provenance": provenance}
+
+    @staticmethod
+    def _establish_raster_identity(frames: list[dict[str, Any]]) -> None:
+        """Give stored Frames the B2 raster identity ingest records; an unreadable raster stays unestablished."""
+        if all("raster_duplicate_status" in frame for frame in frames):
+            return
+        identities = raster_identities({frame["frame_id"]: Path(frame["source_path"]) if frame.get("source_path") else None for frame in frames})
+        for frame in frames:
+            frame.update(identities[frame["frame_id"]])
 
     def _hydrate_survey_membership(self) -> None:
-        """Records written before Survey membership existed read back with SINGLETON Surveys.
+        """Records written before Survey membership existed get it by the ingest rules.
 
-        Additive and in memory only: loading old state never rewrites it; the next save persists it.
+        Raster identity (B2), declared provenance (B3), row-shift verification (B4) and geometry
+        partitioning (B5) are applied exactly as at ingest. A Frame whose raster cannot be read has no
+        identity or channel layout and so is never verified: it stays a SINGLETON Survey. A retained
+        bundle that declares Survey groups is not verified at all (declared Frames are never VERIFIED
+        at ingest, and a declaration is not re-validated here). Additive and in memory only: loading
+        old state never rewrites it; the next save persists it.
         """
+        from PIL import Image
+
         for survey_id, survey in self.runtime_surveys.items():
-            if "surveys" not in survey:
-                survey["surveys"] = singleton_surveys(survey.get("survey_id") or survey_id, survey.get("frames") or [])
+            if "surveys" in survey:
+                continue
+            frames = survey.get("frames") or []
+            self._establish_raster_identity(frames)
+            paths = {frame["frame_id"]: Path(frame["source_path"]) for frame in frames if frame.get("source_path")}
+            channel_layouts: dict[str, str | None] = {}
+            for frame in frames:
+                try:
+                    with Image.open(paths[frame["frame_id"]]) as image:
+                        channel_layouts[frame["frame_id"]] = image.mode
+                except Exception:  # noqa: BLE001 -- a missing or unreadable raster is simply not evidence
+                    channel_layouts[frame["frame_id"]] = None
+                frame.setdefault("geometry_signature", {"width_px": frame.get("width_px"), "height_px": frame.get("height_px"),
+                                                        "channel_layout": channel_layouts[frame["frame_id"]]})
+            metadata = self._stored_bundle_metadata(frames)
+            declares_surveys = bool((metadata["mission"] or {}).get("declared_surveys"))
+            verified = [] if declares_surveys else verified_survey_groups(
+                frames, channel_layouts, lambda frame_id: load_native_pixels(paths[frame_id]),
+            )
+            survey["surveys"] = form_surveys(survey.get("survey_id") or survey_id, frames, channel_layouts, {
+                frame["frame_id"]: metadata["navigation_provenance"] if (frame.get("navigation") or {}).get("navigation_status") == "AVAILABLE" else None
+                for frame in frames
+            }, verified)
 
     def _hydrate_legacy_runtime_surveys(self) -> bool:
         changed = False
@@ -161,15 +232,15 @@ class Store:
                 continue
             frames = survey.get("frames", [])
             frame_index = {frame.get("frame_id"): index for index, frame in enumerate(frames)}
-            source_paths = [Path(frame["source_path"]) for frame in frames if frame.get("source_path")]
-            bundle = source_paths[0].parent if source_paths else None
-            navigation: dict[str, dict[str, Any]] = {}
+            # The same B2 identity, B3 provenance and A7 relationship rules as ingest.
+            self._establish_raster_identity(frames)
+            relationships = ping_relationships(frames, survey.get("surveys") or [])
+            metadata = self._stored_bundle_metadata(frames)
+            navigation: dict[str, dict[str, Any]] = metadata["navigation"]
             mission: dict[str, Any] | None = survey.get("mission")
-            if bundle and (bundle / "navigation.csv").is_file():
-                navigation = parse_navigation_csv(bundle / "navigation.csv")
-            if bundle and (bundle / "mission.json").is_file():
-                mission = {**(mission or {}), **parse_mission_json(bundle / "mission.json")}
-            sequential = bool((mission or {}).get("sequential_observations"))
+            if metadata["mission"] is not None:
+                mission = {**(mission or {}), **metadata["mission"]}
+            sequential = bool((metadata["mission"] or {}).get("sequential_observations"))
             conditions: dict[str, dict[str, Any]] = {}
             pixels_by_frame: dict[str, Any] = {}
             for finding in survey["findings"]:
@@ -179,9 +250,7 @@ class Store:
                 finding["frame_index"] = frame_index.get(finding.get("source_frame_id"), 0)
                 finding["ping_start"] = nav.get("ping_start") if nav else None
                 finding["ping_end"] = nav.get("ping_end") if nav else None
-                finding["sequential_observation_supported"] = bool(
-                    sequential and nav and nav.get("ping_start") is not None and nav.get("ping_end") is not None
-                )
+                finding.update(relationships.get(finding.get("source_frame_id"), NO_PING_RELATIONSHIP))
                 if not source.is_file():
                     continue
                 if finding["source_frame_id"] not in conditions:
@@ -426,11 +495,12 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     if max_upload_bytes <= 0:
         raise ValueError("SAGARDRISHTI_MAX_UPLOAD_BYTES must be a positive integer")
 
-    def _open_raster_size(path: Path, display_name: str) -> tuple[int, int]:
+    def _open_raster_geometry(path: Path, display_name: str) -> tuple[int, int, str]:
+        """(width, height, channel layout): the geometry signature of spec B rule 4."""
         from PIL import Image
         try:
             with Image.open(path) as image:
-                return image.size
+                return (*image.size, image.mode)
         # Deliberately broad: PIL's open is monkey-patched by ultralytics and can
         # raise beyond the documented decode errors. Whatever went wrong, the
         # operator-facing fact is the same and precise -- this file could not be
@@ -447,6 +517,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         paths: list[Path] = []
         navigation_path: Path | None = None
         mission_path: Path | None = None
+        provenance_path: Path | None = None
         bundle_entries = 0
         if suffix == ".zip":
             bundle = store.uploads / upload_id
@@ -475,16 +546,21 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                         mission_path = bundle / candidate.name
                         with archive.open(info) as source, mission_path.open("wb") as out:
                             shutil.copyfileobj(source, out)
+                    elif name_lower == "provenance.json":
+                        provenance_path = bundle / candidate.name
+                        with archive.open(info) as source, provenance_path.open("wb") as out:
+                            shutil.copyfileobj(source, out)
             if not paths:
                 raise _error(422, "EMPTY_BUNDLE", "The bundle contains no PNG, JPEG or PBM raster to process.")
         else:
             paths = [destination]
 
         paths.sort(key=lambda item: item.name)
+        geometry: dict[str, tuple[int, int, str]] = {}
         for path in paths:
             # A single raster is stored under a generated id, so the operator is
             # told the name they actually uploaded.
-            _open_raster_size(path, path.name if suffix == ".zip" else filename)
+            geometry[path.name] = _open_raster_geometry(path, path.name if suffix == ".zip" else filename)
 
         # Navigation/mission are optional companions to the rasters. Malformed
         # metadata is rejected outright rather than silently dropped; a frame
@@ -501,12 +577,33 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 )
             navigation_status = "AVAILABLE"
         mission_meta = parse_mission_json(mission_path) if mission_path is not None else None
+        navigation_provenance = resolve_navigation_provenance(
+            (mission_meta or {}).get("navigation_provenance"),
+            parse_bundle_provenance(provenance_path) if provenance_path is not None else None,
+        )
+        if mission_meta is not None:
+            mission_meta["navigation_provenance"] = navigation_provenance
+        # Spec B rule 3a: a declared Survey names Frames by raster file name. It is rejected, never
+        # repaired, when it names a raster not in this Upload or spans geometries (rule 4, I-B2).
+        declared_surveys = (mission_meta or {}).get("declared_surveys") or []
+        for group in declared_surveys:
+            unknown = sorted(set(group) - set(geometry))
+            if unknown:
+                raise NavigationValidationError(
+                    f"mission.json declared_surveys names raster(s) not present in this upload: {', '.join(unknown)}", field="declared_surveys",
+                )
+            if len({geometry[name] for name in group}) > 1:
+                raise NavigationValidationError(
+                    "mission.json declared_surveys groups rasters of different geometry (width, height, channel layout) "
+                    f"into one Survey: {', '.join(sorted(group))}", field="declared_surveys",
+                )
         # A ZIP's member order and timestamps are not enough to assert sequential
         # ping persistence. The uploader must explicitly declare the recording
         # relationship and supply ping bounds for the frame.
         sequential_contract = bool((mission_meta or {}).get("sequential_observations"))
         return {
             "paths": paths, "navigation": navigation_by_frame, "navigation_status": navigation_status,
+            "navigation_provenance": navigation_provenance, "declared_surveys": declared_surveys,
             "mission": mission_meta, "sequential_contract": sequential_contract,
             "bundle_entries": bundle_entries if suffix == ".zip" else None,
         }
@@ -522,6 +619,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         navigation_by_frame: dict[str, Any] = decoded["navigation"]
         mission_meta = decoded["mission"]
         sequential_contract = decoded["sequential_contract"]
+        navigation_provenance = decoded["navigation_provenance"]
         open_set_available = store.open_set is not None
         try:
             store.jobs.update(job_id, state="INFERENCE", stage="yolo11s", files_parsed=len(paths))
@@ -547,6 +645,9 @@ def create_app(root: str | Path | None = None) -> FastAPI:
             from PIL import Image
             import numpy as np
 
+            # I-B4: a byte-identical copy of a raster re-reads the same pings, so its declared ping
+            # bounds cannot relate it to another Frame as a separate Look.
+            raster_identity = raster_identities({f"frame_{index:04d}": path for index, path in enumerate(paths)})
             all_findings: list[dict[str, Any]] = []
             frames: list[dict[str, Any]] = []
             channel_layouts: dict[str, str] = {}
@@ -557,15 +658,15 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                     channel_layouts[f"frame_{index:04d}"] = source_image.mode
                     pixels = np.asarray(source_image.convert("RGB"))
                 condition = store.conditions.assess(pixels, {"navigation_available": nav_record is not None})
+                identity = raster_identity[f"frame_{index:04d}"]
                 for finding in findings:
                     finding.update(finding_navigation_view(nav_record))
                     finding["frame_index"] = index
                     finding["ping_start"] = nav_record.get("ping_start") if nav_record else None
                     finding["ping_end"] = nav_record.get("ping_end") if nav_record else None
-                    finding["sequential_observation_supported"] = bool(
-                        sequential_contract and nav_record is not None
-                        and nav_record.get("ping_start") is not None and nav_record.get("ping_end") is not None
-                    )
+                    finding["raster_duplicate_status"] = identity["raster_duplicate_status"]
+                    # Declared ping bounds are kept for display; they never relate Frames (A7).
+                    finding.update(NO_PING_RELATIONSHIP)
                     overlap = store.conditions.candidate_overlap(finding["bbox_px"], (meta["height_px"], meta["width_px"]), condition)
                     finding["sonar_condition"] = condition
                     finding["sonar_evidence"] = overlap
@@ -582,7 +683,10 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                             finding["open_set"] = store.open_set.evidence(store.runtime.open_set_embedding(prepared))
                         except (RuntimeError, ValueError):
                             finding["open_set"] = {"status": "FAILED", "missing_inputs": ["FROZEN_FEATURE_EMBEDDING"]}
-                frames.append({"frame_id": f"frame_{index:04d}", "source_path": str(path), **meta, "navigation": frame_navigation_view(nav_record), "sonar_condition": condition})
+                frames.append({"frame_id": f"frame_{index:04d}", "source_path": str(path), **meta, **identity,
+                               "geometry_signature": {"width_px": meta["width_px"], "height_px": meta["height_px"],
+                                                      "channel_layout": channel_layouts[f"frame_{index:04d}"]},
+                               "navigation": frame_navigation_view(nav_record), "sonar_condition": condition})
                 all_findings.extend(findings)
                 store.jobs.increment(job_id, "images_processed")
                 store.jobs.increment(job_id, "frames_completed")
@@ -597,6 +701,26 @@ def create_app(root: str | Path | None = None) -> FastAPI:
             store.jobs.update(job_id, state="POSTPROCESSING", stage="persist", detections_generated=len(all_findings))
 
             store.jobs.set_phase(job_id, "contact_fusion", "running")
+            source_paths = {frame["frame_id"]: Path(frame["source_path"]) for frame in frames}
+
+            # Spec B rule 3a: declared groups become DECLARED Surveys. Their Frames are not verification
+            # candidates, and no other Frame joins them.
+            frame_id_by_name = {path.name: f"frame_{index:04d}" for index, path in enumerate(paths)}
+            declared_groups = [[frame_id_by_name[name] for name in group] for group in decoded["declared_surveys"]]
+            # Spec B rules 3b and 4: row-shift verification of UNIQUE, undeclared Frames within one geometry.
+            verified_groups = verified_survey_groups(
+                frames, channel_layouts, lambda frame_id: load_native_pixels(source_paths[frame_id]),
+                excluded={frame_id for group in declared_groups for frame_id in group},
+            )
+            surveys = form_surveys(survey_id, frames, channel_layouts, {
+                frame["frame_id"]: navigation_provenance if frame["navigation"]["navigation_status"] == "AVAILABLE" else None
+                for frame in frames
+            }, verified_groups, declared_groups)
+            # A7: Contacts are bounded by Survey; only a verified ping relationship relates Frames.
+            relationships = ping_relationships(frames, surveys)
+            for finding in all_findings:
+                finding.update(relationships.get(finding["source_frame_id"], NO_PING_RELATIONSHIP))
+
             contacts = fuse_contacts(all_findings, survey_id)
             for contact in contacts:
                 supporting = [x for x in all_findings if x["detection_id"] in contact["source_detection_ids"]]
@@ -643,7 +767,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 "navigation_status": decoded["navigation_status"], "mission": mission_meta,
                 "model_registry": store.model_registry.health(), "contact_fusion_policy": "contact_fusion@v1",
                 "sequential_observation_contract": sequential_contract,
-                "surveys": singleton_surveys(survey_id, frames, channel_layouts),
+                "surveys": surveys,
             }
             with store.state_lock:
                 store.runtime_surveys[survey_id] = record
@@ -808,11 +932,27 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         return event
 
     OBSERVATION_CSV_FIELDS = ["detection_id", "source_frame_id", "raw_class", "raw_confidence", "display_class", "display_confidence", "classification_source", "production_qualified", "review_state", "bbox_px", "latitude", "longitude", "heading_deg", "timestamp_utc", "navigation_status"]
+    # Spec B-AC6: Survey membership and navigation provenance, copied from the stored Survey entries.
+    SURVEY_CSV_FIELDS = ["survey_ref", "membership_provenance", "navigation_provenance"]
     CONTACT_CSV_FIELDS = ["contact_id", "resolved_class", "candidate_classes", "observation_count", "distinct_frame_observation_count",
                           "persistence_evidence_type", "confidence", "raw_fused_confidence", "normalized_confidence", "raw_detector_confidence", "max_raw_confidence", "evidence_strength", "evidence_score", "evidence_score_type", "confidence_method", "confidence_normalization", "confidence_normalization_range", "missing_evidence_components",
                           "priority_band", "priority_score", "recommended_action", "anomaly_score", "anomaly_threshold", "is_open_set_candidate",
                           "quality_score", "quality_flags", "latitude", "longitude", "navigation_status", "localization_uncertainty_status",
                           "review_verdict", "review_count", "source_detection_ids", "best_observation_id", "detector_model_sha"]
+
+    def _survey_columns(survey: dict[str, Any], frame_ids: list[str]) -> dict[str, Any]:
+        """Survey columns for the Frames a row came from.
+
+        One Survey gives its values. A row whose Frames lie in several Surveys (a Contact retained from
+        before association was bounded by Frame) lists each distinct Survey in the CSV's ``|``
+        convention, aligned across the three columns; a null provenance is an empty entry.
+        """
+        refs = {frame["frame_id"]: frame.get("survey_ref") for frame in survey.get("frames") or []}
+        entries = {item["survey_ref"]: item for item in survey.get("surveys") or []}
+        members = [entries[ref] for ref in dict.fromkeys(refs.get(frame_id) for frame_id in frame_ids) if ref in entries]
+        if len(members) == 1:
+            return {field: members[0].get(field) for field in SURVEY_CSV_FIELDS}
+        return {field: "|".join(item.get(field) or "" for item in members) if members else None for field in SURVEY_CSV_FIELDS}
 
     def _report_provenance(survey: dict[str, Any]) -> dict[str, Any]:
         """Everything a reader needs to attribute this export, computed from the record set."""
@@ -924,15 +1064,16 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 raise _error(422, "VALIDATION_FAILED", "scope must be contacts or observations")
             buffer = io.StringIO()
             if scope == "observations":
-                writer = csv.DictWriter(buffer, fieldnames=OBSERVATION_CSV_FIELDS)
+                writer = csv.DictWriter(buffer, fieldnames=OBSERVATION_CSV_FIELDS + SURVEY_CSV_FIELDS)
                 writer.writeheader()
                 for item in survey["findings"]:
-                    writer.writerow({key: item.get(key) for key in OBSERVATION_CSV_FIELDS})
+                    writer.writerow({**{key: item.get(key) for key in OBSERVATION_CSV_FIELDS},
+                                     **_survey_columns(survey, [item.get("source_frame_id")])})
             else:
-                writer = csv.DictWriter(buffer, fieldnames=CONTACT_CSV_FIELDS)
+                writer = csv.DictWriter(buffer, fieldnames=CONTACT_CSV_FIELDS + SURVEY_CSV_FIELDS)
                 writer.writeheader()
                 for contact in survey.get("contacts") or []:
-                    writer.writerow(_contact_report_row(contact))
+                    writer.writerow({**_contact_report_row(contact), **_survey_columns(survey, contact.get("source_frame_ids") or [])})
             return StreamingResponse(iter([buffer.getvalue()]), media_type="text/csv", headers={"Content-Disposition": f'attachment; filename="aqualens-{survey_id}-{scope}.csv"'})
         raise _error(422, "VALIDATION_FAILED", "format must be json or csv")
 

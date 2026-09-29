@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Contact, Evidence as Ev, EvidenceKey, Priority, ReviewDecision } from "../api/types";
 import { contactName, isReviewed, useStore } from "../state/store";
 import { analystLabel, AVAILABILITY_LABEL, CLASS_LABEL, displayName, EVIDENCE_LABEL, methodLabel, PRIORITY_LABEL, shortTime } from "../api/labels";
-import { DemoTag, Icon, Kbd, StateChip, StateGlyph, StatusMark } from "../components/ui";
+import { confidenceText, DemoTag, Icon, Kbd, StateChip, StateGlyph, StatusMark } from "../components/ui";
 
 export function Inspector({ contact }: { contact: Contact }) {
   const { state, imagery } = useStore();
@@ -57,12 +57,33 @@ function Machine({ contact }: { contact: Contact }) {
             </div>
             <div className="machine__score">
               <span className="machine__score-label">
-                Detector score {m.demo && <DemoTag>Fixture value</DemoTag>}
+                Confidence {m.demo && <DemoTag>Fixture value</DemoTag>}
               </span>
-              <span className="machine__score-value">{m.raw_detector_score.toFixed(2)}</span>
+              <span className="machine__score-value">{confidenceText(contact) ?? m.raw_detector_score.toFixed(2)}</span>
             </div>
           </div>
-          <p className="insp__note">Raw score from the frozen detector. Not a calibrated probability.</p>
+          <p className="insp__note">Confidence from this Contact's evidence. Not a calibrated probability.</p>
+          <details className="insp__tech">
+            <summary>Technical details</summary>
+            <dl>
+              <div>
+                <dt>Raw detector score</dt>
+                <dd className="mono">{m.raw_detector_score.toFixed(4)}</dd>
+              </div>
+              {m.raw_fused_confidence != null && (
+                <div>
+                  <dt>Fused evidence</dt>
+                  <dd className="mono">{m.raw_fused_confidence.toFixed(4)}</dd>
+                </div>
+              )}
+              {m.display_confidence_method && (
+                <div>
+                  <dt>Display method</dt>
+                  <dd className="mono">{m.display_confidence_method}</dd>
+                </div>
+              )}
+            </dl>
+          </details>
           {m.supervised_class === "SHIPWRECK" && shipwreck?.availability === "FAILED" && (
             <p className="caveat">
               <Icon name="info" size={14} />

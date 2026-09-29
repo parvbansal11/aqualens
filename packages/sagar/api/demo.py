@@ -8,7 +8,7 @@ import argparse
 import fcntl
 import os
 from pathlib import Path
-from sagar.api.product import ProductService, MODEL_ID, base_evidence, evidence, validate_runtime_root
+from sagar.api.product import ProductService, MODEL_ID, base_evidence, display_confidence_fields, evidence, validate_runtime_root
 from sagar.api.product_models import Contact, ProductMission
 from sagar.perception.runtime import EXPECTED_SHA256
 
@@ -45,8 +45,10 @@ def seed(service):
             ('c', 'PIPELINE', .61, 'CABLE_PIPELINE_RELATED', 'LOW', [72.502, 15.502]),
         ]:
             identifier = 'demo_contact_' + letter
+            # Same product confidence logic as real Contacts; a fixture has only a detector channel.
             machine = {'supervised_class': cls, 'raw_detector_score': score, 'model_id': MODEL_ID,
-                       'model_sha': EXPECTED_SHA256, 'demo': True} if cls else None
+                       'model_sha': EXPECTED_SHA256, 'demo': True,
+                       **display_confidence_fields({'max_raw_confidence': score})} if cls else None
             ev = base_evidence(STAMP, demo=True)
             if machine:
                 ev['detector'] = evidence('AVAILABLE', 'DEMO_FIXTURE_NOT_INFERENCE',

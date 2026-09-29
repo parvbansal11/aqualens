@@ -5330,3 +5330,33 @@ dl.ev__more dd {
     top: 100px;
   }
 }
+
+/* Technical provenance for the machine score: collapsed by default, never the headline. */
+.insp__tech {
+  margin-top: 8px;
+  color: var(--ink-3);
+  font-size: 12px;
+}
+.insp__tech summary {
+  cursor: pointer;
+  width: max-content;
+}
+.insp__tech summary:focus-visible {
+  outline: 1.5px solid var(--focus);
+  outline-offset: 2px;
+}
+.insp__tech dl {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+}
+.insp__tech dl > div {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 8px;
+}
+.insp__tech dd {
+  margin: 0;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}

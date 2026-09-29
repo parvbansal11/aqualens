@@ -4,7 +4,7 @@ import { api, ApiFailure } from "../api/client";
 import { analystLabel, AVAILABILITY_LABEL, CLASS_LABEL, displayName, EVIDENCE_LABEL, PRIORITY_LABEL, shortTime } from "../api/labels";
 import { hrefFor, navigate } from "../router";
 import { contactName, useStore } from "../state/store";
-import { Band, ContactThumb, Empty, Icon, machineLabel, Skeleton, StateGlyph, StatusMark } from "../components/ui";
+import { Band, confidenceText, ContactThumb, Empty, Icon, machineLabel, Skeleton, StateGlyph, StatusMark } from "../components/ui";
 
 const EV_KEYS: EvidenceKey[] = ["detector", "local_anomaly", "persistence", "raised_relief", "navigation"];
 
@@ -237,7 +237,7 @@ function Preview({ contact, onClose }: { contact: Contact; onClose: () => void }
           <dt>Machine</dt>
           <dd>
             {contact.machine
-              ? `${machineLabel(contact)} · detector score ${contact.machine.raw_detector_score.toFixed(2)}${contact.machine.demo ? " (fixture value)" : ""}`
+              ? `${machineLabel(contact)}${confidenceText(contact) ? ` · confidence ${confidenceText(contact)}` : ""}${contact.machine.demo ? " (fixture)" : ""}`
               : `Local anomaly · ${AVAILABILITY_LABEL[contact.evidence.local_anomaly.status].toLowerCase()}`}
           </dd>
         </div>

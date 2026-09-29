@@ -94,8 +94,8 @@ const hero = await run("dark", "sonar-analyst", async ({ page, shot, cam, settle
   await settle();
   await page.waitForFunction(() => /Seafloor depth context/.test(document.querySelector(".mm-insp")?.innerText ?? ""), { timeout: 20000 }).catch(() => {});
   const insp = await page.evaluate(() => ({ title: document.querySelector(".mm-insp h2")?.textContent, text: document.querySelector(".mm-insp")?.innerText ?? "" }));
-  ck("7 inspector shows the selected backend Contact", insp.title === name(target) && insp.text.includes(target.machine.supervised_class) && insp.text.includes(target.machine.raw_detector_score.toFixed(2)) && /raw, not calibrated/.test(insp.text), insp.title);
-  ck("7 no probability or confidence wording", !/confidence|probability|%/i.test(insp.text));
+  ck("7 inspector shows the selected backend Contact", insp.title === name(target) && insp.text.includes(target.machine.supervised_class) && insp.text.includes(`Confidence\n${target.machine.display_confidence.toFixed(2)}`) || (insp.title === name(target) && new RegExp(`Confidence\\s+${target.machine.display_confidence.toFixed(2)}`).test(insp.text)), insp.title);
+  ck("7 operator view shows display confidence, not the raw score or a probability", !insp.text.includes(target.machine.raw_detector_score.toFixed(2)) && !/probability|%/i.test(insp.text));
   // Independent check of the depth value: decode the same public tile outside the app.
   const fix = geo.platform_context.find((f) => target.detections.some((d) => d.survey_ref === f.properties.survey_ref && d.frame_ref === f.properties.frame_ref));
   const [lon, lat] = fix.geometry.coordinates;

@@ -45,6 +45,10 @@ export function Icon({ name, size = 16, label }: { name: keyof typeof PATHS | st
 /** Machine output only. A Contact without a supervised class is never given one here. */
 export const machineLabel = (c: Contact) => (c.machine ? CLASS_LABEL[c.machine.supervised_class] : "Local anomaly");
 
+/** The operator-facing Contact confidence: the backend's display_confidence, never the raw score. */
+export const confidenceText = (c: Contact) =>
+  c.machine?.display_confidence != null ? c.machine.display_confidence.toFixed(2) : null;
+
 /* ---------- evidence availability: shape carries meaning, color only supports it ---------- */
 export function StateGlyph({ state, size = 10 }: { state: EvidenceStatus; size?: number }) {
   const r = size / 2 - 1;

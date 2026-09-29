@@ -19,7 +19,9 @@ const SECTIONS = [
 const EV: EvidenceKey[] = ["detector", "local_anomaly", "persistence", "raised_relief", "navigation"];
 
 const machineCell = (c: Contact) =>
-  c.machine ? `${CLASS_LABEL[c.machine.supervised_class]} · ${c.machine.raw_detector_score.toFixed(2)}${c.machine.demo ? " fixture" : " raw"}` : `Local anomaly · ${AVAILABILITY_LABEL[c.evidence.local_anomaly.status].toLowerCase()}`;
+  c.machine
+    ? `${CLASS_LABEL[c.machine.supervised_class]}${c.machine.display_confidence != null ? ` · confidence ${c.machine.display_confidence.toFixed(2)}` : ""}${c.machine.demo ? " (fixture)" : ""}`
+    : `Local anomaly · ${AVAILABILITY_LABEL[c.evidence.local_anomaly.status].toLowerCase()}`;
 
 const evState = (c: Contact, k: EvidenceKey) => (c.evidence[k].provenance === "SYNTHETIC_DEMO" ? "Synthetic demo" : AVAILABILITY_LABEL[c.evidence[k].status]);
 
@@ -278,6 +280,39 @@ export function Report() {
                 </tr>
               </tbody>
             </table>
+            {report.contacts.some((c) => c.machine) && (
+              <>
+                <p className="paper__muted">
+                  Confidence in this report is display confidence
+                  {report.contacts.find((c) => c.machine?.display_confidence_method)?.machine?.display_confidence_method
+                    ? ` (${report.contacts.find((c) => c.machine?.display_confidence_method)!.machine!.display_confidence_method})`
+                    : ""}
+                  , not a calibrated probability. The frozen detector's raw scores are kept unchanged:
+                </p>
+                <table className="ptable">
+                  <thead>
+                    <tr>
+                      <th>Contact</th>
+                      <th>Machine class</th>
+                      <th>Raw detector score</th>
+                      <th>Confidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {report.contacts
+                      .filter((c) => c.machine)
+                      .map((c) => (
+                        <tr key={c.contact_id}>
+                          <td className="mono">{contactName(c)}</td>
+                          <td className="mono">{c.machine!.supervised_class}</td>
+                          <td className="mono">{c.machine!.raw_detector_score.toFixed(4)}</td>
+                          <td className="mono">{c.machine!.display_confidence != null ? c.machine!.display_confidence.toFixed(2) : "Unavailable"}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </>
+            )}
           </section>
 
           <section id="r-limits">

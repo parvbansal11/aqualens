@@ -73,10 +73,17 @@ class Evidence(Strict):
 
 class Machine(Strict):
     supervised_class: Literal['PIPELINE', 'SHIPWRECK', 'CRAB_POT']
+    # The frozen detector's own score. Scientific and evaluation paths use only this value.
     raw_detector_score: float = Field(ge=0, le=1)
     model_id: str
     model_sha: str
     demo: bool = False
+    # Product presentation confidence: the historical SagarDrishti bounded sigmoid
+    # (DEMO_BOUNDED_SIGMOID_V1, ~0.70..0.90) over the Contact evidence fusion. Deterministic and
+    # monotonic; not a calibrated or posterior probability.
+    display_confidence: float | None = Field(default=None, ge=0, le=1)
+    raw_fused_confidence: float | None = Field(default=None, ge=0, le=1)
+    display_confidence_method: str | None = None
 
 class Analyst(Strict):
     classification: AnalystClass = AnalystClass.UNRESOLVED

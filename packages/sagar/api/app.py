@@ -167,6 +167,9 @@ class Store:
         # rerun or alter detector inference.
         if self._hydrate_legacy_runtime_surveys():
             self.save_runtime_surveys()
+        # Product Contacts stored before display confidence existed receive it once, from the value
+        # their own processing run computed. Raw detector scores are never rewritten.
+        self.product.backfill_display_confidence(self.runtime_surveys)
 
     @staticmethod
     def _stored_bundle_metadata(frames: list[dict[str, Any]]) -> dict[str, Any]:

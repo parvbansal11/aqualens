@@ -359,6 +359,30 @@
             "title": "Demo",
             "type": "boolean"
           },
+          "display_confidence": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Confidence"
+          },
+          "display_confidence_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Confidence Method"
+          },
           "model_id": {
             "title": "Model Id",
             "type": "string"
@@ -372,6 +396,19 @@
             "minimum": 0.0,
             "title": "Raw Detector Score",
             "type": "number"
+          },
+          "raw_fused_confidence": {
+            "anyOf": [
+              {
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Raw Fused Confidence"
           },
           "supervised_class": {
             "enum": [

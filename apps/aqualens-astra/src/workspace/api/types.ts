@@ -163,10 +163,15 @@ export type EvidenceKey = "detector" | "local_anomaly" | "persistence" | "raised
 
 export interface Machine {
   supervised_class: MachineClass;
+  /** The frozen detector's own score; shown only in technical detail. */
   raw_detector_score: number;
   model_id: string;
   model_sha: string;
   demo: boolean;
+  /** Product presentation confidence (historical SagarDrishti bounded sigmoid). Not a probability. */
+  display_confidence?: number | null;
+  raw_fused_confidence?: number | null;
+  display_confidence_method?: string | null;
 }
 
 export interface Analyst {

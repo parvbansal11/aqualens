@@ -9,7 +9,7 @@ import { contactName, isReviewed, queueOrder, useStore } from "../state/store";
 import { api, ApiFailure } from "../api/client";
 import type { Contact, MapFeature, MapResponse } from "../api/types";
 import { analystLabel, displayName, PRIORITY_LABEL, PRIORITY_RANK, STATUS_LABEL } from "../api/labels";
-import { Band, ContactThumb, Empty, Icon, machineLabel, Skeleton, StatusMark } from "../components/ui";
+import { Band, confidenceText, ContactThumb, Empty, Icon, machineLabel, Skeleton, StatusMark } from "../components/ui";
 import { arrowImage, ATTRIBUTION, buildStyle, DEPTH_STOPS, depthColors, type Layers, type MapTheme } from "../map/style";
 import { depthAt, type DepthContext } from "../map/depth";
 import { seaLevel, type SeaLevel } from "../map/tide";
@@ -759,12 +759,10 @@ function Inspector({
           <dt>Machine evidence</dt>
           <dd>{c.machine ? <span className="mono">{c.machine.supervised_class}</span> : "Local anomaly, no supervised class"}</dd>
         </div>
-        {c.machine && (
+        {confidenceText(c) && (
           <div>
-            <dt>Detector score</dt>
-            <dd>
-              <span className="mono">{c.machine.raw_detector_score.toFixed(2)}</span> <span className="muted small">raw, not calibrated</span>
-            </dd>
+            <dt>Confidence</dt>
+            <dd className="mono">{confidenceText(c)}</dd>
           </div>
         )}
         <div>

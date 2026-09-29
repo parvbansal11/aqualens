@@ -356,6 +356,32 @@
               "title": "Demo",
               "type": "boolean"
             },
+            "display_confidence": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Display Confidence"
+            },
+            "display_confidence_method": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Display Confidence Method"
+            },
             "model_id": {
               "title": "Model Id",
               "type": "string"
@@ -369,6 +395,20 @@
               "minimum": 0,
               "title": "Raw Detector Score",
               "type": "number"
+            },
+            "raw_fused_confidence": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Raw Fused Confidence"
             },
             "supervised_class": {
               "enum": [
@@ -613,6 +653,32 @@
           "title": "Demo",
           "type": "boolean"
         },
+        "display_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Confidence"
+        },
+        "display_confidence_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Confidence Method"
+        },
         "model_id": {
           "title": "Model Id",
           "type": "string"
@@ -626,6 +692,20 @@
           "minimum": 0,
           "title": "Raw Detector Score",
           "type": "number"
+        },
+        "raw_fused_confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Fused Confidence"
         },
         "supervised_class": {
           "enum": [
@@ -1016,6 +1096,32 @@
               "title": "Demo",
               "type": "boolean"
             },
+            "display_confidence": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Display Confidence"
+            },
+            "display_confidence_method": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Display Confidence Method"
+            },
             "model_id": {
               "title": "Model Id",
               "type": "string"
@@ -1029,6 +1135,20 @@
               "minimum": 0,
               "title": "Raw Detector Score",
               "type": "number"
+            },
+            "raw_fused_confidence": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Raw Fused Confidence"
             },
             "supervised_class": {
               "enum": [

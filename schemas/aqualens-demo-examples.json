@@ -35,9 +35,12 @@
         "timestamp": "2026-09-28T00:00:00+00:00",
         "values": {
           "demo": true,
+          "display_confidence": 0.8981550973725857,
+          "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
           "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
           "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
           "raw_detector_score": 0.74,
+          "raw_fused_confidence": 0.481,
           "supervised_class": "CRAB_POT"
         }
       },
@@ -110,9 +113,12 @@
     ],
     "machine": {
       "demo": true,
+      "display_confidence": 0.8981550973725857,
+      "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
       "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
       "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
       "raw_detector_score": 0.74,
+      "raw_fused_confidence": 0.481,
       "supervised_class": "CRAB_POT"
     },
     "mission_id": "demo_mission_arabian_sea_07",
@@ -318,9 +324,12 @@
             "timestamp": "2026-09-28T00:00:00+00:00",
             "values": {
               "demo": true,
+              "display_confidence": 0.8819506125790765,
+              "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
               "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
               "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
               "raw_detector_score": 0.61,
+              "raw_fused_confidence": 0.3965000000000001,
               "supervised_class": "PIPELINE"
             }
           },
@@ -417,9 +426,12 @@
         ],
         "machine": {
           "demo": true,
+          "display_confidence": 0.8819506125790765,
+          "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
           "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
           "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
           "raw_detector_score": 0.61,
+          "raw_fused_confidence": 0.3965000000000001,
           "supervised_class": "PIPELINE"
         },
         "mission_id": "demo_mission_arabian_sea_07",
@@ -574,9 +586,12 @@
             "timestamp": "2026-09-28T00:00:00+00:00",
             "values": {
               "demo": true,
+              "display_confidence": 0.8981550973725857,
+              "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
               "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
               "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
               "raw_detector_score": 0.74,
+              "raw_fused_confidence": 0.481,
               "supervised_class": "CRAB_POT"
             }
           },
@@ -649,9 +664,12 @@
         ],
         "machine": {
           "demo": true,
+          "display_confidence": 0.8981550973725857,
+          "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1",
           "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
           "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
           "raw_detector_score": 0.74,
+          "raw_fused_confidence": 0.481,
           "supervised_class": "CRAB_POT"
         },
         "mission_id": "demo_mission_arabian_sea_07",

@@ -41,6 +41,30 @@ def now():
 def error(code, message, status=404):
     return HTTPException(status, {'error': {'code': code, 'message': message, 'detail': {}}})
 
+def display_confidence_fields(runtime_contact: dict) -> dict:
+    """Product presentation confidence for one Contact, from the historical SagarDrishti mapping.
+
+    ``sagar.vnext.fuse_contact_confidence`` fuses the Contact's available evidence (weighted
+    noisy-OR, CONTACT_EVIDENCE_FUSION_V1) and normalizes the result with
+    ``normalize_demo_confidence`` (DEMO_BOUNDED_SIGMOID_V1: 0.70 + 0.20 * sigmoid(28 * (x - 0.3140))).
+    A runtime Contact already carries that result from processing and it is reused unchanged;
+    otherwise the same function computes it from the fields given. The raw detector score is
+    never modified, and scientific paths never read this value.
+    """
+    from sagar.vnext import fuse_contact_confidence
+
+    normalized = runtime_contact.get('normalized_confidence')
+    fused = runtime_contact.get('raw_fused_confidence')
+    normalization = runtime_contact.get('confidence_normalization')
+    method = runtime_contact.get('confidence_method')
+    if normalized is None or fused is None:
+        result = fuse_contact_confidence(runtime_contact)
+        normalized, fused = result['normalized_confidence'], result['raw_fused_confidence']
+        normalization, method = result['confidence_normalization'], result['confidence_method']
+    return {'display_confidence': float(normalized), 'raw_fused_confidence': float(fused),
+            'display_confidence_method': f"{normalization or 'DEMO_BOUNDED_SIGMOID_V1'} over {method or 'CONTACT_EVIDENCE_FUSION_V1'}"}
+
+
 def validate_runtime_root(runtime_root: Path, project_root: Path | None = None):
     """Operational storage must never point at frozen/source evidence trees."""
     root = (project_root or Path(__file__).resolve().parents[3]).resolve()
@@ -145,6 +169,36 @@ class ProductService:
         self.real = ProductRepository(runtime_root / 'reviews.sqlite3')
         self.demo = ProductRepository(runtime_root / 'demo' / 'product.sqlite3')
 
+    def backfill_display_confidence(self, runtime_surveys):
+        """Give Contacts stored before display confidence existed their value, once.
+
+        Real Contacts reuse the value their processing run already computed (runtime survey
+        records); demo Contacts use the same function on their fixture detector score. Only the
+        ``machine`` presentation fields are added; raw scores, analyst state and history are untouched.
+        """
+        runtime = {c.get('contact_id'): c for record in runtime_surveys.values() for c in record.get('contacts', [])}
+        updated = 0
+        for repo in (self.real, self.demo):
+            with repo.connect() as db:
+                db.execute('BEGIN IMMEDIATE')
+                rows = db.execute("SELECT id, mission_id, payload FROM product_records WHERE kind='contact'").fetchall()
+                for identifier, mission_id, payload in rows:
+                    contact = json.loads(payload)
+                    machine = contact.get('machine')
+                    if not machine or machine.get('display_confidence') is not None:
+                        continue
+                    source = runtime.get(identifier) or {'max_raw_confidence': machine['raw_detector_score']}
+                    fields = display_confidence_fields(source)
+                    machine.update(fields)
+                    detector = (contact.get('evidence') or {}).get('detector') or {}
+                    if isinstance(detector.get('values'), dict) and 'raw_detector_score' in detector['values']:
+                        detector['values'].update(fields)
+                    repo.put(db, 'contact', identifier, mission_id, contact)
+                    updated += 1
+        if updated:
+            log.info('display_confidence_backfilled contacts=%s', updated)
+        return updated
+
     def repo(self, identifier):
         return self.demo if identifier.startswith('demo_') else self.real
 
@@ -206,7 +260,8 @@ class ProductService:
                 raise ValueError('Demo detector output refused in real Mission')
             best = findings[raw['best_observation_id']]
             machine = {'supervised_class': best['raw_class'], 'raw_detector_score': best['raw_confidence'],
-                       'model_id': best['model_id'], 'model_sha': best['model_sha256'], 'demo': False}
+                       'model_id': best['model_id'], 'model_sha': best['model_sha256'], 'demo': False,
+                       **display_confidence_fields(raw)}
             ev = base_evidence(timestamp)
             ev['detector'] = evidence('AVAILABLE', 'frozen_yolo11s', values=machine, timestamp=timestamp, provenance='FROZEN_DETECTOR')
             count = raw['look_count']

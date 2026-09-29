@@ -50,6 +50,8 @@ type Action =
   | { type: "data"; data: Partial<Data> }
   | { type: "contact"; contact: Contact }
   | { type: "select"; id: string | null }
+  /** Default selection: applies only when nothing valid is selected when the update lands. */
+  | { type: "pin"; id: string }
   | { type: "pending"; id: string | null }
   | { type: "role"; role: Role | null }
   | { type: "theme"; pref: ThemePref }
@@ -125,6 +127,8 @@ function reducer(state: State, a: Action): State {
       return { ...state, ...a.data };
     case "contact":
       return { ...state, contacts: state.contacts.map((c) => (c.contact_id === a.contact.contact_id ? a.contact : c)) };
+    case "pin":
+      return state.selectedId && state.contacts.some((c) => c.contact_id === state.selectedId) ? state : { ...state, selectedId: a.id };
     case "select":
       return { ...state, selectedId: a.id };
     case "pending":
@@ -287,7 +291,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // The selection is pinned, never re-derived: re-sorting the queue after a verdict must not move
   // the analyst to a different Contact mid-decision.
   useEffect(() => {
-    if (state.phase === "ready" && selected && selected.contact_id !== state.selectedId) dispatch({ type: "select", id: selected.contact_id });
+    // "pin", not "select": a Contact chosen in the same commit (for example from a deep link) wins.
+    if (state.phase === "ready" && selected && selected.contact_id !== state.selectedId) dispatch({ type: "pin", id: selected.contact_id });
   }, [state.phase, selected, state.selectedId]);
   const actor = state.role?.name ?? "Workspace user";
 

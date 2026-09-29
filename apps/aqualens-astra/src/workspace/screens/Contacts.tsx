@@ -188,6 +188,7 @@ function Row({ contact: c, selected, onPreview }: { contact: Contact; selected: 
       <td className="strong">{contactName(c)}</td>
       <td>
         <span className={c.machine ? "tag-detector" : "tag-anomaly"}>{machineLabel(c)}</span>
+        {confidenceText(c) && <span className="muted num"> · {confidenceText(c)}</span>}
       </td>
       <td>{c.analyst.classification !== "UNRESOLVED" ? <span className="analyst-label">{analystLabel(c.analyst.classification)}</span> : <span className="muted">Not classified</span>}</td>
       <td>

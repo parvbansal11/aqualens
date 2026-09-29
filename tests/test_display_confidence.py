@@ -33,25 +33,29 @@ def test_historical_mapping_is_used():
         "DEMO_BOUNDED_SIGMOID_V1", .70, .90, 28.0, .3139777305538386)
     for raw in GRID:
         fields = display_confidence_fields({"max_raw_confidence": raw})
-        fused = fuse_contact_confidence({"max_raw_confidence": raw})["raw_fused_confidence"]
-        assert fields["raw_fused_confidence"] == pytest.approx(fused)
-        assert fields["display_confidence"] == pytest.approx(normalize_demo_confidence(fused))
-        assert fields["display_confidence"] == pytest.approx(historical(fused))
-        assert fields["display_confidence_method"] == "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1"
+        # The historical function with its historical parameters, applied to the raw detector score.
+        assert fields["display_confidence"] == pytest.approx(normalize_demo_confidence(raw))
+        assert fields["display_confidence"] == pytest.approx(historical(raw))
+        assert fields["display_confidence_method"] == "DEMO_BOUNDED_SIGMOID_V1 over raw_detector_score"
+        # The fused evidence value stays available for audit.
+        assert fields["raw_fused_confidence"] == pytest.approx(fuse_contact_confidence({"max_raw_confidence": raw})["raw_fused_confidence"])
 
 
-def test_deterministic_monotonic_and_bounded():
+def test_deterministic_strictly_monotonic_and_bounded():
     values = [display_confidence_fields({"max_raw_confidence": raw})["display_confidence"] for raw in GRID]
     assert values == [display_confidence_fields({"max_raw_confidence": raw})["display_confidence"] for raw in GRID]
-    assert all(b >= a for a, b in zip(values, values[1:]))
+    assert all(b > a for a, b in zip(values, values[1:]))
     assert all(0.70 <= v <= 0.90 for v in values)
 
 
-def test_runtime_value_is_reused_not_recomputed():
-    runtime = {"max_raw_confidence": 0.18, "raw_fused_confidence": 0.2559, "normalized_confidence": 0.7329,
-               "confidence_normalization": "DEMO_BOUNDED_SIGMOID_V1", "confidence_method": "CONTACT_EVIDENCE_FUSION_V1"}
-    assert display_confidence_fields(runtime) == {"display_confidence": 0.7329, "raw_fused_confidence": 0.2559,
-        "display_confidence_method": "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1"}
+def test_same_raw_score_same_display_whatever_the_other_evidence():
+    """Regression: fused-evidence normalization showed raw 0.2655 as 0.812 but raw 0.2657 as 0.788."""
+    a = display_confidence_fields({"max_raw_confidence": 0.27, "raw_fused_confidence": 0.20, "acoustic_shadow_support": 0.9})
+    b = display_confidence_fields({"max_raw_confidence": 0.27, "raw_fused_confidence": 0.45, "quality_score": 0.1})
+    assert a["display_confidence"] == b["display_confidence"]
+    lower = display_confidence_fields({"max_raw_confidence": 0.2655, "raw_fused_confidence": 0.33})["display_confidence"]
+    higher = display_confidence_fields({"max_raw_confidence": 0.2657, "raw_fused_confidence": 0.29})["display_confidence"]
+    assert higher > lower
 
 
 @pytest.fixture()
@@ -78,8 +82,8 @@ def test_real_survey_contacts_expose_raw_and_display(client):
     for contact in contacts:
         machine = contact["machine"]
         assert machine["raw_detector_score"] == .42  # the detector's own score, unchanged
-        assert 0.70 <= machine["display_confidence"] <= 0.90
-        assert machine["display_confidence_method"] == "DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1"
+        assert machine["display_confidence"] == pytest.approx(historical(.42))
+        assert machine["display_confidence_method"] == "DEMO_BOUNDED_SIGMOID_V1 over raw_detector_score"
         assert contact["evidence"]["detector"]["values"]["raw_detector_score"] == .42
         detail = client.get(f"/api/v1/contacts/{contact['contact_id']}").json()["machine"]
         assert detail["raw_detector_score"] == .42 and detail["display_confidence"] == machine["display_confidence"]
@@ -124,10 +128,25 @@ def test_contacts_stored_before_display_confidence_are_backfilled_once(client, t
     db.commit()
     restarted = TestClient(create_app(ROOT))
     machine = restarted.get(f"/api/v1/contacts/{identifier}").json()["machine"]
-    assert machine["display_confidence"] == pytest.approx(expected)  # the run's own value, restored
+    assert machine["display_confidence"] == pytest.approx(expected)
     assert machine["raw_detector_score"] == .42
     again = TestClient(create_app(ROOT)).get(f"/api/v1/contacts/{identifier}").json()["machine"]
     assert again == machine
+
+
+def test_values_from_the_previous_fused_method_are_rederived_from_raw(client, tmp_path):
+    import json, sqlite3
+    mission = _upload(client)
+    db = sqlite3.connect(tmp_path / "runtime" / "reviews.sqlite3")
+    (identifier, payload), = db.execute("SELECT id, payload FROM product_records WHERE kind='contact' AND mission_id=?", (mission,)).fetchall()
+    contact = json.loads(payload)
+    contact["machine"].update(display_confidence=0.6, display_confidence_method="DEMO_BOUNDED_SIGMOID_V1 over CONTACT_EVIDENCE_FUSION_V1")
+    db.execute("UPDATE product_records SET payload=? WHERE id=?", (json.dumps(contact), identifier))
+    db.commit()
+    machine = TestClient(create_app(ROOT)).get(f"/api/v1/contacts/{identifier}").json()["machine"]
+    assert machine["display_confidence"] == pytest.approx(historical(.42))
+    assert machine["display_confidence_method"] == "DEMO_BOUNDED_SIGMOID_V1 over raw_detector_score"
+    assert machine["raw_detector_score"] == .42
 
 
 def test_scientific_harness_reads_raw_scores_only():

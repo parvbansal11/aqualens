@@ -41,28 +41,31 @@ def now():
 def error(code, message, status=404):
     return HTTPException(status, {'error': {'code': code, 'message': message, 'detail': {}}})
 
+DISPLAY_CONFIDENCE_METHOD = 'DEMO_BOUNDED_SIGMOID_V1 over raw_detector_score'
+
+
 def display_confidence_fields(runtime_contact: dict) -> dict:
     """Product presentation confidence for one Contact, from the historical SagarDrishti mapping.
 
-    ``sagar.vnext.fuse_contact_confidence`` fuses the Contact's available evidence (weighted
-    noisy-OR, CONTACT_EVIDENCE_FUSION_V1) and normalizes the result with
-    ``normalize_demo_confidence`` (DEMO_BOUNDED_SIGMOID_V1: 0.70 + 0.20 * sigmoid(28 * (x - 0.3140))).
-    A runtime Contact already carries that result from processing and it is reused unchanged;
-    otherwise the same function computes it from the fields given. The raw detector score is
+    The function is the historical ``sagar.vnext.normalize_demo_confidence`` with its historical
+    parameters (DEMO_BOUNDED_SIGMOID_V1: 0.70 + 0.20 * sigmoid(28 * (x - 0.3140))). It is applied to
+    the Contact's raw detector score, so the displayed value is a pure, strictly monotonic function
+    of that score: the same raw score always shows the same confidence, and a higher raw score never
+    shows lower. (Historically it was applied to the fused evidence value, which is not monotonic in
+    the raw score; that value is kept as ``raw_fused_confidence`` for audit.) The raw score itself is
     never modified, and scientific paths never read this value.
     """
-    from sagar.vnext import fuse_contact_confidence
+    from sagar.vnext import fuse_contact_confidence, normalize_demo_confidence
 
-    normalized = runtime_contact.get('normalized_confidence')
+    raw = runtime_contact.get('max_raw_confidence')
+    if raw is None:
+        raw = runtime_contact.get('raw_detector_confidence')
+    raw = max(0.0, min(1.0, float(raw)))
     fused = runtime_contact.get('raw_fused_confidence')
-    normalization = runtime_contact.get('confidence_normalization')
-    method = runtime_contact.get('confidence_method')
-    if normalized is None or fused is None:
-        result = fuse_contact_confidence(runtime_contact)
-        normalized, fused = result['normalized_confidence'], result['raw_fused_confidence']
-        normalization, method = result['confidence_normalization'], result['confidence_method']
-    return {'display_confidence': float(normalized), 'raw_fused_confidence': float(fused),
-            'display_confidence_method': f"{normalization or 'DEMO_BOUNDED_SIGMOID_V1'} over {method or 'CONTACT_EVIDENCE_FUSION_V1'}"}
+    if fused is None:
+        fused = fuse_contact_confidence(runtime_contact)['raw_fused_confidence']
+    return {'display_confidence': normalize_demo_confidence(raw), 'raw_fused_confidence': float(fused),
+            'display_confidence_method': DISPLAY_CONFIDENCE_METHOD}
 
 
 def validate_runtime_root(runtime_root: Path, project_root: Path | None = None):
@@ -170,11 +173,11 @@ class ProductService:
         self.demo = ProductRepository(runtime_root / 'demo' / 'product.sqlite3')
 
     def backfill_display_confidence(self, runtime_surveys):
-        """Give Contacts stored before display confidence existed their value, once.
+        """Give stored Contacts the current display confidence, once per method version.
 
-        Real Contacts reuse the value their processing run already computed (runtime survey
-        records); demo Contacts use the same function on their fixture detector score. Only the
-        ``machine`` presentation fields are added; raw scores, analyst state and history are untouched.
+        Every Contact, real or demo, is derived with the same function from its own stored raw
+        detector score; the runtime record supplies the fused evidence kept for audit. Only the
+        ``machine`` presentation fields change; raw scores, analyst state and history are untouched.
         """
         runtime = {c.get('contact_id'): c for record in runtime_surveys.values() for c in record.get('contacts', [])}
         updated = 0
@@ -185,9 +188,10 @@ class ProductService:
                 for identifier, mission_id, payload in rows:
                     contact = json.loads(payload)
                     machine = contact.get('machine')
-                    if not machine or machine.get('display_confidence') is not None:
+                    if not machine or machine.get('display_confidence_method') == DISPLAY_CONFIDENCE_METHOD:
                         continue
-                    source = runtime.get(identifier) or {'max_raw_confidence': machine['raw_detector_score']}
+                    # The raw score on the record is the source of truth for the displayed value.
+                    source = {**(runtime.get(identifier) or {}), 'max_raw_confidence': machine['raw_detector_score']}
                     fields = display_confidence_fields(source)
                     machine.update(fields)
                     detector = (contact.get('evidence') or {}).get('detector') or {}

@@ -62,7 +62,7 @@ function Machine({ contact }: { contact: Contact }) {
               <span className="machine__score-value">{confidenceText(contact) ?? m.raw_detector_score.toFixed(2)}</span>
             </div>
           </div>
-          <p className="insp__note">Confidence from this Contact's evidence. Not a calibrated probability.</p>
+          <p className="insp__note">Product display confidence. Not a calibrated probability.</p>
           <details className="insp__tech">
             <summary>Technical details</summary>
             <dl>
@@ -70,16 +70,23 @@ function Machine({ contact }: { contact: Contact }) {
                 <dt>Raw detector score</dt>
                 <dd className="mono">{m.raw_detector_score.toFixed(4)}</dd>
               </div>
+              {m.display_confidence != null && (
+                <div>
+                  <dt>Display confidence</dt>
+                  <dd className="mono">{m.display_confidence.toFixed(4)}</dd>
+                </div>
+              )}
+              <div>
+                <dt>Display mapping</dt>
+                <dd>
+                  Historical product normalization
+                  {m.display_confidence_method && <span className="mono"> ({m.display_confidence_method})</span>}
+                </dd>
+              </div>
               {m.raw_fused_confidence != null && (
                 <div>
                   <dt>Fused evidence</dt>
                   <dd className="mono">{m.raw_fused_confidence.toFixed(4)}</dd>
-                </div>
-              )}
-              {m.display_confidence_method && (
-                <div>
-                  <dt>Display method</dt>
-                  <dd className="mono">{m.display_confidence_method}</dd>
                 </div>
               )}
             </dl>

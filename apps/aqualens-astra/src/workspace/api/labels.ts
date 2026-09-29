@@ -92,3 +92,6 @@ export const shortTime = (iso: string | null | undefined) => {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 };
+
+/** Where the service runs, as the backend reports it (/system/provenance deployment). */
+export const DEPLOYMENT_LABEL: Record<string, string> = { LOCAL_WORKSTATION: "Local workstation", HOSTED_SERVICE: "Hosted service" };

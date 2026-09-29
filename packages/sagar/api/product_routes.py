@@ -8,7 +8,7 @@ import subprocess
 from typing import Literal
 from fastapi import APIRouter, File, Query, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
-from sagar.api.product import CLASSES, LIMITATIONS, MODEL_ID, capabilities, error, render_html
+from sagar.api.product import CLASSES, LIMITATIONS, MODEL_ID, capabilities, deployment_mode, error, render_html
 from sagar.api.product_models import (AnalystClass, Contact, ClassificationInput,
     NoteInput, Priority, PriorityInput, ReviewInput, ReviewEvent, MapResponse, MissionReport)
 
@@ -38,7 +38,7 @@ def install_product_routes(app, store, upload_handler):
         health = store.runtime.health()
         recovery = store.runtime.shipwreck_recovery
         return {'product': 'Aqualens', 'model_id': MODEL_ID, 'model_sha': health['model_sha256'],
-            'deployment': 'LOCAL_WORKSTATION', 'scientific_mode': not recovery, 'shipwreck_recovery': recovery,
+            'deployment': deployment_mode(), 'scientific_mode': not recovery, 'shipwreck_recovery': recovery,
             'shipwreck_recovery_invocations': store.runtime.recovery_invocations,
             'build_version': build, 'source_files_sha256': source_digests,
             'association_policy': 'contact_fusion@v1.1_point_target_guard', 'working_tree_modified_at_start': dirty, 'api_version': '0.2.0',

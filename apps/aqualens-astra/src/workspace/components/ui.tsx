@@ -125,7 +125,7 @@ export function Empty({ title, children, action }: { title: string; children: Re
   );
 }
 
-/** Restrained placeholder while the local service answers. */
+/** Restrained placeholder while the Aqualens service answers. */
 export function Skeleton({ lines = 3, wide = false }: { lines?: number; wide?: boolean }) {
   return (
     <div className={`skeleton ${wide ? "skeleton--wide" : ""}`} aria-hidden="true">

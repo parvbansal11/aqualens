@@ -32,7 +32,7 @@ const STATUS: Record<CapabilityStatus, string> = {
   NOT_APPLICABLE: "Not applicable",
 };
 const AVAIL: Record<EvidenceStatus, string> = { AVAILABLE: "Available", UNAVAILABLE: "Unavailable", NOT_VALIDATED: "Not yet validated", NOT_APPLICABLE: "Off", FAILED: "Failed evaluation" };
-const MODE: Record<string, string> = { ANALYST_ONLY: "Analyst only", CONDITIONAL: "Per Contact", OFF: "Off", ON: "On", LOCAL_WORKSTATION: "Local workstation" };
+const MODE: Record<string, string> = { ANALYST_ONLY: "Analyst only", CONDITIONAL: "Per Contact", OFF: "Off", ON: "On", LOCAL_WORKSTATION: "Local workstation", HOSTED_SERVICE: "Hosted service" };
 
 export function System() {
   const { state, refreshSystem } = useStore();
@@ -52,7 +52,7 @@ export function System() {
             </button>
           }
         >
-          Aqualens could not reach the local processing service.
+          Aqualens could not reach the Aqualens processing service.
         </Empty>
       );
     return (
@@ -78,7 +78,7 @@ export function System() {
       <header className="page__head">
         <p className="page__eyebrow">System details</p>
         <h1 className="page__title">What produced this evidence</h1>
-        <p className="page__lede">Read live from the local Aqualens service. Readiness says the service can run; capability says what the science supports today.</p>
+        <p className="page__lede">Read live from the Aqualens service. Readiness says the service can run; capability says what the science supports today.</p>
       </header>
 
       <section className="block" aria-labelledby="sys-ready">
@@ -94,7 +94,7 @@ export function System() {
           ))}
         </ul>
         <p className="muted small">
-          {r?.status === "READY" ? "Local system ready." : "Local system not ready."} {r?.detector_loaded ? "Detector loaded." : "The detector loads on first inference."} {API_BASE}
+          {r?.status === "READY" ? "System ready." : "System not ready."} {r?.detector_loaded ? "Detector loaded." : "The detector loads on first inference."} {API_BASE}
         </p>
       </section>
 
@@ -194,7 +194,7 @@ export function System() {
           </div>
           <div>
             <dt>People</dt>
-            <dd>Names in history are declared by the working view. This workstation has no sign-in.</dd>
+            <dd>Names in history are declared by the working view. This deployment has no sign-in.</dd>
           </div>
           <div>
             <dt>Build</dt>

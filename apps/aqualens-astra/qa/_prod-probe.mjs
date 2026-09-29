@@ -1,0 +1,15 @@
+import puppeteer from "puppeteer-core";
+const WEB = "https://aqualens-web.vercel.app", API = "https://aqualens-api.onrender.com/api/v1";
+const b = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new" });
+const p = await b.newPage(); await p.setViewport({ width: 1440, height: 900 });
+const reqs = []; p.on("request", (r) => r.url().startsWith(API) && reqs.push(r)); const errs = []; p.on("console", (m) => m.type() === "error" && errs.push(m.text()));
+const t0 = Date.now();
+await p.goto(WEB + "/workspace", { waitUntil: "networkidle2" });
+await (await p.$('.intake input[type="file"]')).uploadFile(process.argv[2]);
+await new Promise((r) => setTimeout(r, 400));
+await p.evaluate(() => [...document.querySelectorAll(".intake__actions .btn--primary")].find((x) => x.textContent.includes("Process"))?.click());
+await p.waitForFunction(() => !!document.querySelector(".ready__facts") || !!document.querySelector(".drop.is-failed"), { timeout: 600000 });
+await new Promise((r) => setTimeout(r, 800));
+const up = reqs.find((r) => r.method() === "POST" && /\/uploads$/.test(r.url()));
+console.log(JSON.stringify({ seconds: ((Date.now() - t0) / 1000).toFixed(1), state: await p.evaluate(() => document.querySelector(".drop__state")?.textContent), facts: await p.evaluate(() => document.querySelector(".ready__facts")?.innerText.replace(/\n/g, " ")), upload: up?.url().split("/api/v1")[1], status: up?.response()?.status(), errors: errs }));
+await b.close();

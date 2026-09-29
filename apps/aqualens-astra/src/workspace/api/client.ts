@@ -42,12 +42,12 @@ const HUMAN: Record<string, string> = {
   DUPLICATE_UPLOAD: "This exact file is already part of the mission.",
   REPORT_NOT_READY: "The report waits until every upload has finished processing.",
   VALIDATION_FAILED: "The request was not accepted. Check the file or the values and try again.",
-  UPLOAD_TOO_LARGE: "The file is larger than this workstation accepts.",
+  UPLOAD_TOO_LARGE: "The file is larger than this deployment accepts.",
   UNREADABLE_BUNDLE: "The bundle could not be read.",
   UNREADABLE_RASTER: "The image could not be read as sonar.",
   UNSAFE_ARCHIVE: "The bundle contains unsafe paths and was not opened.",
   DUPLICATE_ARCHIVE_NAME: "The bundle repeats a file name.",
-  INTERNAL_ERROR: "Something went wrong in the local service.",
+  INTERNAL_ERROR: "Something went wrong in the Aqualens service.",
 };
 
 const UNCONFIGURED = () => new ApiFailure("No Aqualens service is configured for this deployment.", "OFFLINE", null, true);
@@ -58,11 +58,11 @@ async function request<T>(path: string, init: RequestInit = {}, { raw = false } 
   try {
     response = await fetch(`${API_BASE}${path}`, { ...init, headers: { Accept: "application/json", ...(init.headers ?? {}) } });
   } catch {
-    throw new ApiFailure("Aqualens could not reach the local processing service.", "OFFLINE", null, true);
+    throw new ApiFailure("Aqualens could not reach the Aqualens processing service.", "OFFLINE", null, true);
   }
   if (!response.ok) {
     let code = "HTTP_" + response.status;
-    let message = response.status === 404 ? "That record was not found." : "The local service could not complete this request.";
+    let message = response.status === 404 ? "That record was not found." : "The Aqualens service could not complete this request.";
     try {
       const body = await response.json();
       if (body?.error?.code) {
@@ -97,7 +97,7 @@ export const api = {
     try {
       response = await fetch(`${API_BASE}/readiness`);
     } catch {
-      throw new ApiFailure("Aqualens could not reach the local processing service.", "OFFLINE", null, true);
+      throw new ApiFailure("Aqualens could not reach the Aqualens processing service.", "OFFLINE", null, true);
     }
     return response.json();
   },

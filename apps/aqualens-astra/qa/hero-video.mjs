@@ -13,7 +13,7 @@ const R = []; const ck = (l, ok, i = "") => R.push(`${ok ? "PASS" : "FAIL"} ${l}
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const v = () => p.evaluate(() => { const e = document.querySelector(".cl-ocean video"); return e && { paused: e.paused, t: +e.currentTime.toFixed(2), src: e.currentSrc.split("/").pop(), muted: e.muted, loop: e.loop, inline: e.playsInline, auto: e.autoplay }; });
 const btn = (label) => p.evaluate((label) => { const b = [...document.querySelectorAll(".cl-text-button")].find((x) => x.textContent.includes(label)); b?.click(); return !!b; }, label);
-await p.goto("http://127.0.0.1:5320/", { waitUntil: "networkidle2" });
+await p.goto((process.env.AQUALENS_WEB ?? "http://127.0.0.1:5320") + "/", { waitUntil: "networkidle2" });
 await wait(1500);
 const a = await v(); ck("A starts automatically", a && !a.paused && a.t > 0 && a.muted && a.loop && a.inline && a.auto, JSON.stringify(a));
 // B: sample through the first natural end (16.37s) without seeking.

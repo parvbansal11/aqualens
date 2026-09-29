@@ -128,7 +128,7 @@ export function MissionScreen() {
         <section className="block" aria-labelledby="m-jobs">
           <div className="block__head">
             <h2 id="m-jobs">Processing</h2>
-            <p>Observed job states from the local service. Nothing is estimated.</p>
+            <p>Observed job states from the Aqualens service. Nothing is estimated.</p>
           </div>
           {state.jobs.length === 0 ? (
             <p className="muted">No processing runs yet.</p>
@@ -190,7 +190,7 @@ function UploadPanel({ missionId }: { missionId: string }) {
     <section className="block upload" aria-labelledby="m-upload">
       <div className="block__head">
         <h2 id="m-upload">Add sonar</h2>
-        <p>PNG, JPEG or PBM rasters, or a prepared ZIP bundle. Processing starts on the local service when the file is accepted.</p>
+        <p>PNG, JPEG or PBM rasters, or a prepared ZIP bundle. Processing starts on the Aqualens service when the file is accepted.</p>
       </div>
       <div className="row gap">
         <input

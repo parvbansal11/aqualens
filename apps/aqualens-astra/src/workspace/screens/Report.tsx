@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useStore, contactName } from "../state/store";
 import { api, ApiFailure } from "../api/client";
 import type { Contact, EvidenceKey, MissionReport } from "../api/types";
-import { analystLabel, AVAILABILITY_LABEL, CLASS_LABEL, displayName, EVIDENCE_LABEL, MEMBERSHIP, navLabel, PRIORITY_LABEL, shortTime, STATUS_LABEL } from "../api/labels";
+import { analystLabel, AVAILABILITY_LABEL, CLASS_LABEL, DEPLOYMENT_LABEL, displayName, EVIDENCE_LABEL, MEMBERSHIP, navLabel, PRIORITY_LABEL, shortTime, STATUS_LABEL } from "../api/labels";
 import { DemoTag, Empty, Icon, Skeleton } from "../components/ui";
 
 const SECTIONS = [
@@ -101,7 +101,7 @@ export function Report() {
             <p className="paper__sub">
               {report.demo
                 ? "Deterministic demonstration. Detector scores and positions in this report are fixture values, not survey evidence."
-                : "Generated from the local Aqualens service. Analyst verdicts are human judgements recorded with their history."}
+                : "Generated from the Aqualens service. Analyst verdicts are human judgements recorded with their history."}
             </p>
             <p className="paper__context">
               Snapshot {report.report_id.slice(-8)} · generated {shortTime(report.generated_at)}. Prepared in the context of Smart India Hackathon 2026, Problem Statement 26057.
@@ -268,7 +268,7 @@ export function Report() {
                   <th>Shipwreck recovery</th>
                   <td>{p.shipwreck_recovery ? "Enabled" : "Disabled"}</td>
                   <th>Deployment</th>
-                  <td>{p.deployment === "LOCAL_WORKSTATION" ? "Local workstation" : p.deployment}</td>
+                  <td>{DEPLOYMENT_LABEL[p.deployment] ?? p.deployment}</td>
                 </tr>
                 <tr>
                   <th>Association</th>

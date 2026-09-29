@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import "./styles/workspace.css";
-import { ACTION_LABEL, analystHint, analystLabel, displayName, PRIORITY_LABEL, shortTime, STATUS_LABEL } from "./api/labels";
+import { ACTION_LABEL, analystHint, analystLabel, DEPLOYMENT_LABEL, displayName, PRIORITY_LABEL, shortTime, STATUS_LABEL } from "./api/labels";
 import { API_BASE } from "./api/config";
 import type { Analyst, ReviewEvent } from "./api/types";
 import { hrefFor, navigate, useRoute, withTransition, type Screen } from "./router";
@@ -142,7 +142,7 @@ function Body({ screen }: { screen: Screen }) {
           </button>
         }
       >
-        {state.problem ?? "Aqualens could not reach the local processing service."}
+        {state.problem ?? "Aqualens could not reach the Aqualens processing service."}
       </Empty>
     );
   if (state.phase === "no-mission" && screen !== "home") return <Home />;
@@ -314,7 +314,7 @@ function Toolbar({ screen, theme }: { screen: Screen; theme: "dark" | "light" })
                   </span>
                   <span>System details</span>
                 </button>
-                <p className="menu__note">Roles change emphasis only. There is no sign-in on this workstation.</p>
+                <p className="menu__note">Roles change emphasis only. There is no sign-in on this deployment.</p>
               </div>
             </>
           )}
@@ -361,7 +361,7 @@ export function MissionChoices({ onDone }: { onDone?: () => void }) {
 function SystemState() {
   const { state, dispatch } = useStore();
   const ready = state.online && state.readiness?.status === "READY";
-  const label = !state.online ? "Service unavailable" : !state.readiness ? "Checking service" : ready ? "Local system ready" : "Local system not ready";
+  const label = !state.online ? "Service unavailable" : !state.readiness ? "Checking service" : ready ? "System ready" : "System not ready";
   return (
     <button className={`sys-state ${ready ? "is-ready" : state.online ? "is-partial" : "is-off"}`} onClick={() => dispatch({ type: "modal", modal: "status" })} aria-label={`${label}. Show service details`}>
       <i aria-hidden="true" />
@@ -589,7 +589,7 @@ function StatusSheet({ onClose }: { onClose: () => void }) {
   const { state, refreshSystem } = useStore();
   const r = state.readiness;
   const rows: [string, boolean | undefined, string][] = [
-    ["API", state.online ? r?.services.api : false, "Local Aqualens service"],
+    ["API", state.online ? r?.services.api : false, "Aqualens service"],
     ["Database", r?.services.database, "Missions, Contacts and review history"],
     ["Storage", r?.services.storage, "Uploads and runtime records"],
     ["Detector", r?.services.detector, r ? (r.detector_loaded ? "Frozen detector loaded" : "Frozen detector present; it loads on first inference") : ""],
@@ -597,7 +597,7 @@ function StatusSheet({ onClose }: { onClose: () => void }) {
   ];
   return (
     <Sheet
-      title="Local system"
+      title="System status"
       onClose={onClose}
       actions={
         <>
@@ -617,9 +617,9 @@ function StatusSheet({ onClose }: { onClose: () => void }) {
       }
     >
       {!state.online ? (
-        <p className="sheet__lede">Aqualens could not reach the local processing service at {API_BASE}.</p>
+        <p className="sheet__lede">Aqualens could not reach the Aqualens processing service at {API_BASE}.</p>
       ) : (
-        <p className="sheet__lede">Service checks from the local workstation. Readiness is not a measure of scientific validity.</p>
+        <p className="sheet__lede">Service checks from the Aqualens API. Readiness is not a measure of scientific validity.</p>
       )}
       <ul className="svc">
         {rows.map(([name, ok, detail]) => (
@@ -632,7 +632,7 @@ function StatusSheet({ onClose }: { onClose: () => void }) {
       </ul>
       {state.provenance && (
         <p className="muted small">
-          {state.provenance.deployment === "LOCAL_WORKSTATION" ? "Local workstation" : state.provenance.deployment} · API {state.provenance.api_version}
+          {DEPLOYMENT_LABEL[state.provenance.deployment] ?? state.provenance.deployment} · API {state.provenance.api_version}
         </p>
       )}
     </Sheet>

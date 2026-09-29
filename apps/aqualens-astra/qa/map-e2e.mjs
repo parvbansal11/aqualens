@@ -6,8 +6,8 @@ import { execFileSync } from "node:child_process";
 
 const [size = "1440x900"] = process.argv.slice(2);
 const [width, height] = size.split("x").map(Number);
-const BASE = "http://127.0.0.1:5320";
-const API = "http://127.0.0.1:8000/api/v1";
+const BASE = process.env.AQUALENS_WEB ?? "http://127.0.0.1:5320";
+const API = process.env.AQUALENS_API ?? "http://127.0.0.1:8000/api/v1";
 const PY = process.env.AQUALENS_PYTHON ?? "python3"; // needs Pillow
 const out = new URL(`./out/map-${size}/`, import.meta.url).pathname;
 fs.rmSync(out, { recursive: true, force: true });

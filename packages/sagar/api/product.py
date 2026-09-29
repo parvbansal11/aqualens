@@ -5,6 +5,7 @@ imported implicitly: only uploads attached to a product Mission enter this store
 """
 from __future__ import annotations
 import fcntl
+import os
 import html
 import json
 import logging
@@ -333,6 +334,15 @@ def render_html(report):
     return '<!doctype html><html><head><meta charset="utf-8"><title>Aqualens report</title></head><body><h1>' + html.escape(report['label']) + '</h1><pre>' + html.escape(json.dumps(report, indent=2, ensure_ascii=False)) + '</pre></body></html>'
 
 
+def deployment_mode():
+    """Where this service runs, reported truthfully. Render sets RENDER=true on every service;
+    AQUALENS_DEPLOYMENT overrides for other hosts."""
+    declared = os.environ.get('AQUALENS_DEPLOYMENT', '').strip().upper()
+    if declared in ('HOSTED_SERVICE', 'LOCAL_WORKSTATION'):
+        return declared
+    return 'HOSTED_SERVICE' if os.environ.get('RENDER') else 'LOCAL_WORKSTATION'
+
+
 def capabilities(detector_ready, shipwreck_recovery=False):
     def cap(status, availability, reason, **kwargs):
         return Capability(status=status, availability=availability, reason=reason, **kwargs).model_dump(mode='json')
@@ -354,5 +364,6 @@ def capabilities(detector_ready, shipwreck_recovery=False):
         'persistence': cap('IMPLEMENTED_NOT_VALIDATED', 'AVAILABLE', 'Conditional per Contact: verified PIPELINE continuity only; no point-target adjacency inference', mode='CONDITIONAL'),
         'navigation': cap('IMPLEMENTED_NOT_VALIDATED', 'AVAILABLE', 'Source platform context only; contact localization unavailable without defensible geometry', mode='CONDITIONAL'),
         'reporting': cap('IMPLEMENTED_NOT_VALIDATED', 'AVAILABLE', 'Structured JSON and escaped HTML with limitations'),
-        'deployment': cap('IMPLEMENTED_NOT_VALIDATED', 'AVAILABLE', 'Local workstation; no enterprise authentication', mode='LOCAL_WORKSTATION'),
+        'deployment': cap('IMPLEMENTED_NOT_VALIDATED', 'AVAILABLE',
+            ('Hosted service' if deployment_mode() == 'HOSTED_SERVICE' else 'Local workstation') + '; no enterprise authentication', mode=deployment_mode()),
     }

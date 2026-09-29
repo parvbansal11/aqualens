@@ -7,8 +7,8 @@ import crypto from "node:crypto";
 import path from "node:path";
 
 const [raster, syntheticZip] = process.argv.slice(2);
-const BASE = "http://127.0.0.1:5320";
-const API = "http://127.0.0.1:8000/api/v1";
+const BASE = process.env.AQUALENS_WEB ?? "http://127.0.0.1:5320";
+const API = process.env.AQUALENS_API ?? "http://127.0.0.1:8000/api/v1";
 const out = new URL("./out/demo-contamination/", import.meta.url).pathname;
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });

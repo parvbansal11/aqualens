@@ -252,3 +252,12 @@ def test_demo_reset_refuses_live_backend(client):
         cwd=ROOT, env={**os.environ, 'PYTHONPATH': str(ROOT / 'packages')}, capture_output=True, text=True)
     assert result.returncode != 0
     assert 'Stop the backend' in result.stderr
+
+
+def test_deployment_is_reported_truthfully(client, monkeypatch):
+    monkeypatch.delenv('RENDER', raising=False)
+    monkeypatch.delenv('AQUALENS_DEPLOYMENT', raising=False)
+    assert client.get('/api/v1/system/provenance').json()['deployment'] == 'LOCAL_WORKSTATION'
+    monkeypatch.setenv('RENDER', 'true')
+    assert client.get('/api/v1/system/provenance').json()['deployment'] == 'HOSTED_SERVICE'
+    assert client.get('/api/v1/system/capabilities').json()['deployment']['mode'] == 'HOSTED_SERVICE'

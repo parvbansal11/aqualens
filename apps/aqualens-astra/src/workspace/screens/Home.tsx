@@ -126,9 +126,9 @@ export function Home() {
 
       <footer className="home__foot">
         {mission.demo ? (
-          <span>Deterministic demo mission from the local Aqualens service. Its detector scores and positions are fixture values, not survey evidence.</span>
+          <span>Deterministic demo mission from the Aqualens service. Its detector scores and positions are fixture values, not survey evidence.</span>
         ) : (
-          <span>Created {shortTime(mission.created_at)}. Records from the local Aqualens service.</span>
+          <span>Created {shortTime(mission.created_at)}. Records from the Aqualens service.</span>
         )}
       </footer>
     </div>

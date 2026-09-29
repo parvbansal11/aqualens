@@ -9,7 +9,7 @@ import { useStore } from "../state/store";
 
 /**
  * Survey Intake, the real-mode entry. Selecting a file only selects it. Nothing is called ingested
- * until the local service has accepted and decoded it, and nothing is called ready until its
+ * until the Aqualens service has accepted and decoded it, and nothing is called ready until its
  * processing job reports COMPLETED. Every state shown after selection comes from the backend.
  */
 
@@ -123,7 +123,7 @@ export function Start() {
         setJob(current);
         writePending(null);
         if (current.state === "FAILED") {
-          setProblem({ title: "Processing failed", message: current.error?.message ?? "The local service could not process this survey.", retry: false });
+          setProblem({ title: "Processing failed", message: current.error?.message ?? "The Aqualens service could not process this survey.", retry: false });
           setPhase("failed");
           return;
         }
@@ -223,7 +223,7 @@ export function Start() {
 
       <main className="intake__main">
         <h1 className="intake__title">Start with survey data.</h1>
-        <p className="intake__lede">Choose a side-scan sonar raster or a survey bundle. It is processed by the local Aqualens service.</p>
+        <p className="intake__lede">Choose a side-scan sonar raster or a survey bundle. It is processed by the Aqualens service.</p>
 
         <input
           ref={input}
@@ -279,7 +279,7 @@ export function Start() {
                 </p>
                 <p className="drop__state" role="status" aria-live="polite">
                   {phase === "selected" && "Selected · ready to process"}
-                  {phase === "uploading" && "Uploading to the local service"}
+                  {phase === "uploading" && "Uploading to the Aqualens service"}
                   {phase === "processing" && (ingested ? "Survey ingested · processing" : "Received · waiting for the processing job")}
                   {phase === "ready" && "Processed · survey ready"}
                   {phase === "failed" && problem?.title}
@@ -310,7 +310,7 @@ export function Start() {
           )}
         </section>
 
-        {offline && <p className="intake__problem" role="alert">The local Aqualens service is not reachable. Start it, then try again.</p>}
+        {offline && <p className="intake__problem" role="alert">The Aqualens service is not reachable. Check that it is running, then try again.</p>}
 
         {phase === "selected" && (
           <div className="intake__actions">
@@ -391,7 +391,7 @@ function Ready({ missionId, job, onContinue }: { missionId: string; job: Job | n
   if (!loaded)
     return (
       <p className="intake__lede" aria-busy="true">
-        Opening the mission from the local service.
+        Opening the mission from the Aqualens service.
       </p>
     );
   const notes = stepsOf(job).filter((s) => (s.state === "skipped" || s.state === "unavailable") && s.detail);
@@ -467,7 +467,7 @@ function Previous() {
     <section className="previous" aria-labelledby="previous-title">
       <div className="previous__head">
         <h2 id="previous-title">Previous surveys</h2>
-        <span>{missions.length ? `${missions.length} mission${missions.length === 1 ? "" : "s"} on the local service` : ""}</span>
+        <span>{missions.length ? `${missions.length} mission${missions.length === 1 ? "" : "s"} on the Aqualens service` : ""}</span>
       </div>
       {missions.length === 0 ? (
         <p className="previous__none">No surveys yet. Your first upload will appear here.</p>

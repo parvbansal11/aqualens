@@ -307,6 +307,17 @@ function SceneDetect() {
   );
 }
 
+/**
+ * Verify scene layout, in fixed horizontal zones so no text shares space with another:
+ * image 0..700, marker labels on MARK_LABEL_Y with their bars on MARK_BAR_Y, the profile band
+ * PROFILE_TOP..PROFILE_BASE, and the descriptor on its own row, DESCRIPTOR_Y.
+ */
+const MARK_LABEL_Y = 728;
+const MARK_BAR_Y = 742;
+const PROFILE_TOP = 774;
+const PROFILE_BASE = 948;
+const DESCRIPTOR_Y = 988;
+
 /** Real pixel intensities along one row through the Viator wreck and its shadow. */
 function useProfile(row: number) {
   const [path, setPath] = useState("");
@@ -332,7 +343,8 @@ function useProfile(row: number) {
         smooth
           .map(
             (v, i) =>
-              `${i ? "L" : "M"}${((i / 721) * 1600).toFixed(1)} ${(960 - (v / 160) * 190).toFixed(1)}`,
+              // 8-bit intensity scaled into the profile band (PROFILE_TOP..PROFILE_BASE), never above it.
+              `${i ? "L" : "M"}${((i / 721) * 1600).toFixed(1)} ${(PROFILE_BASE - (Math.min(v, 255) / 255) * (PROFILE_BASE - PROFILE_TOP)).toFixed(1)}`,
           )
           .join(""),
       );
@@ -366,41 +378,24 @@ function SceneVerify() {
         y2={rowY}
       />
       <g className="verify-graph">
-        <line x1={0} x2={1600} y1={960} y2={960} className="stroke-faint" />
+        <line x1={0} x2={1600} y1={PROFILE_BASE} y2={PROFILE_BASE} className="stroke-faint" />
         <path d={profile} className="profile" pathLength={1} />
         <g className="verify-marks">
-          <line
-            x1={180 * k}
-            x2={470 * k}
-            y1={745}
-            y2={745}
-            className="stroke-bone"
-          />
-          <text x={180 * k} y={732} className="svg-label">
+          <text x={24} y={MARK_LABEL_Y} className="svg-label">
+            Seabed
+          </text>
+          <line x1={180 * k} x2={470 * k} y1={MARK_BAR_Y} y2={MARK_BAR_Y} className="stroke-bone" />
+          <text x={180 * k} y={MARK_LABEL_Y} className="svg-label">
             Acoustic shadow
           </text>
-          <line
-            x1={500 * k}
-            x2={700 * k}
-            y1={745}
-            y2={745}
-            className="stroke-amber"
-          />
-          <text x={500 * k} y={732} className="svg-label svg-label--amber">
+          <line x1={500 * k} x2={700 * k} y1={MARK_BAR_Y} y2={MARK_BAR_Y} className="stroke-amber" />
+          <text x={500 * k} y={MARK_LABEL_Y} className="svg-label svg-label--amber">
             Highlight
-          </text>
-          <text x={24} y={732} className="svg-label">
-            Seabed
           </text>
         </g>
       </g>
-      <text
-        x={1576}
-        y={732}
-        className="svg-mono svg-mono--dim"
-        textAnchor="end"
-      >
-        intensity along the amber row, measured from this image
+      <text x={24} y={DESCRIPTOR_Y} className="svg-mono svg-mono--dim">
+        Intensity along the amber row, measured from this image
       </text>
     </svg>
   );

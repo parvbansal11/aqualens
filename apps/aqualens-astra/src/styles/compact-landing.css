@@ -414,6 +414,22 @@
   cursor: pointer;
   font-size: 20px;
 }
+.cl-stage-controls .cl-autoplay {
+  width: auto;
+  min-width: 64px;
+  margin-left: 6px;
+  padding: 0 14px;
+  border-color: transparent;
+  color: var(--bone-dim);
+  font: 400 11px/1 var(--mono);
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+.cl-stage-controls .cl-autoplay:hover {
+  background: transparent;
+  color: var(--bone);
+  border-color: var(--rule-strong);
+}
 .cl-stage-controls button:disabled {
   opacity: 0.3;
   cursor: default;
@@ -806,10 +822,16 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .cl-stage-copy,
-  .cl-scene,
+  /* Only the stage text re-enters; its controls never remount. Scenes cross-fade below. */
+  .cl-stage-text,
   .cl-contact-content {
-    animation: cl-enter 0.3s ease-out both;
+    animation: cl-enter 0.45s var(--ease-out) both;
+  }
+  .cl-scene.is-entering {
+    animation: cl-scene-in 0.48s var(--ease-out) both;
+  }
+  .cl-scene.is-leaving {
+    animation: cl-scene-out 0.48s ease both;
   }
   .cl-hero-content {
     animation: cl-enter 0.8s ease-out both;
@@ -952,7 +974,7 @@
     grid-template-columns: 1fr;
     gap: 22px;
   }
-  .cl-stage-copy {
+  .cl-stage-text {
     display: grid;
     grid-template-columns: 100px 1fr;
     gap: 12px 20px;
@@ -984,7 +1006,7 @@
     min-height: 30px;
   }
   .cl-stage-controls {
-    grid-column: 1/-1;
+    margin-top: 14px;
   }
   .cl-panel-bar {
     padding: 10px;
@@ -1263,5 +1285,53 @@
   .cl-compass-anchor {
     width: 128vw;
     top: 50%;
+  }
+}
+
+/* Scenes stack so the previous one can fade out beneath the new one: no empty frame between. */
+.cl-scene-stack {
+  display: grid;
+  background: #0a0e10;
+}
+.cl-scene-stack > .cl-scene {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.cl-scene.is-leaving {
+  pointer-events: none;
+}
+@keyframes cl-scene-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@keyframes cl-scene-out {
+  to {
+    opacity: 0;
+  }
+}
+/* Time left on the current stage while the cycle runs. */
+.cl-rail-progress {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background: var(--bone);
+  transform-origin: left;
+  animation: cl-rail-fill linear both;
+}
+.cl-rail-progress.is-paused {
+  animation-play-state: paused;
+}
+@keyframes cl-rail-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cl-rail-progress {
+    display: none;
   }
 }

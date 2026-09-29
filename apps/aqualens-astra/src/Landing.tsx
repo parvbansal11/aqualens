@@ -4,6 +4,7 @@ import { SCENES, STAGES } from "./sections/PipelineScenes";
 import { Arrow } from "./sections/Arrow";
 import { Compass } from "./sections/Compass";
 import { linkTo } from "./lib/nav";
+import { AutoAdvance, HOLD_MS, nextStage, previousStage, STAGE_MS, windowClock, wrap } from "./lib/stages";
 import "./styles/compact-landing.css";
 
 const HERO_MP4 = "/media/oceaneye-hero.mp4";
@@ -270,19 +271,83 @@ function Opening() {
   );
 }
 
+/**
+ * How It Works. One stage index, always wrapped into range; controls and rail never remount, so
+ * focus and clicks survive every change; one timer advances the cycle while the section is on
+ * screen, and waits longer after a person picks a stage.
+ */
 function Pipeline() {
+  const count = STAGES.length;
   const [active, setActive] = useState(0);
+  const [held, setHeld] = useState(false);
+  const [playing, setPlaying] = useState(() => !prefersReduced());
+  const [onScreen, setOnScreen] = useState(false);
+  const [pageVisible, setPageVisible] = useState(() => !document.hidden);
+  const [leaving, setLeaving] = useState<number | null>(null);
+  const section = useRef<HTMLElement>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const Scene = SCENES[active];
-  const move = (next: number, focus = false) => {
+  const shown = useRef(0);
+  const fade = useRef<number | null>(null);
+  const cycle = useRef<AutoAdvance | null>(null);
+
+  // Exactly one auto-advance timer for the life of the section.
+  useEffect(() => {
+    cycle.current = new AutoAdvance(windowClock, () => {
+      setHeld(false);
+      setActive((a) => nextStage(a, count));
+    });
+    return () => {
+      cycle.current?.cancel();
+      cycle.current = null;
+    };
+  }, [count]);
+
+  useEffect(() => {
+    const el = section.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.35 });
+    io.observe(el);
+    const vis = () => setPageVisible(!document.hidden);
+    document.addEventListener("visibilitychange", vis);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", vis);
+    };
+  }, []);
+
+  const running = playing && onScreen && pageVisible;
+  useEffect(() => {
+    if (running) cycle.current?.schedule(held ? HOLD_MS : STAGE_MS);
+    else cycle.current?.cancel();
+  }, [active, held, running]);
+
+  // Cross-fade: the previous scene stays underneath until the new one has faded in.
+  useEffect(() => {
+    if (shown.current === active) return;
+    setLeaving(shown.current);
+    shown.current = active;
+    if (fade.current) window.clearTimeout(fade.current);
+    fade.current = window.setTimeout(() => setLeaving(null), 480);
+  }, [active]);
+  useEffect(() => () => void (fade.current && window.clearTimeout(fade.current)), []);
+
+  const go = (index: number, focus = false) => {
+    const next = wrap(index, count);
+    setHeld(true);
     setActive(next);
     if (focus) tabs.current[next]?.focus({ preventScroll: true });
   };
+
+  const Scene = SCENES[wrap(active, count)];
+  const Leaving = leaving === null ? null : SCENES[wrap(leaving, count)];
   return (
     <section
       id="method"
+      ref={section}
       className="cl-section cl-pipeline"
       aria-labelledby="method-title"
+      data-stage={active}
+      data-autoplay={running ? "running" : "paused"}
     >
       <header className="cl-section-head">
         <p className="cl-label">01 / How it works</p>
@@ -298,30 +363,31 @@ function Pipeline() {
         aria-labelledby={`stage-tab-${active}`}
         tabIndex={0}
       >
-        <div className="cl-stage-copy" key={`copy-${active}`}>
-          <div className="cl-stage-number">
-            {String(active + 1).padStart(2, "0")}
-            <span className="cl-label">/ 09</span>
+        <div className="cl-stage-copy">
+          <div className="cl-stage-text" key={`copy-${active}`} aria-live={running ? "off" : "polite"}>
+            <div className="cl-stage-number">
+              {String(active + 1).padStart(2, "0")}
+              <span className="cl-label">/ 09</span>
+            </div>
+            <h3>{STAGES[active].name}</h3>
+            <p className="cl-stage-description">{DESCRIPTIONS[active]}</p>
+            <p className="cl-yields cl-label">{STAGES[active].yields}</p>
           </div>
-          <h3>{STAGES[active].name}</h3>
-          <p className="cl-stage-description">{DESCRIPTIONS[active]}</p>
-          <p className="cl-yields cl-label">{STAGES[active].yields}</p>
           <div className="cl-stage-controls">
-            <button
-              onClick={() => move(active - 1)}
-              disabled={active === 0}
-              aria-label="Previous stage"
-            >
+            <button onClick={() => go(previousStage(active, count))} aria-label="Previous stage">
               ←
             </button>
-            <button
-              onClick={() => move(active + 1)}
-              disabled={active === 8}
-              aria-label="Next stage"
-            >
+            <button onClick={() => go(nextStage(active, count))} aria-label="Next stage">
               →
             </button>
-            <span className="cl-label">Explore the stages</span>
+            <button
+              className="cl-autoplay"
+              onClick={() => setPlaying((p) => !p)}
+              aria-pressed={!playing}
+              aria-label={playing ? "Pause automatic stage advance" : "Play automatic stage advance"}
+            >
+              {playing ? "Pause" : "Play"}
+            </button>
           </div>
         </div>
         <div className="cl-sonar-panel">
@@ -332,12 +398,18 @@ function Pipeline() {
             <span className="cl-signal" aria-hidden="true" />
           </div>
           <div
-            className="cl-scene"
-            key={active}
+            className="cl-scene-stack"
             role="img"
             aria-label={`${STAGES[active].name}: ${DESCRIPTIONS[active]} Illustrative process using real sonar imagery.`}
           >
-            <Scene />
+            {Leaving && leaving !== active && (
+              <div className="cl-scene is-leaving" key={`leaving-${leaving}`} aria-hidden="true">
+                <Leaving />
+              </div>
+            )}
+            <div className="cl-scene is-entering" key={`scene-${active}`}>
+              <Scene />
+            </div>
           </div>
           <div className="cl-panel-bar cl-panel-caption">
             <span>Real sonar. Illustrative overlays.</span>
@@ -351,13 +423,13 @@ function Pipeline() {
         aria-label="Pipeline stages"
         onKeyDown={(e) => {
           let next = active;
-          if (e.key === "ArrowRight") next = (active + 1) % 9;
-          else if (e.key === "ArrowLeft") next = (active + 8) % 9;
+          if (e.key === "ArrowRight") next = nextStage(active, count);
+          else if (e.key === "ArrowLeft") next = previousStage(active, count);
           else if (e.key === "Home") next = 0;
-          else if (e.key === "End") next = 8;
+          else if (e.key === "End") next = count - 1;
           else return;
           e.preventDefault();
-          move(next, true);
+          go(next, true);
         }}
       >
         {STAGES.map((s, i) => (
@@ -371,10 +443,18 @@ function Pipeline() {
             aria-selected={active === i}
             aria-controls="stage-panel"
             tabIndex={active === i ? 0 : -1}
-            onClick={() => move(i)}
+            onClick={() => go(i)}
           >
             <span>{String(i + 1).padStart(2, "0")}</span>
             {s.name}
+            {active === i && (
+              <i
+                className={`cl-rail-progress ${running ? "" : "is-paused"}`}
+                key={`${active}-${held}`}
+                style={{ animationDuration: `${held ? HOLD_MS : STAGE_MS}ms` }}
+                aria-hidden="true"
+              />
+            )}
           </button>
         ))}
       </div>

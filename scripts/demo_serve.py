@@ -46,6 +46,30 @@ def _find_store(app: Any) -> Any | None:
     return None
 
 
+def _seed_demo_fixture(app: Any) -> None:
+    """Make the deterministic demo Mission available (``/workspace?demo=1``).
+
+    Uses the backend's own offline seed (``sagar.api.demo.seed``) in-process. It is idempotent and
+    non-destructive: an existing demo Mission, including analyst edits made during a presentation,
+    is returned unchanged. It writes only to the isolated demo store, never to real Missions, and it
+    is never a detector run. Set AQUALENS_SEED_DEMO=0 to skip it.
+    """
+    if os.environ.get("AQUALENS_SEED_DEMO", "1") == "0":
+        print("DEMO_SEED SKIPPED: AQUALENS_SEED_DEMO=0", flush=True)
+        return
+    store = _find_store(app)
+    if store is None:
+        print("DEMO_SEED UNAVAILABLE: the application store could not be reached.", flush=True)
+        return
+    try:
+        from sagar.api.demo import seed
+
+        mission = seed(store.product)
+        print(f"DEMO_SEED OK: {mission['mission_id']}", flush=True)
+    except Exception as exc:  # reported, never fatal to serving
+        print(f"DEMO_SEED FAILED: {type(exc).__name__}: {exc}", flush=True)
+
+
 def create_demo_app() -> Any:
     packages = str(ROOT / "packages")
     if packages not in sys.path:
@@ -53,6 +77,7 @@ def create_demo_app() -> Any:
     from sagar.api import create_app
 
     app = create_app(root=ROOT)
+    _seed_demo_fixture(app)
 
     if os.environ.get("SAGARDRISHTI_DEMO_WARM", "1") == "0":
         print("DEMO_WARMUP SKIPPED: SAGARDRISHTI_DEMO_WARM=0", flush=True)

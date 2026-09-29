@@ -1,7 +1,7 @@
 """Round-2 ticket H0-3: an explicit runtime switch for the SHIPWRECK recovery pass (spec H0 item 3, I-H0-3, H0-AC3).
 
 The recovery pass is an internal demo heuristic (Q4, KD-8). Scientific paths turn it off through an explicit
-detector configuration switch, never by bypassing code; the production default is unchanged. A counter
+detector configuration switch, never by bypassing code; the post-freeze backend default is OFF. A counter
 records every entry into the recovery path, so "off" is proved rather than assumed. The frozen detector is
 faked exactly as in test_weak_shipwreck_recovery.py.
 """
@@ -78,20 +78,20 @@ def test_switch_off_gives_no_recovery_observation_and_never_enters_the_recovery_
     assert detector.model.predict.calls.get(RECOVERY_CONFIDENCE_FLOOR, 0) == 0
 
 
-def test_default_keeps_the_current_behaviour(tmp_path):
-    """Production default unchanged: the same frame yields the one consolidated recovery finding."""
+def test_default_is_scientific_and_never_runs_recovery(tmp_path):
     detector = _detector()
-    assert detector.shipwreck_recovery is True
-    _, findings = detector.infer(_frame_with_recovery_cluster(tmp_path), "survey_default", "frame_0000")
-    assert len(findings) == 1 and findings[0]["candidate_recovery"] is True and findings[0]["raw_class"] == "SHIPWRECK"
-    assert detector.recovery_invocations == 1
-    assert detector.model.predict.calls[RECOVERY_CONFIDENCE_FLOOR] > 0
+    assert detector.shipwreck_recovery is False
+    assert detector.infer(_frame_with_recovery_cluster(tmp_path), "s", "f")[1] == []
+    assert detector.recovery_invocations == 0
 
 
-def test_explicit_on_equals_the_default(tmp_path):
-    frame = _frame_with_recovery_cluster(tmp_path)
-    on, default = _detector(shipwreck_recovery=True), _detector()
-    assert on.infer(frame, "s", "f")[1] == default.infer(frame, "s", "f")[1]
+def test_explicit_demo_opt_in_is_tagged(tmp_path):
+    detector = _detector(shipwreck_recovery=True)
+    findings = detector.infer(_frame_with_recovery_cluster(tmp_path), "s", "f")[1]
+    assert len(findings) == 1
+    assert findings[0]["candidate_recovery"] is True
+    assert findings[0]["demo"] is True
+    assert findings[0]["evidence_provenance"] == "SYNTHETIC_DEMO"
 
 
 @pytest.mark.parametrize("value", ["false", "off", 0, 1, None, "False"])
@@ -119,4 +119,15 @@ def test_the_recovery_path_refuses_to_run_when_switched_off(tmp_path):
 
 def test_health_reports_the_switch():
     assert FinalDetector(WEIGHTS, shipwreck_recovery=False).health()["shipwreck_recovery"] is False
-    assert FinalDetector(WEIGHTS).health()["shipwreck_recovery"] is True
+    assert FinalDetector(WEIGHTS).health()["shipwreck_recovery"] is False
+
+
+def test_default_supervised_shipwreck_has_no_demo_score(tmp_path):
+    image = tmp_path / 'small.png'
+    Image.fromarray(np.zeros((40, 40, 3), dtype=np.uint8)).save(image)
+    detector = _detector()
+    detector.model = SimpleNamespace(predict=lambda **kwargs: [SimpleNamespace(boxes=[_Box(1, .3, (1, 1, 20, 20))])])
+    findings = detector.infer(image, 's', 'f')[1]
+    assert findings[0]['display_confidence'] == .3
+    assert findings[0]['classification_source'] == 'MODEL'
+    assert findings[0]['demo'] is False

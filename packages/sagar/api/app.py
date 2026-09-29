@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import csv
+import hashlib
+import logging
 import io
 import json
 import os
@@ -15,10 +17,14 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field
 
+from sagar.api.product import ProductService, validate_runtime_root
+from sagar.api.product_models import MissionInput, ProductMission
+from sagar.api.product_routes import install_product_routes
 from sagar.api.jobs import JobRegistry, new_job, render_job
 from sagar.memory import ReviewRepository
 from sagar.mission.change import ComparisonRefused, change_summary, compare_detections
@@ -90,14 +96,21 @@ class Store:
         self.split = json.loads((self.snapshot_dir / "split.json").read_text())
         runtime_dir_env = os.environ.get("SAGARDRISHTI_RUNTIME_DIR", "").strip()
         runtime_root = Path(runtime_dir_env).expanduser().resolve() if runtime_dir_env else root / "data" / "runtime"
+        runtime_root = validate_runtime_root(runtime_root, root)
         runtime_root.mkdir(parents=True, exist_ok=True)
         self.reviews = ReviewRepository(runtime_root / "reviews.sqlite3")
         self.comparisons: dict[str, dict[str, Any]] = {}
-        self.jobs = JobRegistry()
+        self.jobs = JobRegistry(database_path=runtime_root / "reviews.sqlite3")
+        self.product = ProductService(runtime_root)
+        for upload in self.product.real.rows('upload'):
+            job = self.jobs.get(upload['job_id'])
+            if upload['status'] == 'INGESTING' and (job is None or job.get('state') == 'FAILED'):
+                self.product.fail_upload(upload['upload_id'])
         # Survey processing runs on a worker thread while the API keeps serving
         # job polls, so every mutation of the persisted runtime state is
         # serialised through one lock.
         self.state_lock = threading.RLock()
+        self.inference_lock = threading.RLock()
         self.started_at = datetime.now(timezone.utc)
         self.uploads = runtime_root / "uploads"
         self.uploads.mkdir(parents=True, exist_ok=True)
@@ -115,7 +128,7 @@ class Store:
                 f"Frozen detector artifact is missing at '{model_path}' ({configured}). "
                 "Refusing to start rather than silently substituting a different model."
             )
-        self.runtime = FinalDetector(model_path)
+        self.runtime = FinalDetector(model_path, shipwreck_recovery=False)
         self.open_set = None
         open_set_dir_env = os.environ.get("SAGARDRISHTI_OPEN_SET_DIR", "").strip()
         open_set_dir = Path(open_set_dir_env).expanduser() if open_set_dir_env else root / "ml/artifacts/vnext/open_set_v1"
@@ -283,7 +296,7 @@ class Store:
                 contact.update({key: confidence[key] for key in ("confidence", "raw_fused_confidence", "normalized_confidence", "raw_detector_confidence", "confidence_components", "confidence_method", "confidence_normalization", "confidence_normalization_range", "confidence_normalization_reference_center", "confidence_normalization_steepness", "confidence_normalization_note")})
                 contact.update(prioritize(contact))
             survey.update({"contacts": contacts, "mission": mission, "model_registry": self.model_registry.health(),
-                           "contact_fusion_policy": "contact_fusion@v1", "sequential_observation_contract": sequential})
+                           "contact_fusion_policy": "contact_fusion@v1.1_point_target_guard", "sequential_observation_contract": sequential})
             changed = True
         return changed
 
@@ -402,12 +415,33 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         **cors_kwargs,
     )
 
+    @app.middleware('http')
+    async def mark_legacy_contract(request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith('/api/v1/runtime/'):
+            response.headers['X-Aqualens-Contract'] = 'legacy-unvalidated-presentation'
+            response.headers['Link'] = '</api/v1/system/capabilities>; rel="describedby"'
+        return response
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception(_request, exc):
+        return JSONResponse(status_code=422, content={'error': {'code': 'VALIDATION_FAILED',
+            'message': 'Request validation failed.', 'detail': {'fields': [
+                {'location': list(e['loc']), 'message': e['msg'], 'type': e['type']} for e in exc.errors()]}}})
+
+    @app.exception_handler(Exception)
+    async def unexpected_exception(_request, exc):
+        logging.getLogger('aqualens.api').exception('request_failed', exc_info=exc)
+        return JSONResponse(status_code=500, content={'error': {'code': 'INTERNAL_ERROR',
+            'message': 'Unexpected server error; inspect local server logs.', 'detail': {}}})
+
     @app.exception_handler(HTTPException)
     async def http_exception(_request, exc: HTTPException):  # type: ignore[no-untyped-def]
         if isinstance(exc.detail, dict) and "error" in exc.detail:
             return JSONResponse(status_code=exc.status_code, content=exc.detail)
         return JSONResponse(status_code=exc.status_code, content={"error": {"code": "INTERNAL", "message": str(exc.detail), "detail": {}}})
 
+    @app.get("/health", include_in_schema=False)
     @app.get("/api/v1/health")
     def health() -> dict[str, str]:
         return {"status": "ok", "run_id": store.manifest["run_id"]}
@@ -451,17 +485,21 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         if not metrics_path.is_file():
             raise _error(503, "ARTIFACT_UNAVAILABLE", "Frozen final-v1 metrics artifact is unavailable.")
         return {"model": "YOLO11s", "checkpoint_sha256": store.runtime.health()["model_sha256"], "metrics": json.loads(metrics_path.read_text()),
-                "shipwreck_status": "experimental / demo-assisted", "s1_provenance": "ml/artifacts/final_v1/research/shipwreck_s1/",
+                "shipwreck_status": "FAILED_CLASS_HELDOUT_RECALL_ZERO", "s1_provenance": "ml/artifacts/final_v1/research/shipwreck_s1/",
                 "open_set": {**store.model_registry.health()["open_set"], "reference_count": store.open_set.embeddings.shape[0] if store.open_set else None}}
 
     @app.get("/api/v1/missions")
-    def list_missions() -> list[dict[str, Any]]:
+    def list_missions(demo: bool = False, offset: int = Query(0, ge=0), limit: int = Query(50, ge=1, le=200)) -> list[dict[str, Any]]:
         mission = store.mission()
-        return [{**mission, "surveys": [store.survey()]}]
+        # Real rows are resolved like GET /missions/{id}: stored rows predate their uploads, so their
+        # survey_ids/upload_ids must come from the repository, never from the creation snapshot.
+        rows = store.product.demo.rows('mission') if demo else [{**mission, 'surveys': [store.survey()], 'legacy': True, 'demo': False}] + store.product.real.rows('mission')
+        page = rows[offset:offset + limit]
+        return [row if demo or row.get('legacy') else store.product.mission(row['mission_id']) for row in page]
 
-    @app.post("/api/v1/missions")
-    def create_mission() -> None:
-        raise _error(409, "CAPABILITY_UNAVAILABLE", "Mission creation is not enabled for the frozen internal round.")
+    @app.post("/api/v1/missions", status_code=201, response_model=ProductMission)
+    def create_mission(payload: MissionInput) -> dict[str, Any]:
+        return store.product.create_mission(payload)
 
     @app.post("/api/v1/surveys/open-prepared")
     def open_prepared_survey(payload: PreparedSurveyInput) -> dict[str, Any]:
@@ -500,7 +538,11 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         from PIL import Image
         try:
             with Image.open(path) as image:
-                return (*image.size, image.mode)
+                geometry = (*image.size, image.mode)
+                if image.width * image.height > 64_000_000:
+                    raise ValueError('Raster exceeds the 64 megapixel operational limit')
+                image.verify()
+                return geometry
         # Deliberately broad: PIL's open is monkey-patched by ultralytics and can
         # raise beyond the documented decode errors. Whatever went wrong, the
         # operator-facing fact is the same and precise -- this file could not be
@@ -527,12 +569,20 @@ def create_app(root: str | Path | None = None) -> FastAPI:
             except zipfile.BadZipFile as exc:
                 raise _error(422, "UNREADABLE_BUNDLE", "The uploaded file is not a readable ZIP bundle.") from exc
             with archive:
+                if len(archive.infolist()) > 10000 or sum(i.file_size for i in archive.infolist()) > max_upload_bytes:
+                    raise _error(413, 'UPLOAD_TOO_LARGE', 'Expanded archive exceeds the deployment limit.')
+                seen_names = set()
                 for info in archive.infolist():
                     candidate = Path(info.filename)
                     if candidate.is_absolute() or ".." in candidate.parts:
                         raise _error(422, "UNSAFE_ARCHIVE", "The bundle contains an unsafe entry path and was not extracted.", {"entry": info.filename})
                     bundle_entries += 1
                     name_lower = candidate.name.lower()
+                    if info.is_dir():
+                        continue
+                    if name_lower in seen_names:
+                        raise _error(422, 'DUPLICATE_ARCHIVE_NAME', 'Archive basenames must be unique.')
+                    seen_names.add(name_lower)
                     if candidate.suffix.lower() in RASTER_SUFFIXES:
                         target = bundle / candidate.name
                         with archive.open(info) as source, target.open("wb") as out:
@@ -620,11 +670,12 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         mission_meta = decoded["mission"]
         sequential_contract = decoded["sequential_contract"]
         navigation_provenance = decoded["navigation_provenance"]
-        open_set_available = store.open_set is not None
+        open_set_available = store.open_set is not None and not decoded.get("product_mission_id")
         try:
-            store.jobs.update(job_id, state="INFERENCE", stage="yolo11s", files_parsed=len(paths))
+            store.jobs.update(job_id, state="INFERENCE", stage="yolo11s", started_at=datetime.now(timezone.utc).isoformat(), files_parsed=len(paths))
             store.jobs.set_phase(job_id, "detector_ready", "running")
-            store.runtime.load()
+            with store.inference_lock:
+                store.runtime.load()
             health = store.runtime.health()
             store.jobs.update(job_id, detector={
                 "availability": "AVAILABLE" if health["runtime_available"] else "UNAVAILABLE",
@@ -652,7 +703,16 @@ def create_app(root: str | Path | None = None) -> FastAPI:
             frames: list[dict[str, Any]] = []
             channel_layouts: dict[str, str] = {}
             for index, path in enumerate(paths):
-                meta, findings = store.runtime.infer(path, survey_id, f"frame_{index:04d}")
+                frame_id = f"frame_{index:04d}"
+                duplicates = raster_identity[frame_id].get('duplicate_raster_frame_ids') or []
+                if decoded.get('product_mission_id') and duplicates and frame_id != duplicates[0]:
+                    with Image.open(path) as duplicate_image:
+                        meta = {'width_px': duplicate_image.width, 'height_px': duplicate_image.height,
+                                'inference_mode': 'DUPLICATE_SKIPPED', 'tile_count': 0}
+                    findings = []
+                else:
+                    with store.inference_lock:
+                        meta, findings = store.runtime.infer(path, survey_id, frame_id)
                 nav_record = navigation_by_frame.get(path.name)
                 with Image.open(path) as source_image:
                     channel_layouts[f"frame_{index:04d}"] = source_image.mode
@@ -674,13 +734,14 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                     finding["physics"] = verify_candidate(pixels, finding["bbox_px"], None, condition)
                     if finding["raw_class"] == "PIPELINE":
                         finding["pipeline_verification"] = verify_pipeline_acoustics(pixels, finding["bbox_px"])
-                    if store.open_set is not None:
+                    if open_set_available:
                         x1, y1, x2, y2 = map(int, finding["bbox_px"])
                         pad = max(8, int(max(x2 - x1, y2 - y1) * 0.5))
                         context = pixels[max(0, y1-pad):min(pixels.shape[0], y2+pad), max(0, x1-pad):min(pixels.shape[1], x2+pad)]
                         try:
                             prepared = context[:, :, ::-1].copy() if context.ndim == 3 else context
-                            finding["open_set"] = store.open_set.evidence(store.runtime.open_set_embedding(prepared))
+                            with store.inference_lock:
+                                finding["open_set"] = store.open_set.evidence(store.runtime.open_set_embedding(prepared))
                         except (RuntimeError, ValueError):
                             finding["open_set"] = {"status": "FAILED", "missing_inputs": ["FROZEN_FEATURE_EMBEDDING"]}
                 frames.append({"frame_id": f"frame_{index:04d}", "source_path": str(path), **meta, **identity,
@@ -765,32 +826,42 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 "survey_id": survey_id, "name": survey_name, "frames": frames, "findings": all_findings,
                 "contacts": contacts, "created_at": datetime.now(timezone.utc).isoformat(),
                 "navigation_status": decoded["navigation_status"], "mission": mission_meta,
-                "model_registry": store.model_registry.health(), "contact_fusion_policy": "contact_fusion@v1",
+                "model_registry": store.model_registry.health(), "contact_fusion_policy": "contact_fusion@v1.1_point_target_guard",
                 "sequential_observation_contract": sequential_contract,
                 "surveys": surveys,
             }
             with store.state_lock:
                 store.runtime_surveys[survey_id] = record
             store.save_runtime_surveys()
+            if decoded.get("product_upload_id"):
+                store.product.finish_upload(decoded["product_upload_id"], record)
             store.jobs.set_phase(job_id, "report", "done", f"{len(all_findings)} finding record{'' if len(all_findings) == 1 else 's'} written")
             store.jobs.update(job_id, state="COMPLETED", stage="completed", report_ready=True,
                               completed_at=datetime.now(timezone.utc).isoformat())
         except Exception as exc:  # noqa: BLE001 -- the reason is surfaced verbatim to the operator
-            store.jobs.fail(job_id, "PROCESSING_FAILED", str(exc) or exc.__class__.__name__)
+            logging.getLogger('aqualens.processing').exception('processing_failed job_id=%s', job_id)
+            store.jobs.fail(job_id, "PROCESSING_FAILED", "Processing failed; inspect local server logs.")
+            if decoded.get('product_upload_id'):
+                store.product.fail_upload(decoded['product_upload_id'])
 
     @app.post("/api/v1/surveys/upload")
-    async def upload_survey(file: UploadFile = File(...)) -> dict[str, Any]:
+    async def upload_survey(file: UploadFile = File(...), mission_id: str | None = None) -> dict[str, Any]:
         """Accept a real raster/bundle, validate it, and start a real run.
 
         The response is the accepted job, not a finished survey: nothing here
         reports a model result that has not actually occurred.
         """
+        if mission_id is not None:
+            product_mission = store.product.mission(mission_id)
+            if product_mission['demo']:
+                raise _error(409, 'DEMO_ISOLATION', 'Demo Missions accept only the deterministic fixture.')
         suffix = Path(file.filename or "").suffix.lower()
         if suffix not in RASTER_SUFFIXES | {".zip"}:
             raise _error(422, "VALIDATION_FAILED", "Upload must be PNG, JPEG, PBM, or a prepared ZIP bundle.")
         upload_id = f"upload_{uuid.uuid4().hex[:12]}"
         destination = store.uploads / f"{upload_id}{suffix}"
         size_bytes = 0
+        file_digest = hashlib.sha256()
         with destination.open("wb") as output:
             while chunk := await file.read(1024 * 1024):
                 size_bytes += len(chunk)
@@ -801,6 +872,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                         413, "UPLOAD_TOO_LARGE",
                         f"Upload exceeds the {max_upload_bytes} byte deployment limit.",
                     )
+                file_digest.update(chunk)
                 output.write(chunk)
         if size_bytes == 0:
             destination.unlink(missing_ok=True)
@@ -813,6 +885,36 @@ def create_app(root: str | Path | None = None) -> FastAPI:
 
         job_id = f"job_{uuid.uuid4().hex[:12]}"
         survey_id = f"survey_{upload_id}"
+        if mission_id is not None:
+            # A bundle whose navigation is SYNTHETIC_DEMO enters the normal ingestion path. Its track is
+            # kept verbatim with provenance SYNTHETIC_DEMO (never rewritten as MEASURED) and is used only
+            # to draw the product map. It never places a Contact, never establishes persistence (that
+            # needs verified ping bounds), and is never an input to scientific evaluation.
+            decoded['product_upload_id'] = upload_id
+            decoded['product_mission_id'] = mission_id
+            identities = raster_identities({f'frame_{i:04d}': path for i, path in enumerate(decoded['paths'])})
+            frames, layouts = [], {}
+            for i, path in enumerate(decoded['paths']):
+                identifier = f'frame_{i:04d}'
+                width, height, layout = _open_raster_geometry(path, path.name)
+                layouts[identifier] = layout
+                frames.append({'frame_id': identifier, 'width_px': width, 'height_px': height, **identities[identifier]})
+            paths_by_frame = {f'frame_{i:04d}': path for i, path in enumerate(decoded['paths'])}
+            by_name = {path.name: f'frame_{i:04d}' for i, path in enumerate(decoded['paths'])}
+            declared = [[by_name[name] for name in group] for group in decoded['declared_surveys']]
+            verified = verified_survey_groups(frames, layouts, lambda f: load_native_pixels(paths_by_frame[f]),
+                excluded={f for group in declared for f in group})
+            partitions = form_surveys(survey_id, frames, layouts,
+                {by_name[name]: decoded['navigation_provenance'] for name in decoded['navigation']}, verified, declared)
+            product_surveys = [{**part, 'survey_id': part['survey_ref'], 'mission_id': mission_id,
+                'upload_id': upload_id, 'runtime_ref': survey_id, 'job_id': job_id, 'status': 'INGESTING',
+                'demo': False, 'provenance': 'REAL', 'sensor': None, 'acquired_at': None,
+                'frames': [f for f in frames if f['frame_id'] in part['frame_ids']]} for part in partitions]
+            store.product.register_upload(mission_id, {'upload_id': upload_id, 'mission_id': mission_id,
+                'filename': Path(file.filename or '').name, 'sha256': file_digest.hexdigest(), 'bytes': size_bytes,
+                'status': 'INGESTING', 'job_id': job_id, 'runtime_ref': survey_id, 'created_at': datetime.now(timezone.utc).isoformat(),
+                'demo': False, 'provenance': 'REAL', 'navigation_provenance': decoded['navigation_provenance'],
+                'source': 'USER_UPLOAD', 'warnings': ['Acquisition metadata unavailable unless explicitly supplied']}, product_surveys)
         detector_health = store.runtime.health()
         store.jobs.create(job_id, new_job(
             job_id=job_id, survey_id=survey_id,
@@ -827,9 +929,9 @@ def create_app(root: str | Path | None = None) -> FastAPI:
                 "loaded": detector_health["model_loaded"], "device": detector_health["device"],
                 "model_sha256": detector_health["model_sha256"],
             },
-            open_set=store.open_set_health(),
+            open_set={"availability": "NOT_VALIDATED", "reason": "Survey-referenced anomaly validation pending"} if mission_id else store.open_set_health(),
         ))
-        store.jobs.update(job_id, metadata={
+        store.jobs.update(job_id, mission_id=mission_id, demo=False if mission_id else None, warnings=[], metadata={
             "navigation": decoded["navigation_status"],
             "mission": "AVAILABLE" if decoded["mission"] else "UNAVAILABLE",
             "sequential_observation_contract": decoded["sequential_contract"],
@@ -860,6 +962,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
             "upload_id": upload_id, "job_id": job_id, "survey_id": survey_id, "state": accepted_state,
             "source_frame_count": len(decoded["paths"]), "navigation_status": decoded["navigation_status"],
             "accepted": True,
+            **({"mission_id": mission_id, "survey_refs": [p["survey_id"] for p in product_surveys]} if mission_id else {}),
         }
 
     @app.get("/api/v1/runtime/surveys/{survey_id}")
@@ -1231,14 +1334,14 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     def get_mission(mission_id: str) -> dict[str, Any]:
         mission = store.mission()
         if mission_id != mission["mission_id"]:
-            raise _error(404, "NOT_FOUND", f"Mission {mission_id} was not found.")
+            return store.product.mission(mission_id)
         return {**mission, "surveys": [store.survey()]}
 
     @app.get("/api/v1/surveys/{survey_id}")
     def get_survey(survey_id: str) -> dict[str, Any]:
         survey = store.survey()
         if survey_id != survey["survey_id"]:
-            raise _error(404, "NOT_FOUND", f"Survey {survey_id} was not found.")
+            return store.product.repo(survey_id).get("survey", survey_id)
         return survey
 
     @app.post("/api/v1/surveys/{survey_id}/ingest")
@@ -1404,7 +1507,7 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     @app.get("/api/v1/jobs/{job_id}")
     def job(job_id: str) -> dict[str, Any]:
         """Observable job state. Counts are incremented after the work happens."""
-        current = store.jobs.get(job_id)
+        current = store.product.demo.get("job", job_id) if job_id.startswith("demo_") else store.jobs.get(job_id)
         if current is None:
             raise _error(404, "NOT_FOUND", f"Job {job_id} was not found.")
         return render_job(current)
@@ -1414,4 +1517,6 @@ def create_app(root: str | Path | None = None) -> FastAPI:
         current = job(job_id)
         return StreamingResponse(iter([f"event: stage\ndata: {json.dumps(current)}\n\n"]), media_type="text/event-stream")
 
+    install_product_routes(app, store, upload_survey)
+    app.state.store = store
     return app

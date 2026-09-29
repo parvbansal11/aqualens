@@ -230,3 +230,66 @@ def test_contradictory_provenance_declarations_are_rejected(client):
 def test_invalid_declared_provenance_rejects_the_upload(client):
     response = _post(client, _bundle(mission={"navigation_provenance": "UNKNOWN"}, navigation=_navigation_csv()))
     assert response.status_code == 422
+
+
+# ------------------------------------------------------------ product Missions (normal ingestion)
+
+def _product_upload(client: TestClient, payload: bytes) -> tuple[str, dict]:
+    mission = client.post("/api/v1/missions", json={"name": "Supplied track"}).json()["mission_id"]
+    response = client.post(f"/api/v1/missions/{mission}/uploads", files={"file": ("bundle.zip", payload, "application/zip")})
+    assert response.status_code == 202, response.text
+    deadline = time.monotonic() + 60
+    while time.monotonic() < deadline:
+        job = client.get(f"/api/v1/jobs/{response.json()['job_id']}").json()
+        if job["state"] in {"COMPLETED", "FAILED"}:
+            break
+        time.sleep(0.02)
+    assert job["state"] == "COMPLETED", job
+    return mission, response.json()
+
+
+@pytest.mark.parametrize("provenance", [V3_PROVENANCE, V4_PROVENANCE], ids=["v3", "v4"])
+def test_synthetic_track_bundle_enters_a_normal_mission_and_draws_the_map_only(client, provenance):
+    # A sequential contract is declared on purpose: synthetic navigation must still establish nothing.
+    navigation = _navigation_csv(spread_deg=0.001)
+    mission_id, accepted = _product_upload(client, _bundle(mission=SEQUENTIAL_CONTRACT, provenance=provenance, navigation=navigation))
+    mission = client.get(f"/api/v1/missions/{mission_id}").json()
+    uploads = client.get(f"/api/v1/missions/{mission_id}/uploads").json()["items"]
+    surveys = client.get(f"/api/v1/missions/{mission_id}/surveys").json()["items"]
+    contacts = client.get(f"/api/v1/missions/{mission_id}/contacts").json()["items"]
+    geo = client.get(f"/api/v1/missions/{mission_id}/map").json()
+
+    # 1, 2: accepted by the normal path; the Mission is not Demo because its navigation is synthetic.
+    assert accepted["mission_id"] == mission_id and mission["demo"] is False and mission["provenance"] == "REAL"
+    # 3, 7: provenance stays SYNTHETIC_DEMO everywhere it is recorded; nothing is serialized as MEASURED.
+    assert uploads[0]["navigation_provenance"] == "SYNTHETIC_DEMO"
+    assert {s["navigation_provenance"] for s in surveys} == {"SYNTHETIC_DEMO"}
+    # 4: the map carries the supplied track verbatim, display-only, never as Contact positions.
+    supplied = {(round(float(r.split(",")[3]), 6), round(float(r.split(",")[2]), 6)) for r in navigation.strip().split("\n")[1:]}
+    track = geo["platform_context"]
+    assert {(round(f["geometry"]["coordinates"][0], 6), round(f["geometry"]["coordinates"][1], 6)) for f in track} == supplied
+    assert {f["properties"]["provenance"] for f in track} == {"SYNTHETIC_DEMO"}
+    assert {f["properties"]["verification"] for f in track} == {"DISPLAY_ONLY_NOT_EVIDENCE"}
+    assert {f["properties"]["role"] for f in track} == {"PLATFORM_FIX_NOT_CONTACT_LOCATION"}
+    assert geo["features"] == [] and geo["availability"] == "UNAVAILABLE"
+    # 5, 6: no persistence, no independent Looks, no Contact position: not evidence of anything.
+    assert len(contacts) == len(NAMES)
+    for contact in contacts:
+        assert contact["look_count"] == 1
+        assert contact["evidence"]["persistence"]["status"] == "UNAVAILABLE"
+        assert contact["evidence"]["navigation"]["status"] != "AVAILABLE"
+        assert contact["machine"]["supervised_class"] == "SHIPWRECK"  # the detector output, unchanged
+    capabilities = client.get("/api/v1/system/capabilities").json()
+    assert capabilities["contact_localization"]["availability"] == "UNAVAILABLE"
+    report = client.post(f"/api/v1/missions/{mission_id}/reports")
+    assert report.status_code == 201, report.text
+    assert report.json()["demo"] is False
+    serialized = json.dumps([mission, uploads, surveys, contacts, geo, report.json()["surveys"], report.json()["map"]])
+    assert "MEASURED" not in serialized
+
+
+def test_measured_track_keeps_its_own_label_on_the_map(client):
+    mission_id, _ = _product_upload(client, _bundle(mission={"navigation_provenance": "MEASURED"}, navigation=_navigation_csv()))
+    track = client.get(f"/api/v1/missions/{mission_id}/map").json()["platform_context"]
+    assert track and {f["properties"]["provenance"] for f in track} == {"MEASURED"}
+    assert {f["properties"]["verification"] for f in track} == {"UPLOADER_DECLARATION_ONLY"}

@@ -137,7 +137,7 @@ def test_the_harness_detector_has_recovery_switched_off_and_never_enters_it(tmp_
 def test_a_detector_with_recovery_on_is_refused(tmp_path):
     path = _frame(tmp_path, "f.png", (640, 640))
     with pytest.raises(ScientificPathError, match="recovery"):
-        infer_row(_faked(FinalDetector(WEIGHTS)), _row(path, tmp_path), tmp_path)
+        infer_row(_faked(FinalDetector(WEIGHTS, shipwreck_recovery=True)), _row(path, tmp_path), tmp_path)
 
 
 def test_a_recovery_finding_is_refused_even_if_one_appears(tmp_path, monkeypatch):
@@ -174,7 +174,7 @@ def test_changing_the_presentation_layer_cannot_change_harness_output(tmp_path, 
                 "production_qualified": True, "display_label": "tampered"}
 
     monkeypatch.setattr(runtime, "shipwreck_demo_presentation", absurd_presentation)
-    tampered_production = _faked(scientific_detector()).infer(path, "s", "f")[1]
+    tampered_production = _faked(FinalDetector(WEIGHTS, shipwreck_recovery=True)).infer(path, "s", "f")[1]
     assert {f["display_confidence"] for f in tampered_production} == {0.99}   # the presentation did change...
     assert _harness(path, tmp_path) == baseline                                # ...the harness output did not
 
@@ -236,9 +236,9 @@ def test_an_override_that_does_not_lower_the_floor_or_is_not_a_number_fails_loud
         FinalDetector(WEIGHTS, confidence_floor=value)
 
 
-def test_production_default_is_unchanged():
+def test_production_default_disables_recovery_without_changing_floor():
     detector = FinalDetector(WEIGHTS)
-    assert detector.shipwreck_recovery is True and detector.confidence_floor is None
+    assert detector.shipwreck_recovery is False and detector.confidence_floor is None
 
 
 # --- the real frozen detector (synthetic fixture images only; no corpus data)

@@ -7,7 +7,7 @@ import hashlib
 
 @dataclass(frozen=True)
 class ContactFusionPolicy:
-    version: str = "contact_fusion@v1"
+    version: str = "contact_fusion@v1.1_point_target_guard"
     min_class_compatibility: bool = True
     min_tile_duplicate_iou: float = .30
     slant_range_match_width_fraction: float = .25
@@ -82,7 +82,9 @@ def _association_relation(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPo
     if pa is None or pb is None or a["survey_ref"]!=b["survey_ref"]: return None
     gap=max(pa[0],pb[0])-min(pa[1],pb[1])
     if gap<=0: return "SAME_LOOK_OVERLAPPING_WINDOWS" if _mapped_boxes_overlap(a,b,pa,pb) else None
-    if gap==1: return "INDEPENDENT_LOOKS_ALONG_TRACK" if _slant_range_match(a,b,policy) else None
+    # Post-freeze safety correction: along-track continuity is supported for PIPELINE only.
+    # A point target at the same range in disjoint pings is not a repeated observation.
+    if gap==1 and a.get("raw_class") == "PIPELINE": return "INDEPENDENT_LOOKS_ALONG_TRACK" if _slant_range_match(a,b,policy) else None
     return None
 def _compatible(a:dict[str,Any],b:dict[str,Any],policy:ContactFusionPolicy)->bool:
     return _association_relation(a,b,policy) is not None

@@ -161,7 +161,7 @@ def test_valid_fraction_records_how_much_of_each_cell_is_image():
 def test_the_tap_refuses_a_detector_with_recovery_on(tmp_path):
     path = _image(tmp_path, "f.png", FULL)
     with pytest.raises(ScientificPathError, match="recovery"):
-        tapped_infer_row(_faked(FinalDetector(WEIGHTS)), _row(path), tmp_path)
+        tapped_infer_row(_faked(FinalDetector(WEIGHTS, shipwreck_recovery=True)), _row(path), tmp_path)
 
 
 # --- the cache: every val and test image, never train; provenance; determinism

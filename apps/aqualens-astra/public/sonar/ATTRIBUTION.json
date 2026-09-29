@@ -8,33 +8,47 @@
   "assets": [
     {
       "file": "viator-detail.png",
-      "source": "/Users/parvbansal/Desktop/sagardrishti/claude-design-final/source/sonar/tiles/F-01.png",
+      "source": "sagardrishti/claude-design-final/source/sonar/tiles/F-01.png",
       "sha256": "8cfbf9e524a52fee391920341edef620828c75cd7493dd688755e4a7ce89d55b",
       "notes": "Source sonar asset, copied without pixel changes. Detail images are existing crops; full rasters remain available."
     },
     {
       "file": "barge-detail.png",
-      "source": "/Users/parvbansal/Desktop/sagardrishti/claude-design-final/source/sonar/tiles/F-03.png",
+      "source": "sagardrishti/claude-design-final/source/sonar/tiles/F-03.png",
       "sha256": "05297be8ab6d395b7b4effba0fa894ff5ad5735e0caf860a6d73dbca545bfbec",
       "notes": "Source sonar asset, copied without pixel changes. Detail images are existing crops; full rasters remain available."
     },
     {
       "file": "viator-03.png",
-      "source": "/Users/parvbansal/Desktop/sagardrishti/claude-design-final/source/sonar/viator-03.png",
+      "source": "sagardrishti/claude-design-final/source/sonar/viator-03.png",
       "sha256": "323cd4f2d55291d2097f30985c0c73273ad3b7e58aba895db0ae3c27c89a9aa3",
       "notes": "Source sonar asset, copied without pixel changes. Detail images are existing crops; full rasters remain available."
     },
     {
       "file": "barge-01.png",
-      "source": "/Users/parvbansal/Desktop/sagardrishti/claude-design-final/source/sonar/barge-01.png",
+      "source": "sagardrishti/claude-design-final/source/sonar/barge-01.png",
       "sha256": "e73327a39c14cdaba611d384b1371f81169e71c450c7005fe5b934f5bc0caab6",
       "notes": "Source sonar asset, copied without pixel changes. Detail images are existing crops; full rasters remain available."
     },
     {
       "file": "barge-02.png",
-      "source": "/Users/parvbansal/Desktop/sagardrishti/claude-design-final/source/sonar/barge-02.png",
+      "source": "sagardrishti/claude-design-final/source/sonar/barge-02.png",
       "sha256": "2adfd421c906efc73882e6089c87a6a7a26a20d1928c91ed4cd3c5954f2a0111",
       "notes": "Source sonar asset, copied without pixel changes. Detail images are existing crops; full rasters remain available."
+    }
+  ],
+  "additional_sources": [
+    {
+      "dataset": "SubPipe",
+      "record": "https://doi.org/10.5281/zenodo.12666132",
+      "license": "GPL-3.0 (per local license evidence, docs/multidomain_v1_licenses.md)",
+      "usage": "Real sonar imagery, shown without pixel changes. Overlays are illustrative.",
+      "assets": [
+        {
+          "file": "subpipe-hf-f08e01eb.png",
+          "sha256": "99cef197ddb50381fa63a7e87d18cab22a2e4838c7c4a4aa58ccbb64ff13b3b2"
+        }
+      ]
     }
   ]
 }

@@ -156,7 +156,8 @@ def test_processing_failure_is_reported_on_the_job_not_the_upload(client, monkey
     assert body["state"] == "QUEUED"          # the upload itself was accepted
     assert job["state"] == "FAILED"
     assert job["error"]["code"] == "PROCESSING_FAILED"
-    assert "detector unavailable" in job["error"]["message"]
+    assert "inspect local server logs" in job["error"]["message"]
+    assert "detector unavailable" not in job["error"]["message"]
     # A failed run leaves no half-written survey behind.
     assert client.get(f"/api/v1/runtime/surveys/{body['survey_id']}").status_code == 404
 

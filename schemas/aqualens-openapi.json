@@ -1,0 +1,4139 @@
+{
+  "components": {
+    "schemas": {
+      "Analyst": {
+        "additionalProperties": false,
+        "properties": {
+          "classification": {
+            "$ref": "#/components/schemas/AnalystClass",
+            "default": "UNRESOLVED"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority",
+            "default": "UNSET"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          },
+          "status": {
+            "default": "UNREVIEWED",
+            "enum": [
+              "UNREVIEWED",
+              "CONFIRMED",
+              "REJECTED",
+              "UNRESOLVED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "title": "Analyst",
+        "type": "object"
+      },
+      "AnalystClass": {
+        "enum": [
+          "FISHING_GEAR",
+          "ROPE_LINE",
+          "NET_LIKE_DEBRIS",
+          "PLASTIC_DEBRIS",
+          "METALLIC_DEBRIS",
+          "CONTAINER_DRUM",
+          "TYRE_RUBBER",
+          "CABLE_PIPELINE_RELATED",
+          "STRUCTURAL_DEBRIS",
+          "NATURAL_FEATURE",
+          "OTHER",
+          "UNRESOLVED"
+        ],
+        "title": "AnalystClass",
+        "type": "string"
+      },
+      "Body_upload_api_v1_missions__mission_id__uploads_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_api_v1_missions__mission_id__uploads_post",
+        "type": "object"
+      },
+      "Body_upload_survey_api_v1_surveys_upload_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_survey_api_v1_surveys_upload_post",
+        "type": "object"
+      },
+      "ClassificationInput": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Actor",
+            "type": "string"
+          },
+          "classification": {
+            "$ref": "#/components/schemas/AnalystClass"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "required": [
+          "actor",
+          "classification"
+        ],
+        "title": "ClassificationInput",
+        "type": "object"
+      },
+      "CompareInput": {
+        "properties": {
+          "baseline_survey_id": {
+            "title": "Baseline Survey Id",
+            "type": "string"
+          },
+          "confirmed_only": {
+            "default": false,
+            "title": "Confirmed Only",
+            "type": "boolean"
+          },
+          "new_survey_id": {
+            "title": "New Survey Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "baseline_survey_id",
+          "new_survey_id"
+        ],
+        "title": "CompareInput",
+        "type": "object"
+      },
+      "Contact": {
+        "additionalProperties": false,
+        "properties": {
+          "analyst": {
+            "$ref": "#/components/schemas/Analyst"
+          },
+          "association_basis": {
+            "title": "Association Basis",
+            "type": "string"
+          },
+          "contact_id": {
+            "title": "Contact Id",
+            "type": "string"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "demo": {
+            "default": false,
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "detections": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Detections",
+            "type": "array"
+          },
+          "evidence": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "object"
+          },
+          "history": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "look_count": {
+            "minimum": 1.0,
+            "title": "Look Count",
+            "type": "integer"
+          },
+          "looks": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Looks",
+            "type": "array"
+          },
+          "machine": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Machine"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mission_id": {
+            "title": "Mission Id",
+            "type": "string"
+          },
+          "provenance": {
+            "default": "REAL",
+            "enum": [
+              "REAL",
+              "SYNTHETIC_DEMO"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "survey_refs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Survey Refs",
+            "type": "array"
+          },
+          "system_priority": {
+            "title": "System Priority",
+            "type": "null"
+          }
+        },
+        "required": [
+          "contact_id",
+          "mission_id",
+          "survey_refs",
+          "created_at",
+          "association_basis",
+          "look_count",
+          "looks",
+          "detections",
+          "machine",
+          "evidence"
+        ],
+        "title": "Contact",
+        "type": "object"
+      },
+      "Evidence": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artifact Ref"
+          },
+          "demo": {
+            "default": false,
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EvidenceStatus"
+          },
+          "timestamp": {
+            "title": "Timestamp",
+            "type": "string"
+          },
+          "values": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Values"
+          }
+        },
+        "required": [
+          "status",
+          "source",
+          "method",
+          "timestamp"
+        ],
+        "title": "Evidence",
+        "type": "object"
+      },
+      "EvidenceStatus": {
+        "enum": [
+          "AVAILABLE",
+          "UNAVAILABLE",
+          "NOT_VALIDATED",
+          "NOT_APPLICABLE",
+          "FAILED"
+        ],
+        "title": "EvidenceStatus",
+        "type": "string"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Machine": {
+        "additionalProperties": false,
+        "properties": {
+          "demo": {
+            "default": false,
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "model_id": {
+            "title": "Model Id",
+            "type": "string"
+          },
+          "model_sha": {
+            "title": "Model Sha",
+            "type": "string"
+          },
+          "raw_detector_score": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Raw Detector Score",
+            "type": "number"
+          },
+          "supervised_class": {
+            "enum": [
+              "PIPELINE",
+              "SHIPWRECK",
+              "CRAB_POT"
+            ],
+            "title": "Supervised Class",
+            "type": "string"
+          }
+        },
+        "required": [
+          "supervised_class",
+          "raw_detector_score",
+          "model_id",
+          "model_sha"
+        ],
+        "title": "Machine",
+        "type": "object"
+      },
+      "MapResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "availability": {
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE"
+            ],
+            "title": "Availability",
+            "type": "string"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "features": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Features",
+            "type": "array"
+          },
+          "platform_context": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Platform Context",
+            "type": "array"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "type": {
+            "const": "FeatureCollection",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "availability",
+          "demo",
+          "reason",
+          "type",
+          "features"
+        ],
+        "title": "MapResponse",
+        "type": "object"
+      },
+      "MissionInput": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name",
+            "type": "string"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "maxLength": 160,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "MissionInput",
+        "type": "object"
+      },
+      "MissionReport": {
+        "additionalProperties": false,
+        "properties": {
+          "contacts": {
+            "items": {
+              "$ref": "#/components/schemas/Contact"
+            },
+            "title": "Contacts",
+            "type": "array"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "generated_at": {
+            "title": "Generated At",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Limitations",
+            "type": "array"
+          },
+          "map": {
+            "$ref": "#/components/schemas/MapResponse"
+          },
+          "mission": {
+            "$ref": "#/components/schemas/ProductMission"
+          },
+          "processing_runs": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Processing Runs",
+            "type": "array"
+          },
+          "provenance": {
+            "additionalProperties": true,
+            "title": "Provenance",
+            "type": "object"
+          },
+          "report_id": {
+            "title": "Report Id",
+            "type": "string"
+          },
+          "surveys": {
+            "items": {
+              "$ref": "#/components/schemas/SurveyView"
+            },
+            "title": "Surveys",
+            "type": "array"
+          },
+          "uploads": {
+            "items": {
+              "$ref": "#/components/schemas/UploadRecord"
+            },
+            "title": "Uploads",
+            "type": "array"
+          }
+        },
+        "required": [
+          "report_id",
+          "generated_at",
+          "demo",
+          "label",
+          "mission",
+          "uploads",
+          "surveys",
+          "contacts",
+          "map",
+          "provenance",
+          "processing_runs",
+          "limitations"
+        ],
+        "title": "MissionReport",
+        "type": "object"
+      },
+      "NoteInput": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Actor",
+            "type": "string"
+          },
+          "note": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "note"
+        ],
+        "title": "NoteInput",
+        "type": "object"
+      },
+      "PreparedSurveyInput": {
+        "description": "Open the immutable, locally materialised frozen survey for operator review.",
+        "properties": {
+          "label": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "title": "PreparedSurveyInput",
+        "type": "object"
+      },
+      "Priority": {
+        "enum": [
+          "CRITICAL",
+          "HIGH",
+          "MEDIUM",
+          "LOW",
+          "UNSET"
+        ],
+        "title": "Priority",
+        "type": "string"
+      },
+      "PriorityInput": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Actor",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/Priority"
+          }
+        },
+        "required": [
+          "actor",
+          "priority"
+        ],
+        "title": "PriorityInput",
+        "type": "object"
+      },
+      "ProductMission": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "demo": {
+            "default": false,
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "mission_id": {
+            "title": "Mission Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "operator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator"
+          },
+          "provenance": {
+            "default": "REAL",
+            "enum": [
+              "REAL",
+              "SYNTHETIC_DEMO"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "survey_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Survey Ids",
+            "type": "array"
+          },
+          "upload_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Upload Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "mission_id",
+          "name"
+        ],
+        "title": "ProductMission",
+        "type": "object"
+      },
+      "ReviewEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "after": {
+            "$ref": "#/components/schemas/Analyst"
+          },
+          "before": {
+            "$ref": "#/components/schemas/Analyst"
+          },
+          "contact_id": {
+            "title": "Contact Id",
+            "type": "string"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "identity_verified": {
+            "title": "Identity Verified",
+            "type": "boolean"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "provenance": {
+            "title": "Provenance",
+            "type": "string"
+          },
+          "review_id": {
+            "title": "Review Id",
+            "type": "string"
+          },
+          "timestamp": {
+            "title": "Timestamp",
+            "type": "string"
+          }
+        },
+        "required": [
+          "review_id",
+          "contact_id",
+          "actor",
+          "identity_verified",
+          "action",
+          "before",
+          "after",
+          "timestamp",
+          "note",
+          "demo",
+          "provenance"
+        ],
+        "title": "ReviewEvent",
+        "type": "object"
+      },
+      "SurveyView": {
+        "additionalProperties": false,
+        "description": "Projection of B's strict Survey membership, not the legacy Upload identifier.",
+        "properties": {
+          "acquired_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acquired At"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "frame_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Frame Ids",
+            "type": "array"
+          },
+          "frames": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Frames",
+            "type": "array"
+          },
+          "geometry_signature": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Geometry Signature"
+          },
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          },
+          "membership_provenance": {
+            "enum": [
+              "SINGLETON",
+              "DECLARED",
+              "VERIFIED",
+              "DEMO_FIXTURE"
+            ],
+            "title": "Membership Provenance",
+            "type": "string"
+          },
+          "mission_id": {
+            "title": "Mission Id",
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "navigation_provenance": {
+            "anyOf": [
+              {
+                "enum": [
+                  "MEASURED",
+                  "DERIVED_FROM_SOURCE",
+                  "SYNTHETIC_DEMO"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Navigation Provenance"
+          },
+          "ping_relationship": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ping Relationship"
+          },
+          "provenance": {
+            "enum": [
+              "REAL",
+              "SYNTHETIC_DEMO"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "runtime_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runtime Ref"
+          },
+          "sensor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensor"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "INGESTING",
+              "READY",
+              "FAILED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "survey_id": {
+            "title": "Survey Id",
+            "type": "string"
+          },
+          "survey_ref": {
+            "title": "Survey Ref",
+            "type": "string"
+          },
+          "upload_id": {
+            "title": "Upload Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "survey_id",
+          "survey_ref",
+          "mission_id",
+          "upload_id",
+          "job_id",
+          "demo",
+          "provenance",
+          "status",
+          "membership_provenance",
+          "frame_ids",
+          "frames"
+        ],
+        "title": "SurveyView",
+        "type": "object"
+      },
+      "UploadRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bytes"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "demo": {
+            "title": "Demo",
+            "type": "boolean"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          },
+          "mission_id": {
+            "title": "Mission Id",
+            "type": "string"
+          },
+          "navigation_provenance": {
+            "anyOf": [
+              {
+                "enum": [
+                  "MEASURED",
+                  "DERIVED_FROM_SOURCE",
+                  "SYNTHETIC_DEMO"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Navigation Provenance"
+          },
+          "provenance": {
+            "enum": [
+              "REAL",
+              "SYNTHETIC_DEMO"
+            ],
+            "title": "Provenance",
+            "type": "string"
+          },
+          "runtime_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runtime Ref"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "INGESTING",
+              "READY",
+              "FAILED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "upload_id": {
+            "title": "Upload Id",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "upload_id",
+          "mission_id",
+          "status",
+          "demo",
+          "provenance",
+          "job_id",
+          "sha256",
+          "filename",
+          "source"
+        ],
+        "title": "UploadRecord",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "sagar__api__app__ReviewInput": {
+        "properties": {
+          "corrected_bbox_px": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Bbox Px"
+          },
+          "corrected_class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Class"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "rejection_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rejection Reason"
+          },
+          "reviewer": {
+            "minLength": 1,
+            "title": "Reviewer",
+            "type": "string"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "verdict",
+          "reviewer"
+        ],
+        "title": "ReviewInput",
+        "type": "object"
+      },
+      "sagar__api__product_models__ReviewInput": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "maxLength": 160,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Actor",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "status": {
+            "enum": [
+              "CONFIRMED",
+              "REJECTED",
+              "UNRESOLVED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "status"
+        ],
+        "title": "ReviewInput",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Marine survey analysis and review API for the Aqualens platform.",
+    "title": "Aqualens API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/benchmarks": {
+      "get": {
+        "operationId": "benchmarks_api_v1_benchmarks_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "run_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Benchmarks Api V1 Benchmarks Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Benchmarks"
+      }
+    },
+    "/api/v1/benchmarks/{run_id}": {
+      "get": {
+        "operationId": "benchmarks_api_v1_benchmarks__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Benchmarks Api V1 Benchmarks  Run Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Benchmarks"
+      }
+    },
+    "/api/v1/compare": {
+      "post": {
+        "operationId": "compare_api_v1_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Compare Api V1 Compare Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Compare"
+      }
+    },
+    "/api/v1/comparisons/{comparison_id}": {
+      "get": {
+        "operationId": "comparison_api_v1_comparisons__comparison_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "comparison_id",
+            "required": true,
+            "schema": {
+              "title": "Comparison Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Comparison Api V1 Comparisons  Comparison Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Comparison"
+      }
+    },
+    "/api/v1/contacts/{contact_id}": {
+      "get": {
+        "operationId": "contact_api_v1_contacts__contact_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Contact",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/classification": {
+      "post": {
+        "operationId": "classification_api_v1_contacts__contact_id__classification_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassificationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewEvent"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Classification",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/evidence": {
+      "get": {
+        "operationId": "contact_evidence_api_v1_contacts__contact_id__evidence_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Contact Evidence",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/history": {
+      "get": {
+        "operationId": "history_api_v1_contacts__contact_id__history_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "History",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/notes": {
+      "post": {
+        "operationId": "note_api_v1_contacts__contact_id__notes_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewEvent"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Note",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/priority": {
+      "post": {
+        "operationId": "priority_api_v1_contacts__contact_id__priority_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PriorityInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewEvent"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Priority",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/contacts/{contact_id}/review": {
+      "post": {
+        "operationId": "review_api_v1_contacts__contact_id__review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contact_id",
+            "required": true,
+            "schema": {
+              "title": "Contact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sagar__api__product_models__ReviewInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewEvent"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Review",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/demo/missions": {
+      "get": {
+        "operationId": "demo_missions_api_v1_demo_missions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Demo Missions",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/demo/seed": {
+      "post": {
+        "operationId": "seed_demo_api_v1_demo_seed_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Seed Demo",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/detections/{detection_id}": {
+      "get": {
+        "operationId": "get_detection_api_v1_detections__detection_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Detection Api V1 Detections  Detection Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Detection"
+      }
+    },
+    "/api/v1/detections/{detection_id}/evidence/persistence": {
+      "get": {
+        "operationId": "persistence_evidence_api_v1_detections__detection_id__evidence_persistence_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Persistence Evidence Api V1 Detections  Detection Id  Evidence Persistence Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Persistence Evidence"
+      }
+    },
+    "/api/v1/detections/{detection_id}/evidence/shadow": {
+      "get": {
+        "operationId": "shadow_evidence_api_v1_detections__detection_id__evidence_shadow_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Shadow Evidence Api V1 Detections  Detection Id  Evidence Shadow Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Shadow Evidence"
+      }
+    },
+    "/api/v1/detections/{detection_id}/reviews": {
+      "get": {
+        "operationId": "reviews_api_v1_detections__detection_id__reviews_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Reviews Api V1 Detections  Detection Id  Reviews Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reviews"
+      },
+      "post": {
+        "operationId": "submit_review_api_v1_detections__detection_id__reviews_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "detection_id",
+            "required": true,
+            "schema": {
+              "title": "Detection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sagar__api__app__ReviewInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Submit Review Api V1 Detections  Detection Id  Reviews Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Submit Review"
+      }
+    },
+    "/api/v1/frames/{frame_id}/raster": {
+      "get": {
+        "operationId": "frame_raster_api_v1_frames__frame_id__raster_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "frame_id",
+            "required": true,
+            "schema": {
+              "title": "Frame Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "layer",
+            "required": false,
+            "schema": {
+              "default": "raw",
+              "title": "Layer",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Frame Raster"
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Api V1 Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/api/v1/jobs/{job_id}": {
+      "get": {
+        "description": "Observable job state. Counts are incremented after the work happens.",
+        "operationId": "job_api_v1_jobs__job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Job Api V1 Jobs  Job Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Job"
+      }
+    },
+    "/api/v1/jobs/{job_id}/events": {
+      "get": {
+        "operationId": "job_events_api_v1_jobs__job_id__events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Job Events"
+      }
+    },
+    "/api/v1/memory/queues/{queue}": {
+      "get": {
+        "operationId": "memory_queue_api_v1_memory_queues__queue__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "queue",
+            "required": true,
+            "schema": {
+              "title": "Queue",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Memory Queue Api V1 Memory Queues  Queue  Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Memory Queue"
+      }
+    },
+    "/api/v1/memory/reviews": {
+      "get": {
+        "operationId": "memory_reviews_api_v1_memory_reviews_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 1000,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Memory Reviews Api V1 Memory Reviews Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Memory Reviews"
+      }
+    },
+    "/api/v1/memory/stats": {
+      "get": {
+        "operationId": "memory_stats_api_v1_memory_stats_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Memory Stats Api V1 Memory Stats Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Memory Stats"
+      }
+    },
+    "/api/v1/missions": {
+      "get": {
+        "operationId": "list_missions_api_v1_missions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "demo",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Demo",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Missions Api V1 Missions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Missions"
+      },
+      "post": {
+        "operationId": "create_mission_api_v1_missions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MissionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductMission"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Mission"
+      }
+    },
+    "/api/v1/missions/{mission_id}": {
+      "get": {
+        "operationId": "get_mission_api_v1_missions__mission_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Mission Api V1 Missions  Mission Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Mission"
+      }
+    },
+    "/api/v1/missions/{mission_id}/contacts": {
+      "get": {
+        "operationId": "mission_contacts_api_v1_missions__mission_id__contacts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "survey_ref",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Survey Ref"
+            }
+          },
+          {
+            "in": "query",
+            "name": "machine_class",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "PIPELINE",
+                    "SHIPWRECK",
+                    "CRAB_POT"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Machine Class"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analyst_class",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AnalystClass"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analyst Class"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "UNREVIEWED",
+                    "CONFIRMED",
+                    "REJECTED",
+                    "UNRESOLVED"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Priority"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Priority"
+            }
+          },
+          {
+            "in": "query",
+            "name": "reviewed",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Reviewed"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 160,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "created",
+              "enum": [
+                "created",
+                "reviewed",
+                "priority"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Mission Contacts",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/missions/{mission_id}/jobs": {
+      "get": {
+        "operationId": "jobs_api_v1_missions__mission_id__jobs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Jobs",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/missions/{mission_id}/map": {
+      "get": {
+        "operationId": "map_data_api_v1_missions__mission_id__map_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Map Data",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/missions/{mission_id}/reports": {
+      "post": {
+        "operationId": "create_report_api_v1_missions__mission_id__reports_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Report",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/missions/{mission_id}/surveys": {
+      "get": {
+        "operationId": "surveys_api_v1_missions__mission_id__surveys_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Surveys",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/missions/{mission_id}/uploads": {
+      "get": {
+        "operationId": "uploads_api_v1_missions__mission_id__uploads_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Uploads",
+        "tags": [
+          "Mission workspace"
+        ]
+      },
+      "post": {
+        "operationId": "upload_api_v1_missions__mission_id__uploads_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mission_id",
+            "required": true,
+            "schema": {
+              "title": "Mission Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_api_v1_missions__mission_id__uploads_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/models": {
+      "get": {
+        "operationId": "models_api_v1_models_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Models Api V1 Models Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Models"
+      }
+    },
+    "/api/v1/models/{model_id}": {
+      "get": {
+        "operationId": "model_api_v1_models__model_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Model Api V1 Models  Model Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Model"
+      }
+    },
+    "/api/v1/readiness": {
+      "get": {
+        "operationId": "readiness_api_v1_readiness_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Readiness",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/reports/{report_id}": {
+      "get": {
+        "operationId": "report_api_v1_reports__report_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "title": "Report Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "enum": [
+                "json",
+                "html"
+              ],
+              "title": "Format",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "download",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Download",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Report",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/roles/{role}/dashboard": {
+      "get": {
+        "operationId": "role_dashboard_api_v1_roles__role__dashboard_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "title": "Role",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Role Dashboard Api V1 Roles  Role  Dashboard Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Role Dashboard"
+      }
+    },
+    "/api/v1/runtime/health": {
+      "get": {
+        "description": "Production host health check target and the operator diagnostics source.\n\nReports what is actually available: API liveness, the frozen detector and\nits digest, the selected compute device, every optional component's real\navailability, and how much runtime state this deployment is holding. No\nfilesystem paths and no secrets.",
+        "operationId": "runtime_health_api_v1_runtime_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Health Api V1 Runtime Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Runtime Health"
+      }
+    },
+    "/api/v1/runtime/memory/reviews": {
+      "get": {
+        "description": "Newest-first append-only review events, optionally scoped to one survey.",
+        "operationId": "runtime_memory_reviews_api_v1_runtime_memory_reviews_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "survey_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Survey Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Memory Reviews Api V1 Runtime Memory Reviews Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Memory Reviews"
+      }
+    },
+    "/api/v1/runtime/memory/stats": {
+      "get": {
+        "description": "Aggregate append-only analyst verdicts across every retained runtime survey.\n\nThis is curated review memory for future training and calibration. No\nmodel is updated by recording a verdict, and nothing here retrains,\nre-weights or re-scores an existing finding.",
+        "operationId": "runtime_memory_stats_api_v1_runtime_memory_stats_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Memory Stats Api V1 Runtime Memory Stats Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Runtime Memory Stats"
+      }
+    },
+    "/api/v1/runtime/model-card": {
+      "get": {
+        "description": "Authoritative frozen final-v1 provenance for the operator-facing Model Lab.",
+        "operationId": "runtime_model_card_api_v1_runtime_model_card_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Model Card Api V1 Runtime Model Card Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Runtime Model Card"
+      }
+    },
+    "/api/v1/runtime/surveys": {
+      "get": {
+        "description": "Newest-first index of retained runtime surveys, for reconnect/recovery.",
+        "operationId": "list_runtime_surveys_api_v1_runtime_surveys_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 200,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Runtime Surveys Api V1 Runtime Surveys Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Runtime Surveys"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}": {
+      "get": {
+        "operationId": "runtime_survey_api_v1_runtime_surveys__survey_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Survey Api V1 Runtime Surveys  Survey Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Survey"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}/change": {
+      "get": {
+        "description": "Report whether a resurvey comparison is supportable, and why not when it is not.\n\nChange semantics are coverage-aware and deliberately conservative:\nNEW, UNCHANGED, NOT_DETECTED, NOT_SURVEYED and REMOVED each mean\nsomething different, and REMOVED is never inferred from a detector\nabsence. This endpoint reports the real capability gates for the two\nsurveys rather than producing a comparison the evidence cannot support.",
+        "operationId": "runtime_change_api_v1_runtime_surveys__survey_id__change_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "baseline_survey_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Baseline Survey Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Change Api V1 Runtime Surveys  Survey Id  Change Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Change"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}/contacts": {
+      "get": {
+        "operationId": "runtime_contacts_api_v1_runtime_surveys__survey_id__contacts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Runtime Contacts Api V1 Runtime Surveys  Survey Id  Contacts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Contacts"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}/findings/{finding_id}/reviews": {
+      "post": {
+        "description": "Append one analyst verdict. Append-only: nothing is overwritten or deleted.\n\nRecording a verdict re-derives the Contact's transparent recovery\npriority, because priority is a rule over available evidence and a human\ndecision is one of those inputs. It never alters the raw detector class,\nthe raw confidence, or any evidence measurement.",
+        "operationId": "runtime_review_api_v1_runtime_surveys__survey_id__findings__finding_id__reviews_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "finding_id",
+            "required": true,
+            "schema": {
+              "title": "Finding Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sagar__api__app__ReviewInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Runtime Review Api V1 Runtime Surveys  Survey Id  Findings  Finding Id  Reviews Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Review"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}/frames/{frame_id}/raster": {
+      "get": {
+        "operationId": "runtime_raster_api_v1_runtime_surveys__survey_id__frames__frame_id__raster_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "frame_id",
+            "required": true,
+            "schema": {
+              "title": "Frame Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Raster"
+      }
+    },
+    "/api/v1/runtime/surveys/{survey_id}/report": {
+      "get": {
+        "description": "Export the survey record set.\n\nJSON carries the complete record plus a provenance block naming the model\nversions, navigation status, evidence availability, review state and the\nlimitations that apply to every figure in it. CSV is offered at two\nscopes because the product has two objects: the Contact (operational)\nand the raw detector observation (evidence).",
+        "operationId": "runtime_report_api_v1_runtime_surveys__survey_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "title": "Format",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "required": false,
+            "schema": {
+              "default": "observations",
+              "title": "Scope",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Runtime Report Api V1 Runtime Surveys  Survey Id  Report Get"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runtime Report"
+      }
+    },
+    "/api/v1/surveys/open-prepared": {
+      "post": {
+        "description": "Return the real immutable survey rather than fabricating a second run.",
+        "operationId": "open_prepared_survey_api_v1_surveys_open_prepared_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreparedSurveyInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Open Prepared Survey Api V1 Surveys Open Prepared Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Open Prepared Survey"
+      }
+    },
+    "/api/v1/surveys/upload": {
+      "post": {
+        "description": "Accept a real raster/bundle, validate it, and start a real run.\n\nThe response is the accepted job, not a finished survey: nothing here\nreports a model result that has not actually occurred.",
+        "operationId": "upload_survey_api_v1_surveys_upload_post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "mission_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_survey_api_v1_surveys_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Upload Survey Api V1 Surveys Upload Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Survey"
+      }
+    },
+    "/api/v1/surveys/{survey_id}": {
+      "get": {
+        "operationId": "get_survey_api_v1_surveys__survey_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Survey Api V1 Surveys  Survey Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Survey"
+      }
+    },
+    "/api/v1/surveys/{survey_id}/detections": {
+      "get": {
+        "operationId": "list_detections_api_v1_surveys__survey_id__detections_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_confidence",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Confidence"
+            }
+          },
+          {
+            "in": "query",
+            "name": "change_status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Change Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "review",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Review"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "priority",
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Detections Api V1 Surveys  Survey Id  Detections Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Detections"
+      }
+    },
+    "/api/v1/surveys/{survey_id}/frames": {
+      "get": {
+        "operationId": "list_frames_api_v1_surveys__survey_id__frames_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Frames Api V1 Surveys  Survey Id  Frames Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Frames"
+      }
+    },
+    "/api/v1/surveys/{survey_id}/ingest": {
+      "post": {
+        "operationId": "ingest_api_v1_surveys__survey_id__ingest_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Ingest Api V1 Surveys  Survey Id  Ingest Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ingest"
+      }
+    },
+    "/api/v1/surveys/{survey_id}/process": {
+      "post": {
+        "operationId": "process_api_v1_surveys__survey_id__process_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Process",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/surveys/{survey_id}/report": {
+      "get": {
+        "operationId": "report_api_v1_surveys__survey_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "survey_id",
+            "required": true,
+            "schema": {
+              "title": "Survey Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "json",
+              "title": "Format",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Report Api V1 Surveys  Survey Id  Report Get"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Report"
+      }
+    },
+    "/api/v1/system/capabilities": {
+      "get": {
+        "operationId": "capability_states_api_v1_system_capabilities_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Capability States",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/system/provenance": {
+      "get": {
+        "operationId": "provenance_api_v1_system_provenance_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Provenance",
+        "tags": [
+          "Mission workspace"
+        ]
+      }
+    },
+    "/api/v1/tiles/{tile_id}/raster": {
+      "get": {
+        "operationId": "tile_raster_api_v1_tiles__tile_id__raster_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tile_id",
+            "required": true,
+            "schema": {
+              "title": "Tile Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "layer",
+            "required": false,
+            "schema": {
+              "default": "raw",
+              "title": "Layer",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Tile Raster"
+      }
+    }
+  }
+}

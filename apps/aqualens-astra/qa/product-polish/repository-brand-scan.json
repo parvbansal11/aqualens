@@ -1,7 +1,0 @@
-[
-  {
-    "file": "scripts/interaction-qa.mjs",
-    "line": 21,
-    "excerpt": "  const proto = WebGLRenderingContext.prototype;"
-  }
-]

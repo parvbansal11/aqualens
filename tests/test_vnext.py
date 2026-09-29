@@ -38,6 +38,14 @@ def test_condition_and_unknown_physics_are_honest():
     assert "HORIZONTAL_DARK_BAND" in condition["quality_flags"]
     assert verify_candidate(image,[2,2,8,8],None,condition)["physics_consistency"] is None
 
+def test_condition_of_single_valued_raster_is_measured_not_crashed():
+    for value in (0, 18, 255):
+        condition = SonarConditionEngine().assess(np.full((64, 128, 3), value, np.uint8))
+        assert condition["entropy"] == 0.0
+        assert condition["dynamic_range"] == 0.0
+        assert "LOW_DYNAMIC_RANGE" in condition["quality_flags"]
+
+
 def test_openset_never_declares_known_class_and_optional_absence_is_safe():
     evidence=OpenSetEvidence(anomaly_score=.9, threshold=.8)
     assert evidence.is_open_set_candidate and ModelRegistry(False).health()["rfdetr"]["available"] is False

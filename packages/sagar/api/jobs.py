@@ -6,13 +6,15 @@ real phase transition. There is deliberately no percentage field: the only
 ratio this module publishes is ``frames_completed`` over ``source_frame_count``,
 both of which are counted, never estimated.
 
-Jobs live in memory for the life of the API process. They are progress
-telemetry for one run, not durable evidence; the durable record is the runtime
-survey written by :mod:`sagar.api.app`.
+Jobs are persisted in the existing runtime SQLite database when configured.
+Interrupted jobs fail explicitly on restart; inference is never silently repeated.
 """
 from __future__ import annotations
 
 import threading
+import sqlite3
+import json
+from pathlib import Path
 from collections import OrderedDict
 from datetime import datetime, timezone
 from typing import Any, Iterable
@@ -49,15 +51,34 @@ class JobRegistry:
     back a detached copy.
     """
 
-    def __init__(self, limit: int = MAX_RETAINED_JOBS) -> None:
+    def __init__(self, limit: int = MAX_RETAINED_JOBS, database_path: Path | None = None) -> None:
         self._lock = threading.Lock()
         self._jobs: "OrderedDict[str, dict[str, Any]]" = OrderedDict()
         self._limit = limit
+        self._database_path = database_path
+        if database_path:
+            with sqlite3.connect(database_path) as db:
+                db.execute('CREATE TABLE IF NOT EXISTS processing_jobs (id TEXT PRIMARY KEY, payload TEXT NOT NULL)')
+                for identifier, encoded in db.execute('SELECT id,payload FROM processing_jobs'):
+                    payload = json.loads(encoded)
+                    if payload.get('state') not in {'COMPLETED', 'FAILED'}:
+                        payload.update(state='FAILED', stage='failed', completed_at=_now(),
+                            error={'code': 'PROCESS_INTERRUPTED', 'message': 'Server restarted before completion; no automatic rerun.', 'phase': payload.get('phase')})
+                    self._jobs[identifier] = payload
+                for identifier in list(self._jobs):
+                    self._persist(identifier)
+
+    def _persist(self, identifier):
+        if self._database_path:
+            with sqlite3.connect(self._database_path, timeout=30) as db:
+                db.execute('INSERT INTO processing_jobs VALUES (?,?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload',
+                           (identifier, json.dumps(self._jobs[identifier])))
 
     def create(self, job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
         with self._lock:
             self._jobs[job_id] = payload
             self._jobs.move_to_end(job_id)
+            self._persist(job_id)
             while len(self._jobs) > self._limit:
                 self._jobs.popitem(last=False)
             return dict(payload)
@@ -65,6 +86,10 @@ class JobRegistry:
     def get(self, job_id: str) -> dict[str, Any] | None:
         with self._lock:
             payload = self._jobs.get(job_id)
+            if payload is None and self._database_path:
+                with sqlite3.connect(self._database_path) as db:
+                    row = db.execute('SELECT payload FROM processing_jobs WHERE id=?', (job_id,)).fetchone()
+                    payload = json.loads(row[0]) if row else None
             return _deep_copy(payload) if payload is not None else None
 
     def update(self, job_id: str, **changes: Any) -> None:
@@ -74,6 +99,7 @@ class JobRegistry:
                 return
             job.update(changes)
             job["updated_at"] = _now()
+            self._persist(job_id)
 
     def increment(self, job_id: str, field: str, amount: int = 1) -> None:
         with self._lock:
@@ -82,6 +108,7 @@ class JobRegistry:
                 return
             job[field] = int(job.get(field) or 0) + amount
             job["updated_at"] = _now()
+            self._persist(job_id)
 
     def set_phase(self, job_id: str, phase: str, state: str, detail: str | None = None) -> None:
         """Record one phase transition. ``state`` must be a real observed state."""
@@ -99,6 +126,7 @@ class JobRegistry:
             if state == "running":
                 job["phase"] = phase
             job["updated_at"] = _now()
+            self._persist(job_id)
 
     def fail(self, job_id: str, code: str, message: str, phase: str | None = None) -> None:
         with self._lock:
@@ -115,6 +143,7 @@ class JobRegistry:
                 entry = steps.setdefault(phase, {"state": "queued", "detail": None})
                 entry["state"] = "failed"
                 entry["detail"] = message
+            self._persist(job_id)
 
 
 def _deep_copy(value: Any) -> Any:

@@ -63,7 +63,7 @@ def _save(array: np.ndarray, tmp_path: Path) -> Path:
 
 
 def _detector_from_predict(predict) -> FinalDetector:
-    detector = FinalDetector(WEIGHTS)
+    detector = FinalDetector(WEIGHTS, shipwreck_recovery=True)
     detector.load = lambda: None  # type: ignore[method-assign]
     detector.model = SimpleNamespace(predict=predict)
     return detector

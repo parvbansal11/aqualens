@@ -1,0 +1,848 @@
+{
+  "$comment": "Deterministic DEMO fixture responses. Every object is demo=true / SYNTHETIC_DEMO; not scientific output.",
+  "GET /api/v1/contacts/demo_contact_a (known target: machine CRAB_POT, UNREVIEWED at seed)": {
+    "analyst": {
+      "classification": "UNRESOLVED",
+      "priority": "UNSET",
+      "reviewed_at": null,
+      "status": "UNREVIEWED"
+    },
+    "association_basis": "DEMO_SINGLE_LOOK",
+    "contact_id": "demo_contact_a",
+    "created_at": "2026-09-28T00:00:00+00:00",
+    "demo": true,
+    "detections": [],
+    "evidence": {
+      "analyst": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "human_semantic_review",
+        "provenance": null,
+        "reason": "Contact has not been reviewed",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "detector": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "DEMO_FIXTURE_NOT_INFERENCE",
+        "provenance": "SYNTHETIC_DEMO",
+        "reason": null,
+        "source": "Aqualens",
+        "status": "AVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": {
+          "demo": true,
+          "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+          "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+          "raw_detector_score": 0.74,
+          "supervised_class": "CRAB_POT"
+        }
+      },
+      "local_anomaly": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "survey_referenced_range_matched",
+        "provenance": null,
+        "reason": "Scientific validation pending; no p-value is emitted",
+        "source": "Aqualens",
+        "status": "NOT_VALIDATED",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "navigation": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "DEMO_FIXTURE_NOT_LOCALIZATION",
+        "provenance": "SYNTHETIC_DEMO",
+        "reason": null,
+        "source": "Aqualens",
+        "status": "AVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": {
+          "geometry": {
+            "coordinates": [
+              72.5,
+              15.5
+            ],
+            "type": "Point"
+          }
+        }
+      },
+      "persistence": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "independent_looks",
+        "provenance": null,
+        "reason": "No defensible repeated physical observation",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "raised_relief": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "range_matched_acoustic_shadow",
+        "provenance": null,
+        "reason": "Validated geometry and relief procedure unavailable",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      }
+    },
+    "history": [],
+    "look_count": 1,
+    "looks": [
+      {
+        "basis": "DEMO_FIXTURE",
+        "contact_id": "demo_contact_a",
+        "demo": true,
+        "frame_refs": [],
+        "is_independent": false,
+        "look_id": "demo_contact_a_look_0",
+        "provenance": "SYNTHETIC_DEMO",
+        "survey_ref": "demo_survey_01"
+      }
+    ],
+    "machine": {
+      "demo": true,
+      "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+      "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+      "raw_detector_score": 0.74,
+      "supervised_class": "CRAB_POT"
+    },
+    "mission_id": "demo_mission_arabian_sea_07",
+    "provenance": "SYNTHETIC_DEMO",
+    "survey_refs": [
+      "demo_survey_01"
+    ],
+    "system_priority": null
+  },
+  "GET /api/v1/contacts/demo_contact_b (no machine class, local anomaly NOT_VALIDATED, UNREVIEWED at seed)": {
+    "analyst": {
+      "classification": "UNRESOLVED",
+      "priority": "UNSET",
+      "reviewed_at": null,
+      "status": "UNREVIEWED"
+    },
+    "association_basis": "DEMO_SINGLE_LOOK",
+    "contact_id": "demo_contact_b",
+    "created_at": "2026-09-28T00:00:00+00:00",
+    "demo": true,
+    "detections": [],
+    "evidence": {
+      "analyst": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "human_semantic_review",
+        "provenance": null,
+        "reason": "Contact has not been reviewed",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "detector": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "frozen_yolo11s",
+        "provenance": null,
+        "reason": "No supervised observation attached",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "local_anomaly": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "survey_referenced_range_matched",
+        "provenance": null,
+        "reason": "Scientific validation pending; no p-value is emitted",
+        "source": "Aqualens",
+        "status": "NOT_VALIDATED",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "navigation": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "DEMO_FIXTURE_NOT_LOCALIZATION",
+        "provenance": "SYNTHETIC_DEMO",
+        "reason": null,
+        "source": "Aqualens",
+        "status": "AVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": {
+          "geometry": {
+            "coordinates": [
+              72.501,
+              15.501
+            ],
+            "type": "Point"
+          }
+        }
+      },
+      "persistence": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "independent_looks",
+        "provenance": null,
+        "reason": "No defensible repeated physical observation",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      },
+      "raised_relief": {
+        "artifact_ref": null,
+        "demo": true,
+        "method": "range_matched_acoustic_shadow",
+        "provenance": null,
+        "reason": "Validated geometry and relief procedure unavailable",
+        "source": "Aqualens",
+        "status": "UNAVAILABLE",
+        "timestamp": "2026-09-28T00:00:00+00:00",
+        "values": null
+      }
+    },
+    "history": [],
+    "look_count": 1,
+    "looks": [
+      {
+        "basis": "DEMO_FIXTURE",
+        "contact_id": "demo_contact_b",
+        "demo": true,
+        "frame_refs": [],
+        "is_independent": false,
+        "look_id": "demo_contact_b_look_0",
+        "provenance": "SYNTHETIC_DEMO",
+        "survey_ref": "demo_survey_01"
+      }
+    ],
+    "machine": null,
+    "mission_id": "demo_mission_arabian_sea_07",
+    "provenance": "SYNTHETIC_DEMO",
+    "survey_refs": [
+      "demo_survey_01"
+    ],
+    "system_priority": null
+  },
+  "GET /api/v1/contacts/{id}/history (demo_contact_c, one scripted verdict)": {
+    "demo": true,
+    "items": [
+      {
+        "action": "fixture_analyst_verdict",
+        "actor": "DEMO_FIXTURE",
+        "after": {
+          "classification": "CABLE_PIPELINE_RELATED",
+          "priority": "LOW",
+          "reviewed_at": "2026-09-28T00:00:00+00:00",
+          "status": "CONFIRMED"
+        },
+        "before": {
+          "classification": "UNRESOLVED",
+          "priority": "UNSET",
+          "reviewed_at": null,
+          "status": "UNREVIEWED"
+        },
+        "contact_id": "demo_contact_c",
+        "demo": true,
+        "identity_verified": false,
+        "note": "Scripted analyst verdict; not a real person or machine prediction",
+        "provenance": "SYNTHETIC_DEMO",
+        "review_id": "demo_review_c",
+        "timestamp": "2026-09-28T00:00:00+00:00"
+      }
+    ]
+  },
+  "GET /api/v1/missions/{demo_mission_id}": {
+    "created_at": "2026-09-28T00:00:00Z",
+    "demo": true,
+    "mission_id": "demo_mission_arabian_sea_07",
+    "name": "Arabian Sea Survey 07 — DEMO",
+    "notes": "Deterministic product demonstration; not measured scientific output.",
+    "operator": null,
+    "provenance": "SYNTHETIC_DEMO",
+    "survey_ids": [
+      "demo_survey_01"
+    ],
+    "upload_ids": [
+      "demo_upload_01"
+    ]
+  },
+  "GET /api/v1/missions/{id}/contacts": {
+    "demo": true,
+    "items": [
+      {
+        "analyst": {
+          "classification": "CABLE_PIPELINE_RELATED",
+          "priority": "LOW",
+          "reviewed_at": "2026-09-28T00:00:00+00:00",
+          "status": "CONFIRMED"
+        },
+        "association_basis": "DEMO_SINGLE_LOOK",
+        "contact_id": "demo_contact_c",
+        "created_at": "2026-09-28T00:00:00+00:00",
+        "demo": true,
+        "detections": [],
+        "evidence": {
+          "analyst": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "human_semantic_review",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "classification": "CABLE_PIPELINE_RELATED",
+              "priority": "LOW",
+              "reviewed_at": "2026-09-28T00:00:00+00:00",
+              "status": "CONFIRMED"
+            }
+          },
+          "detector": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "DEMO_FIXTURE_NOT_INFERENCE",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "demo": true,
+              "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+              "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+              "raw_detector_score": 0.61,
+              "supervised_class": "PIPELINE"
+            }
+          },
+          "local_anomaly": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "survey_referenced_range_matched",
+            "provenance": null,
+            "reason": "Scientific validation pending; no p-value is emitted",
+            "source": "Aqualens",
+            "status": "NOT_VALIDATED",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "navigation": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "DEMO_FIXTURE_NOT_LOCALIZATION",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "geometry": {
+                "coordinates": [
+                  72.502,
+                  15.502
+                ],
+                "type": "Point"
+              }
+            }
+          },
+          "persistence": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "independent_looks",
+            "provenance": null,
+            "reason": "No defensible repeated physical observation",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "raised_relief": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "range_matched_acoustic_shadow",
+            "provenance": null,
+            "reason": "Validated geometry and relief procedure unavailable",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          }
+        },
+        "history": [
+          {
+            "action": "fixture_analyst_verdict",
+            "actor": "DEMO_FIXTURE",
+            "after": {
+              "classification": "CABLE_PIPELINE_RELATED",
+              "priority": "LOW",
+              "reviewed_at": "2026-09-28T00:00:00+00:00",
+              "status": "CONFIRMED"
+            },
+            "before": {
+              "classification": "UNRESOLVED",
+              "priority": "UNSET",
+              "reviewed_at": null,
+              "status": "UNREVIEWED"
+            },
+            "contact_id": "demo_contact_c",
+            "demo": true,
+            "identity_verified": false,
+            "note": "Scripted analyst verdict; not a real person or machine prediction",
+            "provenance": "SYNTHETIC_DEMO",
+            "review_id": "demo_review_c",
+            "timestamp": "2026-09-28T00:00:00+00:00"
+          }
+        ],
+        "look_count": 1,
+        "looks": [
+          {
+            "basis": "DEMO_FIXTURE",
+            "contact_id": "demo_contact_c",
+            "demo": true,
+            "frame_refs": [],
+            "is_independent": false,
+            "look_id": "demo_contact_c_look_0",
+            "provenance": "SYNTHETIC_DEMO",
+            "survey_ref": "demo_survey_01"
+          }
+        ],
+        "machine": {
+          "demo": true,
+          "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+          "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+          "raw_detector_score": 0.61,
+          "supervised_class": "PIPELINE"
+        },
+        "mission_id": "demo_mission_arabian_sea_07",
+        "provenance": "SYNTHETIC_DEMO",
+        "survey_refs": [
+          "demo_survey_01"
+        ],
+        "system_priority": null
+      },
+      {
+        "analyst": {
+          "classification": "UNRESOLVED",
+          "priority": "UNSET",
+          "reviewed_at": null,
+          "status": "UNREVIEWED"
+        },
+        "association_basis": "DEMO_SINGLE_LOOK",
+        "contact_id": "demo_contact_b",
+        "created_at": "2026-09-28T00:00:00+00:00",
+        "demo": true,
+        "detections": [],
+        "evidence": {
+          "analyst": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "human_semantic_review",
+            "provenance": null,
+            "reason": "Contact has not been reviewed",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "detector": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "frozen_yolo11s",
+            "provenance": null,
+            "reason": "No supervised observation attached",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "local_anomaly": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "survey_referenced_range_matched",
+            "provenance": null,
+            "reason": "Scientific validation pending; no p-value is emitted",
+            "source": "Aqualens",
+            "status": "NOT_VALIDATED",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "navigation": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "DEMO_FIXTURE_NOT_LOCALIZATION",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "geometry": {
+                "coordinates": [
+                  72.501,
+                  15.501
+                ],
+                "type": "Point"
+              }
+            }
+          },
+          "persistence": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "independent_looks",
+            "provenance": null,
+            "reason": "No defensible repeated physical observation",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "raised_relief": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "range_matched_acoustic_shadow",
+            "provenance": null,
+            "reason": "Validated geometry and relief procedure unavailable",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          }
+        },
+        "history": [],
+        "look_count": 1,
+        "looks": [
+          {
+            "basis": "DEMO_FIXTURE",
+            "contact_id": "demo_contact_b",
+            "demo": true,
+            "frame_refs": [],
+            "is_independent": false,
+            "look_id": "demo_contact_b_look_0",
+            "provenance": "SYNTHETIC_DEMO",
+            "survey_ref": "demo_survey_01"
+          }
+        ],
+        "machine": null,
+        "mission_id": "demo_mission_arabian_sea_07",
+        "provenance": "SYNTHETIC_DEMO",
+        "survey_refs": [
+          "demo_survey_01"
+        ],
+        "system_priority": null
+      },
+      {
+        "analyst": {
+          "classification": "UNRESOLVED",
+          "priority": "UNSET",
+          "reviewed_at": null,
+          "status": "UNREVIEWED"
+        },
+        "association_basis": "DEMO_SINGLE_LOOK",
+        "contact_id": "demo_contact_a",
+        "created_at": "2026-09-28T00:00:00+00:00",
+        "demo": true,
+        "detections": [],
+        "evidence": {
+          "analyst": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "human_semantic_review",
+            "provenance": null,
+            "reason": "Contact has not been reviewed",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "detector": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "DEMO_FIXTURE_NOT_INFERENCE",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "demo": true,
+              "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+              "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+              "raw_detector_score": 0.74,
+              "supervised_class": "CRAB_POT"
+            }
+          },
+          "local_anomaly": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "survey_referenced_range_matched",
+            "provenance": null,
+            "reason": "Scientific validation pending; no p-value is emitted",
+            "source": "Aqualens",
+            "status": "NOT_VALIDATED",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "navigation": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "DEMO_FIXTURE_NOT_LOCALIZATION",
+            "provenance": "SYNTHETIC_DEMO",
+            "reason": null,
+            "source": "Aqualens",
+            "status": "AVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": {
+              "geometry": {
+                "coordinates": [
+                  72.5,
+                  15.5
+                ],
+                "type": "Point"
+              }
+            }
+          },
+          "persistence": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "independent_looks",
+            "provenance": null,
+            "reason": "No defensible repeated physical observation",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          },
+          "raised_relief": {
+            "artifact_ref": null,
+            "demo": true,
+            "method": "range_matched_acoustic_shadow",
+            "provenance": null,
+            "reason": "Validated geometry and relief procedure unavailable",
+            "source": "Aqualens",
+            "status": "UNAVAILABLE",
+            "timestamp": "2026-09-28T00:00:00+00:00",
+            "values": null
+          }
+        },
+        "history": [],
+        "look_count": 1,
+        "looks": [
+          {
+            "basis": "DEMO_FIXTURE",
+            "contact_id": "demo_contact_a",
+            "demo": true,
+            "frame_refs": [],
+            "is_independent": false,
+            "look_id": "demo_contact_a_look_0",
+            "provenance": "SYNTHETIC_DEMO",
+            "survey_ref": "demo_survey_01"
+          }
+        ],
+        "machine": {
+          "demo": true,
+          "model_id": "sagardrishti_multidomain_v1_1_yolo11s",
+          "model_sha": "2aa3ac71051856bcfc8ec400804995f03568aa26d1a1fb24583e4eb1b7a10b15",
+          "raw_detector_score": 0.74,
+          "supervised_class": "CRAB_POT"
+        },
+        "mission_id": "demo_mission_arabian_sea_07",
+        "provenance": "SYNTHETIC_DEMO",
+        "survey_refs": [
+          "demo_survey_01"
+        ],
+        "system_priority": null
+      }
+    ],
+    "limit": 50,
+    "offset": 0,
+    "total": 3
+  },
+  "GET /api/v1/missions/{id}/map": {
+    "availability": "AVAILABLE",
+    "demo": true,
+    "features": [
+      {
+        "geometry": {
+          "coordinates": [
+            72.5,
+            15.5
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "contact_id": "demo_contact_a",
+          "demo": true,
+          "provenance": "SYNTHETIC_DEMO"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            72.501,
+            15.501
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "contact_id": "demo_contact_b",
+          "demo": true,
+          "provenance": "SYNTHETIC_DEMO"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            72.502,
+            15.502
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "contact_id": "demo_contact_c",
+          "demo": true,
+          "provenance": "SYNTHETIC_DEMO"
+        },
+        "type": "Feature"
+      }
+    ],
+    "platform_context": [],
+    "reason": null,
+    "type": "FeatureCollection"
+  },
+  "GET /api/v1/missions/{id}/surveys": {
+    "items": [
+      {
+        "acquired_at": null,
+        "demo": true,
+        "frame_ids": [],
+        "frames": [],
+        "job_id": "demo_job_01",
+        "membership_provenance": "DEMO_FIXTURE",
+        "mission_id": "demo_mission_arabian_sea_07",
+        "name": "Survey 01 — DEMO",
+        "navigation_provenance": "SYNTHETIC_DEMO",
+        "provenance": "SYNTHETIC_DEMO",
+        "sensor": null,
+        "status": "READY",
+        "survey_id": "demo_survey_01",
+        "survey_ref": "demo_survey_01",
+        "upload_id": "demo_upload_01"
+      }
+    ]
+  },
+  "GET /api/v1/system/capabilities": {
+    "contact_localization": {
+      "availability": "UNAVAILABLE",
+      "classes": null,
+      "mode": null,
+      "reason": "No defensible sonar-to-world geometry; platform fixes are context only",
+      "status": "UNAVAILABLE"
+    },
+    "deployment": {
+      "availability": "AVAILABLE",
+      "classes": null,
+      "mode": "LOCAL_WORKSTATION",
+      "reason": "Local workstation; no enterprise authentication",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "known_target_detection": {
+      "availability": "AVAILABLE",
+      "classes": [
+        "PIPELINE",
+        "SHIPWRECK",
+        "CRAB_POT"
+      ],
+      "mode": null,
+      "reason": "Frozen detector; historical per-class evaluation exists, runtime-path validation is separate",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "local_anomaly": {
+      "availability": "NOT_VALIDATED",
+      "classes": null,
+      "mode": null,
+      "reason": "Survey-referenced range-matched research pending",
+      "status": "PROVISIONAL"
+    },
+    "material_classification": {
+      "availability": "AVAILABLE",
+      "classes": null,
+      "mode": "ANALYST_ONLY",
+      "reason": "Human semantic labels only; no machine material model",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "metric_depth": {
+      "availability": "UNAVAILABLE",
+      "classes": null,
+      "mode": null,
+      "reason": "No defensible physical geometry",
+      "status": "UNAVAILABLE"
+    },
+    "metric_height": {
+      "availability": "UNAVAILABLE",
+      "classes": null,
+      "mode": null,
+      "reason": "No defensible physical geometry",
+      "status": "UNAVAILABLE"
+    },
+    "navigation": {
+      "availability": "AVAILABLE",
+      "classes": null,
+      "mode": "CONDITIONAL",
+      "reason": "Source platform context only; contact localization unavailable without defensible geometry",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "persistence": {
+      "availability": "AVAILABLE",
+      "classes": null,
+      "mode": "CONDITIONAL",
+      "reason": "Conditional per Contact: verified PIPELINE continuity only; no point-target adjacency inference",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "raised_relief": {
+      "availability": "UNAVAILABLE",
+      "classes": null,
+      "mode": null,
+      "reason": "Validated geometry and relief method unavailable",
+      "status": "UNAVAILABLE"
+    },
+    "reporting": {
+      "availability": "AVAILABLE",
+      "classes": null,
+      "mode": null,
+      "reason": "Structured JSON and escaped HTML with limitations",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "shipwreck_demo_recovery": {
+      "availability": "NOT_APPLICABLE",
+      "classes": null,
+      "mode": "OFF",
+      "reason": "Disabled in backend; explicit legacy library demo opt-in only",
+      "status": "NOT_APPLICABLE"
+    },
+    "shipwreck_supervised": {
+      "availability": "FAILED",
+      "classes": null,
+      "mode": null,
+      "reason": "Held-out recall 0; precision 1.0 is degenerate",
+      "status": "IMPLEMENTED_NOT_VALIDATED"
+    },
+    "water_column": {
+      "availability": "NOT_VALIDATED",
+      "classes": null,
+      "mode": null,
+      "reason": "PID-02 validation pending; D1 remains blocked",
+      "status": "PROVISIONAL"
+    }
+  }
+}

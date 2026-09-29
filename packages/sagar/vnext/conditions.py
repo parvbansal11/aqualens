@@ -15,8 +15,11 @@ class SonarConditionEngine:
         black = a <= max(1.0, float(np.percentile(a, 1)))
         row_black = black.mean(axis=1); dropout_rows = row_black >= .92
         dropout_fraction = float(dropout_rows.mean())
-        hist = np.histogram(a, bins=64, range=(float(a.min()), float(a.max()) + 1e-6))[0]; p = hist[hist > 0] / hist.sum()
-        entropy = float(-(p * np.log2(p)).sum() / 6.0)
+        # A single-valued raster (blank or saturated) has zero entropy; binning it would fail.
+        if float(a.max()) - float(a.min()) <= 0: entropy = 0.0
+        else:
+            hist = np.histogram(a, bins=64, range=(float(a.min()), float(a.max()) + 1e-6))[0]; p = hist[hist > 0] / hist.sum()
+            entropy = float(-(p * np.log2(p)).sum() / 6.0)
         # A central sustained dark band is only an estimate, and unavailable when absent.
         col_dark = black.mean(axis=0); centre = a.shape[1] // 2; run = 0
         for i in range(max(0, centre-a.shape[1]//8), min(a.shape[1], centre+a.shape[1]//8)):

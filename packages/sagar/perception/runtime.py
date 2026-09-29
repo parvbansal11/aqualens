@@ -143,10 +143,9 @@ def _strongest_coherent_cluster(
 
 
 class FinalDetector:
-    def __init__(self, weights: Path, *, shipwreck_recovery: bool = True, confidence_floor: float | None = None) -> None:
+    def __init__(self, weights: Path, *, shipwreck_recovery: bool = False, confidence_floor: float | None = None) -> None:
         # The SHIPWRECK recovery pass is an internal demo heuristic (Round-2 Q4, KD-8). Scientific
-        # paths construct the detector with shipwreck_recovery=False (spec H0 item 3); the production
-        # default is unchanged. Only a real bool is accepted, so a mistyped value fails loudly.
+        # paths construct the detector with shipwreck_recovery=False (spec H0 item 3); the default is also OFF. Explicit opt-in is reserved for legacy demo use. Only a real bool is accepted, so a mistyped value fails loudly.
         if not isinstance(shipwreck_recovery, bool):
             raise TypeError(f"shipwreck_recovery must be True or False, not {shipwreck_recovery!r}")
         self.shipwreck_recovery = shipwreck_recovery
@@ -344,13 +343,18 @@ class FinalDetector:
             recovery = candidate.get("evidence_count") is not None
             if recovery:
                 display = spatial_consensus_presentation(candidate["evidence_count"], candidate["tile_diversity"], candidate["mean_cluster_iou"])
-            else:
+            elif self.shipwreck_recovery:
                 display = shipwreck_demo_presentation(raw_class, confidence)
+            else:
+                display = {"display_class": raw_class, "display_confidence": confidence,
+                           "classification_source": "MODEL", "production_qualified": raw_class != "SHIPWRECK"}
             findings.append({
                 "detection_id": f"det_{survey_id}_{source_image_id}_{index:04d}", "survey_id": survey_id,
                 "source_frame_id": source_image_id, "source_image_path": str(image_path), "tile_id": candidate["tile_id"],
                 "raw_class_id": class_id, "raw_class": raw_class, "raw_confidence": confidence,
                 "display_confidence_source": None, **display,
+                "demo": display["classification_source"] == "DEMO_HEURISTIC",
+                "evidence_provenance": "SYNTHETIC_DEMO" if display["classification_source"] == "DEMO_HEURISTIC" else "FROZEN_DETECTOR",
                 "candidate_recovery": recovery, "evidence_count": candidate.get("evidence_count"),
                 "anomaly_score": None, "bbox_px": [x1, y1, x2, y2], "bbox_normalized": [x1 / width, y1 / height, x2 / width, y2 / height],
                 "pixel_dimensions": [width, height], "geo": {"lat": None, "lon": None}, "review_state": None, "review_history": [],
